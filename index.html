@@ -15,6 +15,7 @@
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
   <script src="/js/player.js"></script>
+  <script src="/js/physicsUtils.js"></script>
 	<script>
     var players, canvas, ctx;
 		window.onload = function(){
@@ -37,8 +38,6 @@
       });
 
       socket.on('phone tilt', function(data) {
-        //console.log(players);
-        //console.log(data.id);
         if(players[data.id]) {
           players[data.id].updateAcceleration(data.xAcc/300, data.yAcc/300);
         }
@@ -56,6 +55,40 @@
     function update() {
       var dt = 0;
       players.forEach(function(player) {
+        //Ugly collisions
+        players.forEach(function(p2){
+          if(p2.id !== player.id){
+            
+            if(game.physicsUtils.circleCollision(player, p2)) {
+              //get impule
+              var impulse = game.physicsUtils.getImpulse(player, p2);
+              player.applyImpulse(impulse);
+              impulse.x = impulse.x * -1;
+              impulse.y = impulse.y * -1;
+              p2.applyImpulse(impulse);
+              //Set distance of players to be apart
+              //this is gonna be messy
+
+              var a = p2.x - player.x;
+              var b = p2.y - player.y;
+              var c = p2.radius + player.radius;
+              var currDistSq = game.physicsUtils.sq(a) + game.physicsUtils.sq(b);
+              var radSq = game.physicsUtils.sq(c);
+              var ratio = radSq / currDistSq;
+              var newA = a * ratio;
+              var newB = b * ratio;
+              var moveA = newA - a;
+              var moveB = newB - b;
+
+              player.x -= moveA/2;
+              p2.x += moveA/2;
+              player.y += moveB/2;
+              p2.y -= moveB/2;
+
+              //end mess
+            }
+          }
+        });
         player.update(dt);
       });
     }
@@ -70,6 +103,6 @@
 	</script>
   </head>
   <body>
-    <canvas id="area" width="1920px" height="1080px"></canvas>
+    <canvas id="area" width="640px" height="480px"></canvas>
   </body>
 </html>

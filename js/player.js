@@ -9,11 +9,12 @@ game.createPlayer = function(id, color, x, y) {
     xAcc: 0,
     yAcc: 0,
     velocity : {x: 0, y: 0},
-    r: 20,
+    radius: 20,
     speed: 1,
     id : id,
     color : color,
     mu : 0.95,
+    mass : 10,
 
     update : function(dt) {
       this.calculateVelocity(dt);
@@ -41,11 +42,16 @@ game.createPlayer = function(id, color, x, y) {
       this.x += this.velocity.x;
     },
 
+    applyImpulse : function(impulse) {
+      this.velocity.x = 0 + impulse.x/this.mass;
+      this.velocity.y = 0 + impulse.y/this.mass;
+    },
+
     render : function(ctx) {
       ctx.save();
       ctx.fillStyle = this.color;
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
       ctx.closePath();
       ctx.fill();
       ctx.restore();
