@@ -8,8 +8,7 @@ game.createPlayer = function(id, color, x, y) {
     y: y,
     xAcc: 0,
     yAcc: 0,
-    xVel: 0,
-    yVel: 0,
+    velocity : {x: 0, y: 0},
     r: 20,
     speed: 1,
     id : id,
@@ -23,8 +22,8 @@ game.createPlayer = function(id, color, x, y) {
 
     calculateVelocity : function(dt) {
       this.applyFriction();
-      this.xVel += this.xAcc;
-      this.yVel += this.yAcc;
+      this.velocity.x += this.xAcc;
+      this.velocity.y += this.yAcc;
     },
 
     updateAcceleration : function(x,y) {
@@ -33,13 +32,13 @@ game.createPlayer = function(id, color, x, y) {
     },
 
     applyFriction : function() {
-      this.xVel = this.xVel * this.mu;
-      this.yVel = this.yVel * this.mu;
+      this.velocity.x = this.velocity.x * this.mu;
+      this.velocity.y = this.velocity.y * this.mu;
     },
 
     move : function(dt) {
-      this.y += this.yVel;
-      this.x += this.xVel;
+      this.y += this.velocity.y;
+      this.x += this.velocity.x;
     },
 
     render : function(ctx) {
