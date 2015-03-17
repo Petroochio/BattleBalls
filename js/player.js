@@ -15,10 +15,31 @@ game.createPlayer = function(id, color, x, y) {
     color : color,
     mu : 0.95,
     mass : 10,
+    collisions : [],
 
     update : function(dt) {
+      this.updateCollisions();
       this.calculateVelocity(dt);
       this.move(dt);
+    },
+
+    updateCollisions : function() {
+      var self = this;
+      this.collisions.forEach(function(ball, index, array){
+        if(!game.physicsUtils.circleCollision(ball, self)) {
+          array.splice(index, 1);
+        }
+      });
+    },
+
+    colliding : function(player) {
+      var collide = false;
+      this.collisions.forEach(function(ball){
+        if(ball === player) {
+          collide = true;
+        }
+      });
+      return collide;
     },
 
     calculateVelocity : function(dt) {

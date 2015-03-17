@@ -56,22 +56,25 @@
       var dt = 0;
       players.forEach(function(player) {
         //Ugly collisions
-        players.forEach(function(p2){
-          if(p2.id !== player.id){
+        players.forEach(function(player2){
+          if(player2.id !== player.id){
             
-            if(game.physicsUtils.circleCollision(player, p2)) {
+            if(game.physicsUtils.circleCollision(player, player2) && !player.colliding(player2)) {
               //get impule
-              var impulse = game.physicsUtils.getImpulse(player, p2);
+              console.log('h');
+              var impulse = game.physicsUtils.getImpulse(player, player2);
               player.applyImpulse(impulse);
               impulse.x = impulse.x * -1;
               impulse.y = impulse.y * -1;
-              p2.applyImpulse(impulse);
+              player2.applyImpulse(impulse);
+              player2.collisions.push(player);
+              player.collisions.push(player2);
               //Set distance of players to be apart
               //this is gonna be messy
-
-              var a = p2.x - player.x;
-              var b = p2.y - player.y;
-              var c = p2.radius + player.radius;
+              /*
+              var a = player2.x - player.x;
+              var b = player2.y - player.y;
+              var c = player2.radius + player.radius;
               var currDistSq = game.physicsUtils.sq(a) + game.physicsUtils.sq(b);
               var radSq = game.physicsUtils.sq(c);
               var ratio = radSq / currDistSq;
@@ -81,10 +84,10 @@
               var moveB = newB - b;
 
               player.x -= moveA/2;
-              p2.x += moveA/2;
-              player.y += moveB/2;
-              p2.y -= moveB/2;
-
+              player2.x += moveA/2;
+              player.y -= moveB/2;
+              player2.y += moveB/2;
+              */
               //end mess
             }
           }
