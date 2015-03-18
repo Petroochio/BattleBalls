@@ -31,12 +31,11 @@
       canvas = document.querySelector('#area');
       ctx = canvas.getContext('2d');
       ctx.lineWidth = 5;
-      arena = game.createArena("black", 240, canvas.width/2, canvas.height/2);
+      arena = game.createArena('white', 240, canvas.width/2, canvas.height/2);
       //Set up socket events --Ha Andrew don't look at this
       socket.on('player join', function(data){
         var x = canvas.width/2, y = canvas.height/2;
         players[data.id] = game.createPlayer(data.id, data.color, x, y);
-        console.log(data.color);
       });
 
       socket.on('phone tilt', function(data) {
@@ -63,7 +62,6 @@
             
             if(game.physicsUtils.circleCollision(player, player2) && !player.colliding(player2)) {
               //get impule
-              console.log('h');
               var impulse = game.physicsUtils.getImpulse(player, player2);
               player.applyImpulse(impulse);
               impulse.x = impulse.x * -1;
@@ -84,7 +82,10 @@
     }
 
     function render() {
-      ctx.clearRect(0,0, canvas.width, canvas.height);
+      ctx.save();
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0,0, canvas.width, canvas.height);
+      ctx.restore();
       arena.render(ctx);
       players.forEach(function(player) {
         player.render(ctx);

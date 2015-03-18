@@ -69,12 +69,22 @@ game.createPlayer = function(id, color, x, y) {
     },
 
     render : function(ctx) {
+      //draw another circle maybe?
       ctx.save();
       ctx.fillStyle = this.color;
+      ctx.strokeStyle = this.color;
+      ctx.lineWidth = 3;
+      //ctx.globalAlpha = 0.2;
+      ctx.shadowBlur=15;
+      ctx.shadowColor=this.color;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
       ctx.closePath();
-      ctx.fill();
+      ctx.stroke();
+      // ctx.lineWidth = 2;
+      // ctx.globalAlpha = 1;
+      // ctx.strokeStyle = this.color;
+      // ctx.stroke();
       ctx.restore();
     }
   }

@@ -62,8 +62,8 @@ game.physicsUtils = {
     var impactSpeed = this.vecDot(impact, impulse);
     var force = Math.sqrt(impactSpeed * c1.mass * c2.mass);
 
-    impulse.x = impulse.x * force;
-    impulse.y = impulse.y * force;
+    impulse.x = impulse.x * force * 1.5;
+    impulse.y = impulse.y * force * 1.5;
     return impulse;
   }
 }

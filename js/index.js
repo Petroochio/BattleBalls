@@ -19,8 +19,6 @@ app.get('/', function(req, res){
 	}
 	res.sendFile(filepath);
 });
-
-
 // **** ACTIONS DONE BY SERVER HAVE HIGHER PRIORITY AND INIT BEFORE CLIENT ACTIONS
 
 // Setup socket.io

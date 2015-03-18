@@ -8,6 +8,7 @@ game.createArena = function( color, r, x, y ) {
     y: y,
     radius: r,
     mu : 0.95,
+    color : color,
 
     inBounds : function(player) {
       var bound = {
@@ -20,8 +21,11 @@ game.createArena = function( color, r, x, y ) {
 
     render : function(ctx) {
       ctx.save();
+      
       ctx.strokeStyle = this.color;
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 5;
+      ctx.shadowBlur=15;
+      ctx.shadowColor = this.color;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
       ctx.closePath();
