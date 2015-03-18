@@ -20,11 +20,12 @@ game.createArena = function( color, r, x, y ) {
 
     render : function(ctx) {
       ctx.save();
-      ctx.fillStyle = this.color;
+      ctx.strokeStyle = this.color;
+      ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
       ctx.closePath();
-      ctx.fill();
+      ctx.stroke();
       ctx.restore();
     }
   }
