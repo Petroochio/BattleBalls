@@ -21,7 +21,6 @@ game.createArena = function( color, r, x, y ) {
 
     render : function(ctx) {
       ctx.save();
-      
       ctx.strokeStyle = this.color;
       ctx.lineWidth = 5;
       ctx.shadowBlur=15;
