@@ -20,9 +20,9 @@ game.battleBalls = {
     me.canvas = document.querySelector('#area');
     me.ctx = me.canvas.getContext('2d');
     me.ctx.lineWidth = 5;
-    me.arena = game.createArena('white', 240, me.canvas.width/2, me.canvas.height/2);
+    me.arena = game.createArena('white', /*230*/me.canvas.height/2-10, me.canvas.width/2, me.canvas.height/2);
 
-    //Set up socket events --Ha Andrew don't look at this
+    //Set up socket events --Ha Andrew don't look at this --You can't stop me
     socket.on('player join', function(data){
       var x = me.canvas.width/2, y = me.canvas.height/2;
       me.players[data.id] = game.createPlayer(data.id, data.color, x, y);
@@ -31,7 +31,7 @@ game.battleBalls = {
     socket.on('phone tilt', function(data) {
       if(me.players[data.id]) {
         me.players[data.id].updateAcceleration(data.xAcc/300, data.yAcc/300);
-      }
+      } //my eyes are everywhere
     });
     console.log(me);
     me.loop();

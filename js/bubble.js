@@ -23,7 +23,7 @@ game.addPlayer = function(id, color, x, y) {
     move : function(x,y) {
       this.y -= y;
       this.x -= x;
-    }
+    },
 
     render : function(ctx) {
       ctx.save();
