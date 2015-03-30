@@ -7,9 +7,11 @@ game.battleBalls = {
   ctx : undefined,
   arena : undefined,
   players : [],
+  sparks : [],
 
   init : function(){
-    var me = game.battleBalls;
+    var me = this;
+
     // create new instance of socket.io
     var num = Math.floor(Math.random()*10);
     var name ='user'+num;
@@ -33,7 +35,12 @@ game.battleBalls = {
         me.players[data.id].updateAcceleration(data.xAcc/300, data.yAcc/300);
       } //my eyes are everywhere
     });
-    console.log(me);
+
+    me.players[11] = game.createPlayer(11, 'red', 200, me.canvas.height/2);
+    me.players[12] = game.createPlayer(12, 'blue', 400, me.canvas.height/2);
+    me.players[11].updateAcceleration(1/20, 0);
+    me.players[12].updateAcceleration(-1/20, 0);
+
     me.loop();
   },
 
@@ -60,6 +67,8 @@ game.battleBalls = {
             player2.applyImpulse(impulse);
             player2.collisions.push(player);
             player.collisions.push(player2);
+
+            //me.addSparks(player, player2, impulse);
           }
         }
       });
@@ -70,6 +79,22 @@ game.battleBalls = {
       }
       player.update(dt);
     });
+
+    this.sparks.forEach(function(spark, index, array){
+      spark.update(dt);
+      if(spark.remove) {
+        array.splice(index, 1);
+      }
+    });
+  },
+
+  addSparks : function(c1, c2, impulse) {
+    var line = game.physicsUtils.getPerp(game.physicsUtils.getSlope(c1, c2));
+    var x = c1.x - (c1.x - c2.x)/2;
+    var y = c1.y - (c1.y - c2.y)/2;
+
+    this.sparks.push(game.createSpark(x, y, line.x/5, line.y/5));
+    this.sparks.push(game.createSpark(x, y, -line.x/5, -line.y/5));
   },
 
   render : function() {
@@ -81,6 +106,9 @@ game.battleBalls = {
     me.arena.render(me.ctx);
     me.players.forEach(function(player) {
       player.render(me.ctx);
+    });
+    me.sparks.forEach(function(spark) {
+      spark.render(me.ctx);
     });
   }
 }

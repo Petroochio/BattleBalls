@@ -64,8 +64,10 @@ game.createPlayer = function(id, color, x, y) {
     },
 
     applyImpulse : function(impulse) {
-      this.velocity.x = 0 + impulse.x/this.mass;
-      this.velocity.y = 0 + impulse.y/this.mass;
+      //this.velocity.x = 0 + impulse.x/this.mass;
+      //this.velocity.y = 0 + impulse.y/this.mass;
+      this.velocity.x += impulse.x/this.mass;
+      this.velocity.y += impulse.y/this.mass;
     },
 
     render : function(ctx) {

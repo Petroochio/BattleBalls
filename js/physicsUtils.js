@@ -23,9 +23,7 @@ game.physicsUtils = {
 
   getPerp : function(slope) {
     var s2 = {};
-    s2.x = slope.x;
-    s2.y = -slope.y;
-    s2.m = s2.y/s2.x;
+    s2.m = -1/slope.m;
     return s2;
   },
 

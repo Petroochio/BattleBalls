@@ -10,14 +10,19 @@ game.createSpark = function(x, y, xVel, yVel) {
     speed: 100,
     velocity: { x: xVel, y: yVel},
     color : 'white',
-
+    remove : false,
+    lifeTime : 20,
 
     update : function(dt) {
       /*this.y -= speed;
-
       if(this.y < -10) {
         this.remove = true;
       }*/
+      this.move(dt);
+      this.lifeTime --;
+      if(this.lifeTime <= 0) {
+        this.remove = true;
+      }
     },
 
     move : function(dt) {
@@ -26,10 +31,11 @@ game.createSpark = function(x, y, xVel, yVel) {
     },
 
     render : function(ctx) {
+
       ctx.save();
-      ctx.fillStye = color;
+      ctx.fillStyle = this.color;
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
       ctx.closePath();
       ctx.fill();
       ctx.restore();
