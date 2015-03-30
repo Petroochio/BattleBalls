@@ -27,17 +27,17 @@ game.battleBalls = {
     //Set up socket events --Ha Andrew don't look at this --You can't stop me
     socket.on('player join', function(data){
       var x = me.canvas.width/2, y = me.canvas.height/2;
-      me.players[data.id] = game.createPlayer(data.id, data.color, x, y);
+      me.players[data.id] = new game.Player(data.id, data.color, x, y);
     });
 
     socket.on('phone tilt', function(data) {
       if(me.players[data.id]) {
-        me.players[data.id].updateAcceleration(data.xAcc/300, data.yAcc/300);
+        me.players[data.id].updateAcceleration(data.yAcc/300, data.xAcc/300);
       } //my eyes are everywhere
     });
 
-    me.players[11] = game.createPlayer(11, 'red', 200, me.canvas.height/2);
-    me.players[12] = game.createPlayer(12, 'blue', 400, me.canvas.height/2);
+    me.players[11] = new game.Player(11, 'red', 200, me.canvas.height/2);
+    me.players[12] = new game.Player(12, 'blue', 400, me.canvas.height/2);
     me.players[11].updateAcceleration(1/20, 0);
     me.players[12].updateAcceleration(-1/20, 0);
 
@@ -93,8 +93,8 @@ game.battleBalls = {
     var x = c1.x - (c1.x - c2.x)/2;
     var y = c1.y - (c1.y - c2.y)/2;
 
-    this.sparks.push(game.createSpark(x, y, line.x/5, line.y/5));
-    this.sparks.push(game.createSpark(x, y, -line.x/5, -line.y/5));
+    this.sparks.push(new game.Spark(x, y, line.x/5, line.y/5));
+    this.sparks.push(new game.Spark(x, y, -line.x/5, -line.y/5));
   },
 
   render : function() {

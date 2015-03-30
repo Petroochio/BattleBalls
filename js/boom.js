@@ -2,8 +2,8 @@
 "use strict";
 var game = game || {};
 
-game.Spark = function() {
-  var Spark = function(x, y, xVel, yVel) {
+game.Boom = function() {
+  var Boom = function(x,y, xVel, yVel) {
     this.x = x;
     this.y = y;
     this.radius = 5;
@@ -14,9 +14,9 @@ game.Spark = function() {
     this.lifeTime = 20;
   };
 
-  var sp = Spark.prototype;
+  var b = Boom.prototype;
 
-  sp.update = function(dt) {
+  b.update = function(dt) {
     /*this.y -= speed;
     if(this.y < -10) {
       this.remove = true;
@@ -28,12 +28,12 @@ game.Spark = function() {
     }
   };
 
-  sp.move = function(dt) {
+  b.move = function(dt) {
     this.y += this.velocity.y;
     this.x += this.velocity.x;
   };
 
-  sp.render = function(ctx) {
+  b.render = function(ctx) {
     ctx.save();
     ctx.fillStyle = this.color;
     ctx.beginPath();
@@ -43,5 +43,5 @@ game.Spark = function() {
     ctx.restore();
   };
   
-  return Spark;
+  return Boom;
 }();
