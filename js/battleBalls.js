@@ -32,7 +32,7 @@ game.battleBalls = {
 
     socket.on('phone tilt', function(data) {
       if(me.players[data.id]) {
-        me.players[data.id].updateAcceleration(data.yAcc/300, data.xAcc/300);
+        me.players[data.id].updateAcceleration(data.yAcc/300, -data.xAcc/300);
       } //my eyes are everywhere
     });
 

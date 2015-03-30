@@ -3,12 +3,11 @@
 var game = game || {};
 
 game.Boom = function() {
-  var Boom = function(x,y, xVel, yVel) {
+  var Boom = function(x,y, pow) {
     this.x = x;
     this.y = y;
     this.radius = 5;
-    this.speed = 100;
-    this.velocity = { x: xVel, y: yVel};
+    this.power = pow;
     this.color = 'white';
     this.remove = false;
     this.lifeTime = 20;
@@ -17,20 +16,11 @@ game.Boom = function() {
   var b = Boom.prototype;
 
   b.update = function(dt) {
-    /*this.y -= speed;
-    if(this.y < -10) {
-      this.remove = true;
-    }*/
     this.move(dt);
     this.lifeTime --;
     if(this.lifeTime <= 0) {
       this.remove = true;
     }
-  };
-
-  b.move = function(dt) {
-    this.y += this.velocity.y;
-    this.x += this.velocity.x;
   };
 
   b.render = function(ctx) {

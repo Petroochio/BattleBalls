@@ -15,6 +15,10 @@ game.Player = function() {
     this.color = color;
     this.mu = 0.95;
     this.mass = 10;
+    this.charging = false;
+    this.charge = 0;
+    this.maxCharge = 100;
+    this.coolDown = 0;
     this.collisions = [];
   }
 
@@ -23,7 +27,31 @@ game.Player = function() {
   p.update = function(dt) {
     this.updateCollisions();
     this.calculateVelocity(dt);
+    this.updateCharge(dt);
     this.move(dt);
+  };
+
+  p.beginCharge = function() {
+    this.charging = (this.coolDown <= 0);
+  };
+
+  p.updateCharge = function(dt) {
+    if(this.charging) {
+      this.charge++;
+    } else {
+      this.coolDown--;
+    }
+
+    if(this.charge >= this.maxCharge) {
+       this.endCharge();
+    }
+  };
+
+  p.endCharge = function() {
+    this.charge = 0;
+    this.charging = false;
+    this.coolDown = 100;
+    console.log('BOOM!');
   };
 
   p.updateCollisions = function() {
