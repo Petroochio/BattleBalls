@@ -30,16 +30,24 @@ game.battleBalls = {
       me.players[data.id] = new game.Player(data.id, data.color, x, y);
     });
 
+    socket.on('charge start', function(data){
+      me.players[data.id].beginCharge();
+    });
+
+    socket.on('charge end', function(data){
+      me.players[data.id].endCharge();
+    });
+
     socket.on('phone tilt', function(data) {
       if(me.players[data.id]) {
         me.players[data.id].updateAcceleration(data.yAcc/300, -data.xAcc/300);
-      } //my eyes are everywhere
+      } //my eyes are everywhere --I will gouge your eyes out
     });
 
-    me.players[11] = new game.Player(11, 'red', 200, me.canvas.height/2);
+   /* me.players[11] = new game.Player(11, 'red', 200, me.canvas.height/2);
     me.players[12] = new game.Player(12, 'blue', 400, me.canvas.height/2);
     me.players[11].updateAcceleration(1/20, 0);
-    me.players[12].updateAcceleration(-1/20, 0);
+    me.players[12].updateAcceleration(-1/20, 0); */
 
     me.loop();
   },

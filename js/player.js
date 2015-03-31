@@ -33,6 +33,7 @@ game.Player = function() {
 
   p.beginCharge = function() {
     this.charging = (this.coolDown <= 0);
+    console.log('h');
   };
 
   p.updateCharge = function(dt) {
@@ -48,10 +49,12 @@ game.Player = function() {
   };
 
   p.endCharge = function() {
-    this.charge = 0;
-    this.charging = false;
-    this.coolDown = 100;
-    console.log('BOOM!');
+    if(this.charging) {
+      this.charge = 0;
+      this.charging = false;
+      this.coolDown = 100;
+      console.log('BOOM!');
+    }
   };
 
   p.updateCollisions = function() {

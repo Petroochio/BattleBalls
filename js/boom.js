@@ -3,10 +3,11 @@
 var game = game || {};
 
 game.Boom = function() {
-  var Boom = function(x,y, pow) {
+  var Boom = function(id, x, y, pow) {
+    this.id = id;
     this.x = x;
     this.y = y;
-    this.radius = 5;
+    this.radius = 1;
     this.power = pow;
     this.color = 'white';
     this.remove = false;
@@ -20,6 +21,7 @@ game.Boom = function() {
     this.lifeTime --;
     if(this.lifeTime <= 0) {
       this.remove = true;
+      this.radius += this.pow;
     }
   };
 

@@ -51,6 +51,14 @@ io.on('connection', function(socket){
   socket.on('phone tilt', function(data){
     io.emit('phone tilt', data);
   });
+
+  socket.on('charge start', function(data){
+    io.emit('charge start', data);
+  });
+
+  socket.on('charge end', function(data){
+    io.emit('charge end', data);
+  });
 });
 
 http.listen(3000, function(){
