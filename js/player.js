@@ -33,7 +33,6 @@ game.Player = function() {
 
   p.beginCharge = function() {
     this.charging = (this.coolDown <= 0);
-    console.log('h');
   };
 
   p.updateCharge = function(dt) {
@@ -50,10 +49,12 @@ game.Player = function() {
 
   p.endCharge = function() {
     if(this.charging) {
+      //2 references to global game obj, fix this
+      var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/3) + .25);
+      game.battleBalls.booms[this.id] = boom;
       this.charge = 0;
       this.charging = false;
       this.coolDown = 100;
-      console.log('BOOM!');
     }
   };
 
@@ -93,8 +94,11 @@ game.Player = function() {
   };
 
   p.move = function(dt) {
-    this.y += this.velocity.y;
-    this.x += this.velocity.x;
+    var scale = 1;
+    scale = this.charging ? 0.5 : scale;
+
+    this.y += this.velocity.y * scale;
+    this.x += this.velocity.x * scale;
   };
 
   p.applyImpulse = function(impulse) {

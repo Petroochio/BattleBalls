@@ -8,6 +8,7 @@ game.battleBalls = {
   arena : undefined,
   players : [],
   sparks : [],
+  booms : [],
 
   init : function(){
     var me = this;
@@ -44,10 +45,10 @@ game.battleBalls = {
       } //my eyes are everywhere --I will gouge your eyes out
     });
 
-   /* me.players[11] = new game.Player(11, 'red', 200, me.canvas.height/2);
+    me.players[11] = new game.Player(11, 'red', 200, me.canvas.height/2);
     me.players[12] = new game.Player(12, 'blue', 400, me.canvas.height/2);
     me.players[11].updateAcceleration(1/20, 0);
-    me.players[12].updateAcceleration(-1/20, 0); */
+    me.players[12].updateAcceleration(-1/20, 0); 
 
     me.loop();
   },
@@ -61,21 +62,20 @@ game.battleBalls = {
   update : function() {
     var dt = 0;
     var me = this;
-    this.players.forEach(function(player) {
+    me.players.forEach(function(player) {
       //Ugly collisions
       me.players.forEach(function(player2){
         if(player2.id !== player.id){
           
           if(game.physicsUtils.circleCollision(player, player2) && !player.colliding(player2)) {
-            //get impule
-            var impulse = game.physicsUtils.getImpulse(player, player2);
+            //get impulse
+            var impulse = game.physicsUtils.getImpulse(player, player2, 1.5);
             player.applyImpulse(impulse);
             impulse.x = impulse.x * -1;
             impulse.y = impulse.y * -1;
             player2.applyImpulse(impulse);
             player2.collisions.push(player);
             player.collisions.push(player2);
-
             //me.addSparks(player, player2, impulse);
           }
         }
@@ -86,6 +86,32 @@ game.battleBalls = {
         player.y = me.canvas.width/2;
       }
       player.update(dt);
+    });
+    
+    me.booms.forEach(function(boom, index, array){
+      boom.update(dt);
+      var boomc = {
+        x : boom.play.x,
+        y : boom.play.y,
+        velocity : {x: 0, y: 0},
+        radius : boom.radius
+      };
+      //duplicate, make a helper function
+      
+      me.players.forEach(function(player){
+        if(boom.id !== player.id){
+          if(game.physicsUtils.circleCollision(player, boomc)) {
+            //get impulse
+            var impulse = game.physicsUtils.getImpulse(player, boomc, 5);
+            player.applyImpulse(impulse);
+            //me.addSparks(player, player2, impulse);
+          }
+        }
+      });
+
+      if(boom.remove) {
+        array.splice(index, 1);
+      }
     });
 
     this.sparks.forEach(function(spark, index, array){
@@ -114,6 +140,9 @@ game.battleBalls = {
     me.arena.render(me.ctx);
     me.players.forEach(function(player) {
       player.render(me.ctx);
+    });
+    me.booms.forEach(function(boom) {
+      boom.render(me.ctx);
     });
     me.sparks.forEach(function(spark) {
       spark.render(me.ctx);

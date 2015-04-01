@@ -3,33 +3,30 @@
 var game = game || {};
 
 game.Boom = function() {
-  var Boom = function(id, x, y, pow) {
+  var Boom = function(id, player, pow) {
     this.id = id;
-    this.x = x;
-    this.y = y;
-    this.radius = 1;
+    this.play = player;
+    this.radius = 15;
     this.power = pow;
-    this.color = 'white';
     this.remove = false;
-    this.lifeTime = 20;
+    this.lifeTime = 10;
   };
 
   var b = Boom.prototype;
 
   b.update = function(dt) {
-    this.move(dt);
     this.lifeTime --;
+    this.radius += this.power;
     if(this.lifeTime <= 0) {
       this.remove = true;
-      this.radius += this.pow;
     }
   };
 
   b.render = function(ctx) {
     ctx.save();
-    ctx.fillStyle = this.color;
+    ctx.fillStyle = this.play.color;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.arc(this.play.x, this.play.y, this.radius, 0, Math.PI * 2);
     ctx.closePath();
     ctx.fill();
     ctx.restore();
