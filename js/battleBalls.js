@@ -46,9 +46,9 @@ game.battleBalls = {
     });
 
     me.players[11] = new game.Player(11, 'red', 200, me.canvas.height/2);
-    me.players[12] = new game.Player(12, 'blue', 400, me.canvas.height/2);
-    me.players[11].updateAcceleration(1/20, 0);
-    me.players[12].updateAcceleration(-1/20, 0); 
+    //me.players[12] = new game.Player(12, 'blue', 400, me.canvas.height/2);
+    me.players[11].updateAcceleration(0, 0);
+    //me.players[12].updateAcceleration(-1/20, 0); 
 
     me.loop();
   },
@@ -94,7 +94,7 @@ game.battleBalls = {
         x : boom.play.x,
         y : boom.play.y,
         velocity : {x:0, y:0},
-        mass : 10,
+        mass : boom.pow * 10,
         radius : boom.radius
       };
       //duplicate, make a helper function
@@ -103,7 +103,6 @@ game.battleBalls = {
         if(boom.id !== player.id){
           if(game.physicsUtils.circleCollision(player, boomc)) {
             //get impulse
-            //var impulse = game.physicsUtils.getImpulse(player, boomc, 5);
             var impulse = {x:0, y:0};
             impulse = game.physicsUtils.normalize(game.physicsUtils.vecDiff(player, boomc));
             impulse.x *= 15;

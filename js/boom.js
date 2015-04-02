@@ -9,7 +9,7 @@ game.Boom = function() {
     this.radius = 20;
     this.power = pow;
     this.remove = false;
-    this.lifeTime = 10;
+    this.lifeTime = 5;
   };
 
   var b = Boom.prototype;
@@ -24,11 +24,16 @@ game.Boom = function() {
 
   b.render = function(ctx) {
     ctx.save();
+    ctx.globalAlpha = 0.7; 
     ctx.fillStyle = this.play.color;
+    ctx.strokeStyle = this.play.color;
+    ctx.lineWidth = 3;
+    ctx.shadowBlur=10;
+    ctx.shadowColor=this.play.color;
     ctx.beginPath();
-    ctx.arc(this.play.x, this.play.y, this.radius, 0, Math.PI * 2);
+    ctx.arc(this.play.x, this.play.y, this.radius, 0, Math.PI * 2, false);
     ctx.closePath();
-    ctx.fill();
+    ctx.stroke();
     ctx.restore();
   };
   

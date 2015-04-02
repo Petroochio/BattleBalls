@@ -50,7 +50,7 @@ game.Player = function() {
   p.endCharge = function() {
     if(this.charging) {
       //2 references to global game obj, fix this
-      var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/3) + .25);
+      var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/4) + .25);
       game.battleBalls.booms[this.id] = boom;
       this.charge = 0;
       this.charging = false;
@@ -95,6 +95,7 @@ game.Player = function() {
 
   p.move = function(dt) {
     var scale = 1;
+
     scale = this.charging ? 0.5 : scale;
 
     this.y += this.velocity.y * scale;
@@ -102,8 +103,6 @@ game.Player = function() {
   };
 
   p.applyImpulse = function(impulse) {
-    //this.velocity.x = 0 + impulse.x/this.mass;
-    //this.velocity.y = 0 + impulse.y/this.mass;
     this.velocity.x += impulse.x/this.mass;
     this.velocity.y += impulse.y/this.mass;
   };
@@ -121,6 +120,19 @@ game.Player = function() {
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
+    if(this.charging) {
+      ctx.save();
+      ctx.fillStyle = this.color;
+      ctx.strokeStyle = this.color;
+      ctx.lineWidth = 3;
+      ctx.shadowBlur=10;
+      ctx.shadowColor=this.color;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.charge / 20 + 1, 0, Math.PI * 2, false);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    }
   };
   
   return Player;
