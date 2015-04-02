@@ -93,7 +93,8 @@ game.battleBalls = {
       var boomc = {
         x : boom.play.x,
         y : boom.play.y,
-        velocity : {x: 0, y: 0},
+        velocity : {x:0, y:0},
+        mass : 10,
         radius : boom.radius
       };
       //duplicate, make a helper function
@@ -102,8 +103,13 @@ game.battleBalls = {
         if(boom.id !== player.id){
           if(game.physicsUtils.circleCollision(player, boomc)) {
             //get impulse
-            var impulse = game.physicsUtils.getImpulse(player, boomc, 5);
+            //var impulse = game.physicsUtils.getImpulse(player, boomc, 5);
+            var impulse = {x:0, y:0};
+            impulse = game.physicsUtils.normalize(game.physicsUtils.vecDiff(player, boomc));
+            impulse.x *= 15;
+            impulse.y *= 15;
             player.applyImpulse(impulse);
+
             //me.addSparks(player, player2, impulse);
           }
         }
@@ -112,6 +118,7 @@ game.battleBalls = {
       if(boom.remove) {
         array.splice(index, 1);
       }
+
     });
 
     this.sparks.forEach(function(spark, index, array){

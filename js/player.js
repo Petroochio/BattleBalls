@@ -54,7 +54,7 @@ game.Player = function() {
       game.battleBalls.booms[this.id] = boom;
       this.charge = 0;
       this.charging = false;
-      this.coolDown = 100;
+      this.coolDown = 0;
     }
   };
 
