@@ -51,7 +51,7 @@ game.Player = function() {
     if(this.charging) {
       //2 references to global game obj, fix this
       var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/4) + .25);
-      game.battleBalls.booms[this.id] = boom;
+      game.battleBalls.booms.push(boom);
       this.charge = 0;
       this.charging = false;
       this.coolDown = 0;

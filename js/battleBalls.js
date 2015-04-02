@@ -6,7 +6,8 @@ game.battleBalls = {
   canvas : undefined,
   ctx : undefined,
   arena : undefined,
-  players : [],
+  playerIDs : [],
+  players : {},
   sparks : [],
   booms : [],
 
@@ -29,6 +30,12 @@ game.battleBalls = {
     socket.on('player join', function(data){
       var x = me.canvas.width/2, y = me.canvas.height/2;
       me.players[data.id] = new game.Player(data.id, data.color, x, y);
+      me.playerIDs.push(data.id);
+    });
+
+    socket.on('player leave', function(data){
+      me.playerIDs.splice(me.playerIDs.indexOf(data.id),1);
+      delete me.players[data.id];
     });
 
     socket.on('charge start', function(data){
@@ -44,12 +51,12 @@ game.battleBalls = {
         me.players[data.id].updateAcceleration(data.yAcc/300, -data.xAcc/300);
       } //my eyes are everywhere --I will gouge your eyes out
     });
-
-    me.players[11] = new game.Player(11, 'red', 200, me.canvas.height/2);
+    /*me.playerIDs.push('test');
+    me.players['test'] = new game.Player(11, 'red', 200, me.canvas.height/2);
     //me.players[12] = new game.Player(12, 'blue', 400, me.canvas.height/2);
     me.players[11].updateAcceleration(0, 0);
     //me.players[12].updateAcceleration(-1/20, 0); 
-
+*/
     me.loop();
   },
 
@@ -62,9 +69,11 @@ game.battleBalls = {
   update : function() {
     var dt = 0;
     var me = this;
-    me.players.forEach(function(player) {
+    me.playerIDs.forEach(function(id) {
+      var player = me.players[id];
       //Ugly collisions
-      me.players.forEach(function(player2){
+      me.playerIDs.forEach(function(id2){
+        var player2 = me.players[id2];
         if(player2.id !== player.id){
           
           if(game.physicsUtils.circleCollision(player, player2) && !player.colliding(player2)) {
@@ -99,7 +108,8 @@ game.battleBalls = {
       };
       //duplicate, make a helper function
       
-      me.players.forEach(function(player){
+      me.playerIDs.forEach(function(id){
+        var player = me.players[id];
         if(boom.id !== player.id){
           if(game.physicsUtils.circleCollision(player, boomc)) {
             //get impulse
@@ -108,7 +118,6 @@ game.battleBalls = {
             impulse.x *= 15;
             impulse.y *= 15;
             player.applyImpulse(impulse);
-
             //me.addSparks(player, player2, impulse);
           }
         }
@@ -144,7 +153,8 @@ game.battleBalls = {
     me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
     me.ctx.restore();
     me.arena.render(me.ctx);
-    me.players.forEach(function(player) {
+    me.playerIDs.forEach(function(id) {
+      var player = me.players[id];
       player.render(me.ctx);
     });
     me.booms.forEach(function(boom) {
