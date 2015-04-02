@@ -128,7 +128,7 @@ game.Player = function() {
       ctx.shadowBlur=10;
       ctx.shadowColor=this.color;
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.charge / 20 + 1, 0, Math.PI * 2, false);
+      ctx.arc(this.x, this.y, (this.charge / 20) + 3, 0, Math.PI * 2, false);
       ctx.closePath();
       ctx.stroke();
       ctx.restore();
