@@ -107,7 +107,6 @@ game.battleBalls = {
         radius : boom.radius
       };
       //duplicate, make a helper function
-      
       me.playerIDs.forEach(function(id){
         var player = me.players[id];
         if(boom.id !== player.id){

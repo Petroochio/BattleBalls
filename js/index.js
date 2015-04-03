@@ -8,10 +8,8 @@ var users = {};
 var players = 0;
 
 app.use('/js', express.static(path.resolve(__dirname)));
-
 app.get('/', function(req, res){
 	//the html string being sent
-
 	var md = new MobileDetect(req.headers['user-agent']);
 	var filepath = path.resolve(__dirname + '/../index.html');
 	if(md.mobile() != null) {
@@ -34,13 +32,12 @@ io.on('connection', function(socket){
       delete users[socket.id];
       players--;
     }
-
 	});
 });
 
 io.on('connection', function(socket){
   socket.on('player join', function(data){
-    if(data.id === -1 && players < 6){
+    if(data.id === -1 && players < 15){
       players++;
       data.id = socket.id;
       users[socket.id] = socket;

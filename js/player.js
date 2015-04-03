@@ -46,15 +46,13 @@ game.Player = function() {
   }
 
   p.updateCharge = function(dt) {
-    if(this.charging) {
+    if(this.charging)
       this.charge++;
-    } else {
+    else
       this.coolDown--;
-    }
 
-    if(this.charge >= this.maxCharge) {
+    if(this.charge >= this.maxCharge)
        this.endCharge();
-    }
   };
 
   p.endCharge = function() {
@@ -78,18 +76,16 @@ game.Player = function() {
   p.updateCollisions = function() {
     var self = this;
     this.collisions.forEach(function(ball, index, array){
-      if(!game.physicsUtils.circleCollision(ball, self)) {
+      if(!game.physicsUtils.circleCollision(ball, self))
         array.splice(index, 1);
-      }
     });
   };
 
   p.colliding = function(player) {
     var collide = false;
     this.collisions.forEach(function(ball){
-      if(ball === player) {
+      if(ball === player)
         collide = true;
-      }
     });
     return collide;
   };
@@ -112,9 +108,7 @@ game.Player = function() {
 
   p.move = function(dt) {
     var scale = 1;
-
     scale = (this.charging || this.stunned) ? 0.5 : scale;
-
     this.y += this.velocity.y * scale;
     this.x += this.velocity.x * scale;
   };
