@@ -33,6 +33,7 @@ io.on('connection', function(socket){
     console.log('user disconnected');
     if(users[socket.id]){
       delete users[socket.id];
+      players--;
     }
 
 	});
