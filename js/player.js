@@ -51,7 +51,7 @@ game.Player = function() {
     if(this.charging) {
       //2 references to global game obj, fix this
       var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/4) + .25);
-      game.battleBalls.booms[this.id] = boom;
+      game.battleBalls.booms.push(boom);
       this.charge = 0;
       this.charging = false;
       this.coolDown = 0;
@@ -128,7 +128,7 @@ game.Player = function() {
       ctx.shadowBlur=10;
       ctx.shadowColor=this.color;
       ctx.beginPath();
-      ctx.arc(this.x, this.y, this.charge / 20 + 1, 0, Math.PI * 2, false);
+      ctx.arc(this.x, this.y, (this.charge / 20) + 3, 0, Math.PI * 2, false);
       ctx.closePath();
       ctx.stroke();
       ctx.restore();

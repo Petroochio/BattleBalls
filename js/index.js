@@ -4,8 +4,8 @@ var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
 var MobileDetect = require('mobile-detect');
-var users = [];
-var players = [];
+var users = {};
+var players = 0;
 
 app.use('/js', express.static(path.resolve(__dirname)));
 
@@ -26,26 +26,29 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
 	//broadcast that a user has connected
 	//pass an object containing user informatiojn?
-    /*socket.broadcast.emit('Broadcast');
-	*/
-	/*var userId = socket.handshake.query.user;
-	console.log(userId +' connected.');
-  socket.join(userId);
-
-	var msg = { text:"Hello " + userId, id:"Admin"};
-	io.to(userId).emit('chat message', msg);
-	io.emit("chat message", msg);
-*/
 
 	// handle disconnects
 	socket.on('disconnect', function(){
-		console.log('user disconnected');
+		io.emit('player leave', {id: socket.id});
+    console.log('user disconnected');
+    if(users[socket.id]){
+      delete users[socket.id];
+    }
+
 	});
 });
 
 io.on('connection', function(socket){
   socket.on('player join', function(data){
-    io.emit('player join', data);
+    if(data.id === -1 && players < 6){
+      players++;
+      data.id = socket.id;
+      users[socket.id] = socket;
+      io.to(socket.id).emit('player connect', data);
+      io.emit('player join', data);
+    } else {
+      socket.disconnect();
+    }
   });
 
   socket.on('phone tilt', function(data){

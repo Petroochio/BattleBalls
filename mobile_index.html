@@ -21,6 +21,7 @@
 			// create new instance of socket.io
       var num = Math.floor(Math.random()*10);
       var name ='user'+num;
+      var id = -1;
 
       var red = Math.floor(Math.random() * 105 +150);
       var green = Math.floor(Math.random() * 105 +150);
@@ -29,19 +30,30 @@
       //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
 			var socket = io.connect( window.location.origin, {query: 'user='+name});
 
-      var connectData = { id: num, color: col};
+      var connectData = { id: id, color: col };
 
       socket.emit('player join', connectData);
 
+<<<<<<< HEAD
       var boomButton = document.querySelector("#myCanvas");
+=======
+      socket.on('player connect', function(data){
+        if(data.id !== -1) {
+          id = data.id;
+        }
+        
+      });
+
+      var boomButton = document.querySelector("#boomButton");
+>>>>>>> origin/master
       boomButton.addEventListener("touchstart", function(e){
-        var data = { id: num };
+        var data = { id: id };
         socket.emit('charge start', data);
           redraw();
       }, false);
 
       boomButton.addEventListener("touchend", function(e){
-        var data = { id: num };
+        var data = { id: id };
         socket.emit('charge end', data);
           draw();
       }, false);
@@ -55,7 +67,7 @@
           // alpha is the compass direction the device is facing in degrees
           var rot = e.alpha
 
-          var data = { id: num, xAcc : xTilt, yAcc : yTilt };
+          var data = { id: id, xAcc : xTilt, yAcc : yTilt };
           socket.emit('phone tilt', data);
         }, false);
       }
