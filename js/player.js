@@ -30,12 +30,19 @@ game.Player = function() {
     this.updateCollisions();
     this.calculateVelocity(dt);
     this.updateCharge(dt);
+    this.updateStun(dt);
     this.move(dt);
   };
 
   p.beginCharge = function() {
     this.charging = (this.coolDown <= 0);
   };
+
+  p.updateStun = function(dt) {
+    if(this.stunned)
+      this.stunTime--;
+    this.stunned = (this.stunTime <= 0);
+  }
 
   p.updateCharge = function(dt) {
     if(this.charging) {
@@ -56,10 +63,11 @@ game.Player = function() {
       game.battleBalls.booms.push(boom);
     } else {
       this.stunned = true;
+      this.stunTime = 50;
     }
     this.charge = 0;
     this.charging = false;
-    this.coolDown = 0;
+    this.coolDown = 20;
   };
 
   p.updateCollisions = function() {
@@ -115,7 +123,7 @@ game.Player = function() {
     //draw another circle maybe?
     ctx.save();
     ctx.fillStyle = this.color;
-    ctx.strokeStyle = this.color;
+    ctx.strokeStyle = this.stunned ? 'grey' : this.color;
     ctx.lineWidth = 3;
     ctx.shadowBlur=10;
     ctx.shadowColor=this.color;
@@ -124,6 +132,7 @@ game.Player = function() {
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
+
     if(this.charging) {
       ctx.save();
       ctx.fillStyle = this.color;
