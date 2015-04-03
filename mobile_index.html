@@ -33,19 +33,15 @@
       var connectData = { id: id, color: col };
 
       socket.emit('player join', connectData);
-
-<<<<<<< HEAD
-      var boomButton = document.querySelector("#myCanvas");
-=======
+            
       socket.on('player connect', function(data){
         if(data.id !== -1) {
           id = data.id;
         }
         
       });
-
-      var boomButton = document.querySelector("#boomButton");
->>>>>>> origin/master
+            
+      var boomButton = document.querySelector("#myCanvas");
       boomButton.addEventListener("touchstart", function(e){
         var data = { id: id };
         socket.emit('charge start', data);
@@ -109,11 +105,10 @@
 	</script>
   </head>
   <body>
-	<h3>MOBILE DEVICE</h3>
       <div id="buttons">
+          <br>
           <canvas id="myCanvas"width="200px"height="200px"></canvas>
           <!--<div id="boomButton"></div>-->
-          <br>
           <div id="dashButton">&nbsp;</div>
       </div>
   </body>
