@@ -17,8 +17,10 @@ game.Player = function() {
     this.mass = 10;
     this.charging = false;
     this.charge = 0;
-    this.maxCharge = 100;
+    this.maxCharge = 120;
     this.coolDown = 0;
+    this.stunned = false;
+    this.stunTime = 0;
     this.collisions = [];
   }
 
@@ -48,14 +50,16 @@ game.Player = function() {
   };
 
   p.endCharge = function() {
-    if(this.charging) {
+    if(this.charging && this.charge <= this.maxCharge) {
       //2 references to global game obj, fix this
       var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/4) + .25);
       game.battleBalls.booms.push(boom);
-      this.charge = 0;
-      this.charging = false;
-      this.coolDown = 0;
+    } else {
+      this.stunned = true;
     }
+    this.charge = 0;
+    this.charging = false;
+    this.coolDown = 0;
   };
 
   p.updateCollisions = function() {
@@ -96,7 +100,7 @@ game.Player = function() {
   p.move = function(dt) {
     var scale = 1;
 
-    scale = this.charging ? 0.5 : scale;
+    scale = (this.charging || this.stunned) ? 0.5 : scale;
 
     this.y += this.velocity.y * scale;
     this.x += this.velocity.x * scale;
