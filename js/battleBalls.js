@@ -103,7 +103,7 @@ game.battleBalls = {
         x : boom.play.x,
         y : boom.play.y,
         velocity : {x:0, y:0},
-        mass : boom.pow * 10,
+        mass : boom.pow * 20,
         radius : boom.radius
       };
       //duplicate, make a helper function
@@ -126,7 +126,6 @@ game.battleBalls = {
       if(boom.remove) {
         array.splice(index, 1);
       }
-
     });
 
     this.sparks.forEach(function(spark, index, array){

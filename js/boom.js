@@ -1,4 +1,4 @@
-//Function for making bubble objects and adding them to the game
+//Function for making Boom objects
 "use strict";
 var game = game || {};
 
@@ -13,7 +13,10 @@ game.Boom = function() {
   };
 
   var b = Boom.prototype;
-
+  /** Update function to be called every frame
+   * @param dt : Delta Time since the last time update was called
+   * 
+   */
   b.update = function(dt) {
     this.lifeTime --;
     this.radius += this.power;
@@ -21,7 +24,10 @@ game.Boom = function() {
       this.remove = true;
     }
   };
-
+  /** Render function used to draw the object to the screen
+   * @param ctx : Drawing context
+   * 
+   */
   b.render = function(ctx) {
     ctx.save();
     ctx.globalAlpha = 0.7; 

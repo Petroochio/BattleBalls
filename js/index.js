@@ -26,7 +26,6 @@ app.get('/', function(req, res){
 io.on('connection', function(socket){
 	//broadcast that a user has connected
 	//pass an object containing user informatiojn?
-
 	// handle disconnects
 	socket.on('disconnect', function(){
 		io.emit('player leave', {id: socket.id});

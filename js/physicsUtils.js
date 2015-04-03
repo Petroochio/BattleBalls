@@ -1,18 +1,28 @@
-//Function for making bubble objects and adding them to the game
+//Physics library used for all physics calculations
 "use strict";
 var game = game || {};
-//we will need to give the balls individual mass, but for now im gonna use ten
+
 game.physicsUtils = {
+  /**Square function, returns the value passed in squared
+   * @param val : value to be squared
+   */
   sq : function(val) {
     return val * val;
   },
-
+  /** Checks for a collision between two circles
+   * @param c1 : first circle in collision check
+   * @param c2 : second circle in collision check
+   */
   circleCollision : function(c1, c2) {
     var radSq = this.sq(c1.radius+ c2.radius);
     var distSq = this.sq(c2.x - c1.x) + this.sq(c2.y - c1.y);
     return (radSq >= distSq);
   },
-
+  /** Returns a slope, and the x and y components of a 
+   *  line between the two points passed in
+   * @param p1 : first point
+   * @param p2 : second point
+   */
   getSlope : function(p1, p2) {
     var slope = {};
     slope.x = p2.x - p1.x;
