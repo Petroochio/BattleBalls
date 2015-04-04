@@ -144,17 +144,15 @@ game.Player = function() {
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
-
-    this.renderCharge(ctx);
+    if(this.charging)
+      this.renderCharge(ctx);
   };
 
   p.renderCharge = function(ctx) {
-    if(this.charging) {
-      if(this.chargeType === "boom")
-        this.drawBoomCharge(ctx);
-      else if(this.chargeType === "dash")
-        this.drawBoomCharge(ctx);
-    }
+    if(this.chargeType === "boom")
+      this.drawBoomCharge(ctx);
+    else if(this.chargeType === "dash")
+      this.drawBoomCharge(ctx);
   };
 
   p.drawBoomCharge = function(ctx) {
