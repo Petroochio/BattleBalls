@@ -10,10 +10,12 @@ game.battleBalls = {
   players : {},
   sparks : [],
   booms : [],
+  dt : 0,
+  lastTime : 0,
 
   init : function(){
     var me = this;
-
+    me.lastTime = Date.now(); 
     // create new instance of socket.io
     var num = Math.floor(Math.random()*10);
     var name ='user'+num;
@@ -66,9 +68,16 @@ game.battleBalls = {
     this.render();
   },
 
+  updateTime : function() {
+    var now = Date.now();
+    this.dt = now - this.lastTime;
+    this.lastTime = now;
+  },
+
   update : function() {
-    var dt = 0;
+    this.updtateTime();
     var me = this;
+    console.log(me.dt);
     me.playerIDs.forEach(function(id) {
       var player = me.players[id];
       //Ugly collisions
@@ -94,11 +103,11 @@ game.battleBalls = {
         player.x = me.canvas.width/2;
         player.y = me.canvas.width/2;
       }
-      player.update(dt);
+      player.update(me.dt);
     });
     
     me.booms.forEach(function(boom, index, array){
-      boom.update(dt);
+      boom.update(me.dt);
       var boomc = {
         x : boom.play.x,
         y : boom.play.y,
@@ -128,7 +137,7 @@ game.battleBalls = {
     });
 
     this.sparks.forEach(function(spark, index, array){
-      spark.update(dt);
+      spark.update(me.dt);
       if(spark.remove) {
         array.splice(index, 1);
       }
