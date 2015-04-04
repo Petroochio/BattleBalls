@@ -16,6 +16,7 @@ game.Player = function() {
     this.mu = 0.95;
     this.mass = 10;
     this.charging = false;
+    this.chargeType = undefined;
     this.charge = 0;
     this.maxCharge = 120;
     this.coolDown = 0;
@@ -34,9 +35,11 @@ game.Player = function() {
     this.move(dt);
   };
 
-  p.beginCharge = function() {
-    if(!this.stunned)
+  p.beginCharge = function(type) {
+    if(!this.stunned && !this.charging) {
       this.charging = (this.coolDown <= 0);
+      this.chargeType = "boom";
+    }
   };
 
   p.updateStun = function(dt) {
@@ -58,11 +61,11 @@ game.Player = function() {
   p.endCharge = function() {
     if(this.charging && this.charge < this.maxCharge) {
       //2 references to global game obj, fix this
-      var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/4) + .25);
-      game.battleBalls.booms.push(boom);
-      this.charge = 0;
-      this.charging = false;
-      this.coolDown = 20;
+      if(this.chargeType === "boom")
+        this.doBoom();
+      else if(this.chargeType === "dash")
+        this.doDash();
+
     } else if(this.charging) {
       //this.stunned = true;
       this.stunTime = 200;
@@ -70,7 +73,18 @@ game.Player = function() {
       this.charging = false;
       this.coolDown = 20;
     }
-    
+  };
+
+  p.doBoom = function() {
+    var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/4) + .25);
+    game.battleBalls.booms.push(boom);
+    this.charge = 0;
+    this.charging = false;
+    this.coolDown = 20;
+  };
+
+  p.doDash = function() {
+
   };
 
   p.updateCollisions = function() {
@@ -119,7 +133,6 @@ game.Player = function() {
   };
 
   p.render = function(ctx) {
-    //draw another circle maybe?
     ctx.save();
     ctx.fillStyle = this.color;
     ctx.strokeStyle = this.stunned ? 'grey' : this.color;
@@ -132,20 +145,31 @@ game.Player = function() {
     ctx.stroke();
     ctx.restore();
 
+    this.renderCharge(ctx);
+  };
+
+  p.renderCharge = function(ctx) {
     if(this.charging) {
-      ctx.save();
-      ctx.fillStyle = this.color;
-      ctx.strokeStyle = this.color;
-      ctx.lineWidth = 3;
-      ctx.shadowBlur=10;
-      ctx.shadowColor=this.color;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, (this.charge / 20) + 3, 0, Math.PI * 2, false);
-      ctx.closePath();
-      ctx.stroke();
-      ctx.restore();
+      if(this.chargeType === "boom")
+        this.drawBoomCharge(ctx);
+      else if(this.chargeType === "dash")
+        this.drawBoomCharge(ctx);
     }
   };
+
+  p.drawBoomCharge = function(ctx) {
+    ctx.save();
+    ctx.fillStyle = this.color;
+    ctx.strokeStyle = this.color;
+    ctx.lineWidth = 3;
+    ctx.shadowBlur=10;
+    ctx.shadowColor=this.color;
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, (this.charge / 20) + 3, 0, Math.PI * 2, false);
+    ctx.closePath();
+    ctx.stroke();
+    ctx.restore();
+  }
   
   return Player;
 }();

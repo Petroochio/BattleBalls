@@ -39,7 +39,7 @@ game.battleBalls = {
     });
 
     socket.on('charge start', function(data){
-      me.players[data.id].beginCharge();
+      me.players[data.id].beginCharge("boom");
     });
 
     socket.on('charge end', function(data){
@@ -56,7 +56,7 @@ game.battleBalls = {
     //me.players[12] = new game.Player(12, 'blue', 400, me.canvas.height/2);
     me.players[11].updateAcceleration(0, 0);
     //me.players[12].updateAcceleration(-1/20, 0); 
-*/
+    */
     me.loop();
   },
 
