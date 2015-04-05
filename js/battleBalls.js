@@ -25,7 +25,7 @@ game.battleBalls = {
     me.ctx = me.canvas.getContext('2d');
     me.ctx.lineWidth = 5;
     me.arena = game.createArena('white', /*230*/me.canvas.height/2-10, me.canvas.width/2, me.canvas.height/2);
-
+/*
     //Set up socket events --Ha Andrew don't look at this --You can't stop me
     socket.on('player join', function(data){
       var x = me.canvas.width/2, y = me.canvas.height/2;
@@ -50,7 +50,8 @@ game.battleBalls = {
       if(me.players[data.id]) {
         me.players[data.id].updateAcceleration(data.yAcc/300, -data.xAcc/300);
       } //my eyes are everywhere --I will gouge your eyes out
-    });
+    });*/
+    game.socketHandlers.init(me);
     /*me.playerIDs.push('test');
     me.players['test'] = new game.Player(11, 'red', 200, me.canvas.height/2);
     //me.players[12] = new game.Player(12, 'blue', 400, me.canvas.height/2);
