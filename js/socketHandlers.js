@@ -7,7 +7,9 @@ game.socketHandlers = {
     me.ctx = me.canvas.getContext('2d');
     me.ctx.lineWidth = 5;
     me.arena = game.createArena('white', me.canvas.height/2-10, me.canvas.width/2, me.canvas.height/2);*/
-
+    //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
+    var socket = io.connect( window.location.origin, {query: 'user='+name, type: 'desktop'});
+    
     //Set up socket events --Ha Andrew don't look at this --You can't stop me
     socket.on('player join', function(data){
       var x = app.canvas.width/2, y = app.canvas.height/2;

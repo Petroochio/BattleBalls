@@ -203,7 +203,7 @@ game.Player = function() {
     ctx.beginPath();
     ctx.moveTo(this.x, this.y);
     ctx.lineTo(this.x + forward.x * this.charge/this.maxCharge * 10,
-              this.y + forward.y * this.charge/this.maxCharge * 10,);
+              this.y + forward.y * this.charge/this.maxCharge * 10);
     ctx.closePath();
     ctx.stroke();
     ctx.restore();

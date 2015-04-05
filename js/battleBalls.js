@@ -19,7 +19,7 @@ game.battleBalls = {
     var name ='user'+num;
 
     //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
-    var socket = io.connect( window.location.origin, {query: 'user='+name, type: 'desktop'});
+    //var socket = io.connect( window.location.origin, {query: 'user='+name, type: 'desktop'});
 
     me.canvas = document.querySelector('#area');
     me.ctx = me.canvas.getContext('2d');

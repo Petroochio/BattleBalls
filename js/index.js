@@ -59,6 +59,7 @@ io.on('connection', function(socket){
   socket.on('charge end', function(data){
     io.emit('charge end', data);
   });
+
 });
 
 http.listen(3000, function(){
