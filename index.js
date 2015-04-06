@@ -6,14 +6,15 @@ var io = require('socket.io')(http);
 var MobileDetect = require('mobile-detect');
 var users = {};
 var players = 0;
+var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-app.use('/js', express.static(path.resolve(__dirname)));
+app.use('/js', express.static(path.resolve(__dirname) + '/js'));
 app.get('/', function(req, res){
 	//the html string being sent
 	var md = new MobileDetect(req.headers['user-agent']);
-	var filepath = path.resolve(__dirname + '/../index.html');
+	var filepath = path.resolve(__dirname + '/index.html');
 	if(md.mobile() != null) {
-		filepath = path.resolve(__dirname + '/../mobile_index.html');
+		filepath = path.resolve(__dirname + '/mobile_index.html');
 	}
 	res.sendFile(filepath);
 });
@@ -62,6 +63,6 @@ io.on('connection', function(socket){
 
 });
 
-http.listen(3000, function(){
+http.listen(port, function(){
 	console.log('listening on *:3000');
 });
