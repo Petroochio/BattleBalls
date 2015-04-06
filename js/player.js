@@ -149,8 +149,8 @@ game.Player = function() {
   };
 
   p.applyImpulse = function(impulse) {
-    this.velocity.x += impulse.x/this.mass;
-    this.velocity.y += impulse.y/this.mass;
+    this.yAcc += impulse.x/this.mass;
+    this.xAcc += impulse.y/this.mass;
   };
 
   p.render = function(ctx) {
