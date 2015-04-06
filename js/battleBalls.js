@@ -49,6 +49,7 @@ game.battleBalls = {
       var player = me.players[id];
       //Ugly collisions
       me.playerIDs.forEach(function(id2){
+        player.update(dt);
         var player2 = me.players[id2];
         if(player2.id !== player.id){
           
@@ -70,7 +71,6 @@ game.battleBalls = {
         player.x = me.canvas.width/2;
         player.y = me.canvas.width/2;
       }
-      player.update(dt);
     });
     
     me.booms.forEach(function(boom, index, array){
@@ -90,8 +90,8 @@ game.battleBalls = {
             //get impulse
             var impulse = {x:0, y:0};
             impulse = game.physicsUtils.normalize(game.physicsUtils.vecDiff(player, boomc));
-            impulse.x *= 15;
-            impulse.y *= 15;
+            impulse.x *= 20;
+            impulse.y *= 20;
             player.applyImpulse(impulse);
             //me.addSparks(player, player2, impulse);
           }
