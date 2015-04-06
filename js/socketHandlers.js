@@ -41,5 +41,6 @@ game.socketHandlers = {
         app.players[data.id].updateAcceleration(data.yAcc/300, -data.xAcc/300);
       } //my eyes are everywhere --I will gouge your eyes out
     });
+    app.loop();
   }
 }
