@@ -33,7 +33,6 @@ game.battleBalls = {
     me.players[11].updateAcceleration(0, 0);
     //me.players[12].updateAcceleration(-1/20, 0); 
     */
-    //me.loop();
   },
 
   loop : function() {

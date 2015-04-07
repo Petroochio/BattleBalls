@@ -3,10 +3,6 @@ var game = game || {};
 
 game.socketHandlers = {
   init : function(app) {
-    /*me.canvas = document.querySelector('#area');
-    me.ctx = me.canvas.getContext('2d');
-    me.ctx.lineWidth = 5;
-    me.arena = game.createArena('white', me.canvas.height/2-10, me.canvas.width/2, me.canvas.height/2);*/
     //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
     var socket = io.connect( window.location.origin, {query: 'user='+name, type: 'desktop'});
     var room = "";

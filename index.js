@@ -28,7 +28,7 @@ io.on('connection', function(socket){
 	// handle disconnects
 	socket.on('disconnect', function(){
 		io.emit('player leave', {id: socket.id});
-    console.log('user disconnected');
+    
     if(users[socket.id]){
       delete users[socket.id];
       players--;
@@ -36,10 +36,11 @@ io.on('connection', function(socket){
 	});
 
   socket.on('host connect', function(data){
-    
+
   });
 
   socket.on('player join', function(data){
+
     if(data.id === -1 && players < 15){
       players++;
       data.id = socket.id;
