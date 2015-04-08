@@ -10,6 +10,7 @@ game.battleBalls = {
   players : {},
   sparks : [],
   booms : [],
+  state : 'GAME',
 
   init : function(){
     var me = this;
@@ -41,38 +42,53 @@ game.battleBalls = {
     this.render();
   },
 
-  update : function() {
+  updateStartMenu : function() {
+
+  },
+
+  updateGameEnd : function() {
+
+  },
+
+  updateGameLoop : function() {
     var dt = 0;
     var me = this;
+    var KOes = 0;
     me.playerIDs.forEach(function(id) {
       var player = me.players[id];
       //Ugly collisions
-      me.playerIDs.forEach(function(id2){
-        
-        var player2 = me.players[id2];
-        if(player2.id !== player.id){
+      if(!this.player.KOed) {
+        me.playerIDs.forEach(function(id2){
           
-          if(game.physicsUtils.circleCollision(player, player2) && !player.colliding(player2)) {
-            //get impulse
-            var impulse = game.physicsUtils.getImpulse(player, player2, 1.5);
-            player.applyImpulse(impulse);
-            player.collisions.push({player: player2, force: impulse});
-            impulse.x = impulse.x * -1;
-            impulse.y = impulse.y * -1;
-            player2.applyImpulse(impulse);
-            player2.collisions.push({player: player, force: impulse});
-            //me.addSparks(player, player2, impulse);
+          var player2 = me.players[id2];
+          if(player2.id !== player.id){
+            
+            if(game.physicsUtils.circleCollision(player, player2) && !player.colliding(player2)) {
+              //get impulse
+              var impulse = game.physicsUtils.getImpulse(player, player2, 1.5);
+              player.applyImpulse(impulse);
+              player.collisions.push({player: player2, force: impulse});
+              impulse.x = impulse.x * -1;
+              impulse.y = impulse.y * -1;
+              player2.applyImpulse(impulse);
+              player2.collisions.push({player: player, force: impulse});
+              //me.addSparks(player, player2, impulse);
+            }
           }
+        });
+        //Bad code for resetting player if they leave the arena
+        if(!me.arena.inBounds(player)) {
+          player.x = me.canvas.width/2;
+          player.y = me.canvas.width/2;
         }
-      });
-      //Bad code for resetting player if they leave the arena
-      if(!me.arena.inBounds(player)) {
-        player.x = me.canvas.width/2;
-        player.y = me.canvas.width/2;
-      }
-      player.update(dt);
+        player.update(dt);
+      } else 
+        this.KOes++;
     });
     
+    if(KOes >= me.playerIDs.length)
+      me.state = "END";
+
     me.booms.forEach(function(boom, index, array){
       boom.update(dt);
       var boomc = {
@@ -111,6 +127,20 @@ game.battleBalls = {
     });
   },
 
+  update : function() {
+    switch(this.state) {
+      case "START" :
+        this.updateStartMenu();
+        break;
+      case "GAME" :
+        this.updateGameLoop();
+        break;
+      case "END" :
+        this.updateGameEnd();
+        break;
+    }
+  },
+
   addSparks : function(c1, c2, impulse) {
     var line = game.physicsUtils.getPerp(game.physicsUtils.getSlope(c1, c2));
     var x = c1.x - (c1.x - c2.x)/2;
@@ -120,7 +150,22 @@ game.battleBalls = {
     this.sparks.push(new game.Spark(x, y, -line.x/5, -line.y/5));
   },
 
-  render : function() {
+  renderStart : function() {
+    var me = this;
+    me.ctx.save();
+    me.ctx.fillStyle = 'black';
+    me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
+    me.ctx.restore();
+    me.text(me.ctx, "Players in " + me.playerIDs.length, me.canvas.width, me.canvas.height, 50, "white");
+  },
+
+  text: function(ctx, string, x, y, size, col) {
+    ctx.font = 'bold '+size+'px Monospace';
+    ctx.fillStyle = col;
+    ctx.fillText(string, x, y);
+  },
+
+  renderGame : function() {
     var me = this;
     me.ctx.save();
     me.ctx.fillStyle = 'black';
@@ -137,5 +182,28 @@ game.battleBalls = {
     me.sparks.forEach(function(spark) {
       spark.render(me.ctx);
     });
+  },
+
+  renderEnd : function() {
+    var me = this;
+    me.ctx.save();
+    me.ctx.fillStyle = 'black';
+    me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
+    me.ctx.restore();
+    me.text(me.ctx, "Game Over", me.canvas.width, me.canvas.height, 50, "white");
+  },
+
+  render : function() {
+    switch(this.state) {
+      case "START" :
+        this.renderStart();
+        break;
+      case "GAME" :
+        this.renderGame();
+        break;
+      case "END" :
+        this.renderEnd();
+        break;
+    }
   }
 }
