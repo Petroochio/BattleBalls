@@ -10,7 +10,7 @@ game.battleBalls = {
   players : {},
   sparks : [],
   booms : [],
-  state : 'GAME',
+  state : "START",
 
   init : function(){
     var me = this;
@@ -43,7 +43,8 @@ game.battleBalls = {
   },
 
   updateStartMenu : function() {
-
+    if(this.playerIDs >= 2)
+      this.state = "GAME";
   },
 
   updateGameEnd : function() {
