@@ -56,11 +56,11 @@ game.battleBalls = {
             //get impulse
             var impulse = game.physicsUtils.getImpulse(player, player2, 1.5);
             player.applyImpulse(impulse);
+            player.collisions.push({player: player2, force: impulse});
             impulse.x = impulse.x * -1;
             impulse.y = impulse.y * -1;
             player2.applyImpulse(impulse);
-            player2.collisions.push(player);
-            player.collisions.push(player2);
+            player2.collisions.push({player: player, force: impulse});
             //me.addSparks(player, player2, impulse);
           }
         }

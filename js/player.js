@@ -111,15 +111,17 @@ game.Player = function() {
   p.updateCollisions = function() {
     var self = this;
     this.collisions.forEach(function(ball, index, array){
-      if(!game.physicsUtils.circleCollision(ball, self))
+      if(!game.physicsUtils.circleCollision(ball.player, self))
         array.splice(index, 1);
+      else
+        self.applyImpulse(ball.impulse);
     });
   };
 
   p.colliding = function(player) {
     var collide = false;
     this.collisions.forEach(function(ball){
-      if(ball === player)
+      if(ball.player === player)
         collide = true;
     });
     return collide;
