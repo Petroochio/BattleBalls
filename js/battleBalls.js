@@ -48,7 +48,7 @@ game.battleBalls = {
       var player = me.players[id];
       //Ugly collisions
       me.playerIDs.forEach(function(id2){
-        player.update(dt);
+        
         var player2 = me.players[id2];
         if(player2.id !== player.id){
           
@@ -70,6 +70,7 @@ game.battleBalls = {
         player.x = me.canvas.width/2;
         player.y = me.canvas.width/2;
       }
+      player.update(dt);
     });
     
     me.booms.forEach(function(boom, index, array){

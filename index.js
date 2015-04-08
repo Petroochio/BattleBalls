@@ -34,13 +34,12 @@ io.on('connection', function(socket){
       players--;
     }
 	});
-
+/*
   socket.on('host connect', function(data){
 
   });
-
+*/
   socket.on('player join', function(data){
-
     if(data.id === -1 && players < 15){
       players++;
       data.id = socket.id;
@@ -49,6 +48,7 @@ io.on('connection', function(socket){
       io.emit('player join', data);
     } else {
       socket.disconnect();
+
     }
   });
 

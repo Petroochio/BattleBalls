@@ -8,19 +8,21 @@ game.socketHandlers = {
     var room = "";
     var password = "";
     var connectData = {};
-    socket.emit('host connect', connectData);
+    /*socket.emit('host connect', connectData);
     socket.on('host establish', function(data){
       console.log(data.password);
-    });
+    });*/
     //Set up socket events --Ha Andrew don't look at this --You can't stop me
     socket.on('player join', function(data){
       var x = app.canvas.width/2, y = app.canvas.height/2;
       app.players[data.id] = new game.Player(data.id, data.color, x, y);
       app.playerIDs.push(data.id);
+      console.log(app.playerIDs);
     });
 
     socket.on('player leave', function(data){
-      app.playerIDs.splice(app.playerIDs.indexOf(data.id),1);
+      if(app.players[data.id])
+        app.playerIDs.splice(app.playerIDs.indexOf(data.id),1);
       delete app.players[data.id];
     });
 

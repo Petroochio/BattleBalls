@@ -111,10 +111,11 @@ game.Player = function() {
   p.updateCollisions = function() {
     var self = this;
     this.collisions.forEach(function(ball, index, array){
+      console.log(ball);
       if(!game.physicsUtils.circleCollision(ball.player, self))
         array.splice(index, 1);
-      else
-        self.applyImpulse(ball.impulse);
+      // else
+      //   self.applyImpulse(ball.force);
     });
   };
 
