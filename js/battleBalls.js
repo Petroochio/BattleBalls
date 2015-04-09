@@ -43,12 +43,35 @@ game.battleBalls = {
   },
 
   updateStartMenu : function() {
-    if(this.playerIDs >= 2)
+    var canStart = true;
+    var me = this;
+    this.playerIDs.forEach(function(id){
+      if(!me.players[id].ready)
+        canStart = false;
+    });
+
+    if(this.playerIDs >= 2 && canStart) {
       this.state = "GAME";
+      this.playerIDs.forEach(function(id){
+        me.players[id].ready = false;
+      });
+    }
   },
 
   updateGameEnd : function() {
-
+    var canStart = true;
+    var me = this;
+    this.playerIDs.forEach(function(id){
+      if(!me.players[id].ready)
+        canStart = false;
+    });
+    
+    if(this.playerIDs >= 2 && canStart) {
+      this.state = "GAME";
+      this.playerIDs.forEach(function(id){
+        me.players[id].ready = false;
+      });
+    }
   },
 
   updateGameLoop : function() {
