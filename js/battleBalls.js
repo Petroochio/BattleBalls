@@ -20,20 +20,12 @@ game.battleBalls = {
     var name ='user'+num;
 
     //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
-    //var socket = io.connect( window.location.origin, {query: 'user='+name, type: 'desktop'});
-
     me.canvas = document.querySelector('#area');
     me.ctx = me.canvas.getContext('2d');
     me.ctx.lineWidth = 5;
     me.arena = game.createArena('white', /*230*/me.canvas.height/2-10, me.canvas.width/2, me.canvas.height/2);
-
-    game.socketHandlers.init(me);
-    /*me.playerIDs.push('test');
-    me.players['test'] = new game.Player(11, 'red', 200, me.canvas.height/2);
-    //me.players[12] = new game.Player(12, 'blue', 400, me.canvas.height/2);
-    me.players[11].updateAcceleration(0, 0);
-    //me.players[12].updateAcceleration(-1/20, 0); 
-    */
+    //set up socket
+    game.socketHandlers.init(me); 
   },
 
   loop : function() {
@@ -58,16 +50,18 @@ game.battleBalls = {
       self.players[id].setPositon(playerPositions[index].x, playerPositions[index].y);
     });
   },
-
+  //Update function for start menu
   updateStartMenu : function() {
     var canStart = true;
     var me = this;
+    //Check if all players are ready
     this.playerIDs.forEach(function(id){
       if(!me.players[id].ready)
         canStart = false;
     });
-
+    //If all players are read and there are more than 2
     if(this.playerIDs >= 2 && canStart) {
+      //Begin game
       this.state = "GAME";
       this.playerIDs.forEach(function(id){
         me.players[id].ready = false;
@@ -75,15 +69,16 @@ game.battleBalls = {
       this.setPlayerStarts();
     }
   },
-
+  //update function for end game screen
   updateGameEnd : function() {
     var canStart = true;
     var me = this;
+    //Check if all players are ready
     this.playerIDs.forEach(function(id){
       if(!me.players[id].ready)
         canStart = false;
     });
-    
+    //If players are ready play again
     if(this.playerIDs >= 2 && canStart) {
       this.state = "GAME";
       this.playerIDs.forEach(function(id){
@@ -91,28 +86,30 @@ game.battleBalls = {
       });
     }
   },
-
+  //Main game loop
   updateGameLoop : function() {
     var dt = 0;
-    var me = this;
-    var KOes = 0;
+    var me = this;//save reference to this
+    var KOes = 0;//number of players knocked out
+    //Loop through all players
     me.playerIDs.forEach(function(id) {
-      var player = me.players[id];
-      //Ugly collisions
+      var player = me.players[id];//get player reference
+      //If the player isn't knocked out
       if(!this.player.KOed) {
+        //loop through the rest of the players for collisions
         me.playerIDs.forEach(function(id2){
-          
-          var player2 = me.players[id2];
-          if(player2.id !== player.id){
-            
+          var player2 = me.players[id2]; //reference to player to collide with
+          if(player2.id !== player.id){//if the players aren't the same
+            //Check collision if they aren't already colliding
             if(game.physicsUtils.circleCollision(player, player2) && !player.colliding(player2)) {
               //get impulse
               var impulse = game.physicsUtils.getImpulse(player, player2, 1.5);
-              player.applyImpulse(impulse);
-              player.collisions.push({player: player2, force: impulse});
+              player.applyImpulse(impulse);//apply impluse to first player
+              player.collisions.push({player: player2, force: impulse});//Add collision to player obj
+              //get inverse of impulse
               impulse.x = impulse.x * -1;
               impulse.y = impulse.y * -1;
-              player2.applyImpulse(impulse);
+              player2.applyImpulse(impulse);//send inverse to second player
               player2.collisions.push({player: player, force: impulse});
               //me.addSparks(player, player2, impulse);
             }
@@ -123,16 +120,17 @@ game.battleBalls = {
           player.x = me.canvas.width/2;
           player.y = me.canvas.width/2;
         }
-        player.update(dt);
-      } else 
+        player.update(dt);//update the player
+      } else //if the player is koed
         this.KOes++;
     });
-    
-    if(KOes >= me.playerIDs.length)
+    //If all players are knocked out end the game
+    if(KOes >= me.playerIDs.length -1)
       me.state = "END";
-
+    //Loop through and update akk if the booms
     me.booms.forEach(function(boom, index, array){
-      boom.update(dt);
+      boom.update(dt);//update boom
+      //make a copy of the boom
       var boomc = {
         x : boom.play.x,
         y : boom.play.y,
@@ -140,10 +138,12 @@ game.battleBalls = {
         mass : boom.pow * 20,
         radius : boom.radius
       };
-      //duplicate, make a helper function
+      //!!!!!!!!!!!!!!duplicate, make a helper function
+      //Loop through all players
       me.playerIDs.forEach(function(id){
         var player = me.players[id];
         if(boom.id !== player.id){
+          //check for collison between a boom and other players
           if(game.physicsUtils.circleCollision(player, boomc)) {
             //get impulse
             var impulse = {x:0, y:0};
@@ -155,12 +155,12 @@ game.battleBalls = {
           }
         }
       });
-
+      //remove a boom if it is done
       if(boom.remove) {
         array.splice(index, 1);
       }
     });
-
+    //loop through the sparks
     this.sparks.forEach(function(spark, index, array){
       spark.update(dt);
       if(spark.remove) {
