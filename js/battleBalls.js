@@ -1,7 +1,7 @@
 //Main game file
 "use strict";
 var game = game || {};
-
+//Battle balls game file
 game.battleBalls = {
   canvas : undefined,
   ctx : undefined,
@@ -168,7 +168,7 @@ game.battleBalls = {
       }
     });
   },
-
+  //Update loop that handles all states
   update : function() {
     switch(this.state) {
       case "START" :
@@ -184,16 +184,20 @@ game.battleBalls = {
         break;
     }
   },
-
+  /** Creates sparks based on an impulse
+   * @param c1 : first circle object in collison
+   * @param c2 : second circle object in collison
+   * @param impulse : impulse the sparks are created from
+   */
   addSparks : function(c1, c2, impulse) {
-    var line = game.physicsUtils.getPerp(game.physicsUtils.getSlope(c1, c2));
+    /*var line = game.physicsUtils.getPerp(game.physicsUtils.getSlope(c1, c2));
     var x = c1.x - (c1.x - c2.x)/2;
     var y = c1.y - (c1.y - c2.y)/2;
 
     this.sparks.push(new game.Spark(x, y, line.x/5, line.y/5));
-    this.sparks.push(new game.Spark(x, y, -line.x/5, -line.y/5));
+    this.sparks.push(new game.Spark(x, y, -line.x/5, -line.y/5));*/
   },
-
+  //Draw function for the start menu
   renderStart : function() {
     var me = this;
     me.ctx.save();
@@ -202,32 +206,42 @@ game.battleBalls = {
     me.ctx.restore();
     me.text(me.ctx, "Players in " + me.playerIDs.length, me.canvas.width, me.canvas.height, 50, "white");
   },
-
+  /** Draws text to the screen
+   * @param ctx : drawing context
+   * @param string : text to be rendered
+   * @param x : x coord of text
+   * @param y : y coord of text
+   * @param size : size of text
+   * @param col : color of text
+   */
   text: function(ctx, string, x, y, size, col) {
     ctx.font = 'bold '+size+'px Monospace';
     ctx.fillStyle = col;
     ctx.fillText(string, x, y);
   },
-
+  //Render in game screen
   renderGame : function() {
-    var me = this;
+    var me = this;//save reference to this
     me.ctx.save();
     me.ctx.fillStyle = 'black';
     me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
     me.ctx.restore();
-    me.arena.render(me.ctx);
+    me.arena.render(me.ctx);//draw arena
+    //loop through and draw each player
     me.playerIDs.forEach(function(id) {
       var player = me.players[id];
       player.render(me.ctx);
     });
+    //loop through and draw each boom
     me.booms.forEach(function(boom) {
       boom.render(me.ctx);
     });
+    //loop through and draw each spark
     me.sparks.forEach(function(spark) {
       spark.render(me.ctx);
     });
   },
-
+  //Draw function for the end game screen
   renderEnd : function() {
     var me = this;
     me.ctx.save();
@@ -236,7 +250,7 @@ game.battleBalls = {
     me.ctx.restore();
     me.text(me.ctx, "Game Over", me.canvas.width, me.canvas.height, 50, "white");
   },
-
+  //Main render function that handles different render states
   render : function() {
     switch(this.state) {
       case "START" :
