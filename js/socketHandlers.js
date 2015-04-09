@@ -26,6 +26,11 @@ game.socketHandlers = {
       delete app.players[data.id];
     });
 
+    socket.on('player ready', function(data){
+      if(app.players[data.id])
+        app.players[data.id].ready = true;
+    });
+
     socket.on('charge start', function(data){
       app.players[data.id].beginCharge();
     });
@@ -35,9 +40,9 @@ game.socketHandlers = {
     });
 
     socket.on('phone tilt', function(data) {
-      if(app.players[data.id]) {
+      if(app.players[data.id])
         app.players[data.id].updateAcceleration(data.yAcc/300, -data.xAcc/300);
-      } //my eyes are everywhere --I will gouge your eyes out
+      //my eyes are everywhere --I will gouge your eyes out
     });
     app.loop();
   }
