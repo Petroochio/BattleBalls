@@ -120,6 +120,14 @@ game.Player = function() {
       //   self.applyImpulse(ball.force);
     });
   };
+  /** Sets player positon
+   * @param x : new x coord
+   * @param y : new y coord
+   */
+  p.setPosition = function(x,y) {
+    this.x = x;
+    this.y = y;
+  };
 
   p.colliding = function(player) {
     var collide = false;

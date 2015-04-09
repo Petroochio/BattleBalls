@@ -10,7 +10,7 @@ game.battleBalls = {
   players : {},
   sparks : [],
   booms : [],
-  state : "START",
+  state : "GAME",
 
   init : function(){
     var me = this;
@@ -41,6 +41,23 @@ game.battleBalls = {
     this.update();
     this.render();
   },
+  //Sets start positions of all players
+  setPlayerStarts : function() {
+    var theta = 2*Math.PI/this.playerIDs.length; //Distance between each player
+    var playerPositions = []; //Array of player start positions
+    var startDist = 70; //Distance from center of map
+    for(var i = 0; i < this.playerIDs.length; i++;) {
+      var point = {};
+      point.x = this.canvas.width/2 + startDist*Math.cos(theta);
+      point.y = this.canvas.width/2 + startDist*Math.sin(theta);
+      playerPositions[i] = point;
+    }
+    var self = this;
+    //set each player's position
+    this.playerIDs.forEach(function(id, index){
+      self.players[id].setPositon(playerPositions[index].x, playerPositions[index].y);
+    });
+  },
 
   updateStartMenu : function() {
     var canStart = true;
@@ -55,6 +72,7 @@ game.battleBalls = {
       this.playerIDs.forEach(function(id){
         me.players[id].ready = false;
       });
+      this.setPlayerStarts();
     }
   },
 
@@ -162,6 +180,8 @@ game.battleBalls = {
       case "END" :
         this.updateGameEnd();
         break;
+      default :
+        break;
     }
   },
 
@@ -227,6 +247,8 @@ game.battleBalls = {
         break;
       case "END" :
         this.renderEnd();
+        break;
+      default :
         break;
     }
   }
