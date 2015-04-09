@@ -25,6 +25,7 @@ game.Player = function() {
     this.dashSpeed = 1;
     this.collisions = [];
     this.KOed = false;
+    this.ready = false;
   };
 
   var p = Player.prototype;
