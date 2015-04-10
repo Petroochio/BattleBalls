@@ -14,11 +14,9 @@ game.battleBalls = {
 
   init : function(){
     var me = this;
-
     // create new instance of socket.io
     var num = Math.floor(Math.random()*10);
     var name ='user'+num;
-
     //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
     me.canvas = document.querySelector('#area');
     me.ctx = me.canvas.getContext('2d');
@@ -27,7 +25,7 @@ game.battleBalls = {
     //set up socket
     game.socketHandlers.init(me); 
   },
-
+  //main loop
   loop : function() {
     requestAnimationFrame(this.loop.bind(this));
     this.update();
@@ -44,10 +42,10 @@ game.battleBalls = {
       point.y = this.canvas.width/2 + startDist*Math.sin(theta);
       playerPositions[i] = point;
     }
-    var self = this;
+    var me = this;
     //set each player's position
     this.playerIDs.forEach(function(id, index){
-      self.players[id].setPositon(playerPositions[index].x, playerPositions[index].y);
+      me.players[id].setPositon(playerPositions[index].x, playerPositions[index].y);
     });
   },
   //Update function for start menu
@@ -55,18 +53,18 @@ game.battleBalls = {
     var canStart = true;
     var me = this;
     //Check if all players are ready
-    this.playerIDs.forEach(function(id){
+    me.playerIDs.forEach(function(id){
       if(!me.players[id].ready)
         canStart = false;
     });
     //If all players are read and there are more than 2
-    if(this.playerIDs >= 2 && canStart) {
+    if(me.playerIDs >= 2 && canStart) {
       //Begin game
-      this.state = "GAME";
-      this.playerIDs.forEach(function(id){
+      me.state = "GAME";
+      me.playerIDs.forEach(function(id){
         me.players[id].ready = false;
       });
-      this.setPlayerStarts();
+      me.setPlayerStarts();
     }
   },
   //update function for end game screen
@@ -125,7 +123,7 @@ game.battleBalls = {
         this.KOes++;
     });
     //If all players are knocked out end the game
-    if(KOes >= me.playerIDs.length -1)
+    if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1)
       me.state = "END";
     //Loop through and update akk if the booms
     me.booms.forEach(function(boom, index, array){
