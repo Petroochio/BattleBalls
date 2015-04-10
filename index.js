@@ -60,6 +60,10 @@ io.on('connection', function(socket){
     io.emit('phone tilt', data);
   });
 
+  socket.on('player ready', function(data){
+    io.emit('player ready', data);
+  });
+
   socket.on('charge start', function(data){
     io.emit('charge start', data);
   });

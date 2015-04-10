@@ -67,6 +67,7 @@
                     startCanvas.style.display = "none";
                     boomButton.style.visibility = "visible";
                     dashButton.style.visibility = "visible";
+                    socket.emit('player ready', {id : id});
                 });
                 
                 //initialize Boom Button
