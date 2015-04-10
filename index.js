@@ -39,6 +39,10 @@ io.on('connection', function(socket){
 
   });
 */
+  socket.on('state change', function(data){
+    io.emit('state change', data);
+  });
+
   socket.on('player join', function(data){
     if(data.id === -1 && players < 15){
       players++;

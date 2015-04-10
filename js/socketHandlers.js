@@ -2,9 +2,11 @@
 var game = game || {};
 
 game.socketHandlers = {
+  socket : undefined,
   init : function(app) {
     //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
     var socket = io.connect( window.location.origin, {query: 'user='+name, type: 'desktop'});
+    this.socket = socket;
     var room = "";
     var password = "";
     var connectData = {};
@@ -45,5 +47,10 @@ game.socketHandlers = {
       //my eyes are everywhere --I will gouge your eyes out
     });
     app.loop();
+  },
+
+  changeState : function(newState) {
+    var data = {state : newState};
+    this.socket.emit('state change', data);
   }
 }

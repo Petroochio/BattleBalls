@@ -61,6 +61,7 @@ game.battleBalls = {
     if(me.playerIDs >= 2 && canStart) {
       //Begin game
       me.state = "GAME";
+      game.socketHandlers.stateChange("GAME");
       me.playerIDs.forEach(function(id){
         me.players[id].ready = false;
       });
@@ -79,6 +80,7 @@ game.battleBalls = {
     //If players are ready play again
     if(this.playerIDs >= 2 && canStart) {
       this.state = "GAME";
+      game.socketHandlers.stateChange("GAME");
       this.playerIDs.forEach(function(id){
         me.players[id].ready = false;
       });
@@ -123,8 +125,10 @@ game.battleBalls = {
         this.KOes++;
     });
     //If all players are knocked out end the game
-    if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1)
+    if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1) {
       me.state = "END";
+      game.socketHandlers.changeState("END");
+    }
     //Loop through and update akk if the booms
     me.booms.forEach(function(boom, index, array){
       boom.update(dt);//update boom
