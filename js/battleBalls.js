@@ -45,7 +45,7 @@ game.battleBalls = {
     var me = this;
     //set each player's position
     this.playerIDs.forEach(function(id, index){
-      me.players[id].setPositon(playerPositions[index].x, playerPositions[index].y);
+      me.players[id].setPosition(playerPositions[index].x, playerPositions[index].y);
     });
   },
   //Update function for start menu
