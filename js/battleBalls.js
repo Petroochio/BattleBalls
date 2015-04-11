@@ -174,6 +174,8 @@ game.battleBalls = {
         array.splice(index, 1);
       }
     });
+
+    this.arena.radius -= 0.01;
   },
   //Update loop that handles all states
   update : function() {
