@@ -10,7 +10,7 @@ game.battleBalls = {
   players : {},
   sparks : [],
   booms : [],
-  state : "GAME",
+  state : "START",
 
   init : function(){
     var me = this;
