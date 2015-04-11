@@ -47,6 +47,7 @@ game.battleBalls = {
     this.playerIDs.forEach(function(id, index){
       //me.players[id].setPosition(playerPositions[index].x, playerPositions[index].y);
       me.players[id].setPosition(me.canvas.width/2, me.canvas.height/2);
+      console.log(me.players[id]);
     });
   },
   //Update function for start menu
@@ -68,7 +69,7 @@ game.battleBalls = {
       me.playerIDs.forEach(function(id){
         me.players[id].ready = false;
       });
-      me.setPlayerStarts();
+      //me.setPlayerStarts();
     }
   },
   //update function for end game screen
