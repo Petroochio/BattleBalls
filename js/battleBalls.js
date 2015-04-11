@@ -45,7 +45,8 @@ game.battleBalls = {
     var me = this;
     //set each player's position
     this.playerIDs.forEach(function(id, index){
-      me.players[id].setPosition(playerPositions[index].x, playerPositions[index].y);
+      //me.players[id].setPosition(playerPositions[index].x, playerPositions[index].y);
+      me.players[id].setPosition(me.canvas.width/2, me.canvas.height/2);
     });
   },
   //Update function for start menu
@@ -97,7 +98,7 @@ game.battleBalls = {
     me.playerIDs.forEach(function(id) {
       var player = me.players[id];//get player reference
       //If the player isn't knocked out
-      if(!player.KOed) {
+     // if(!player.KOed) {
         //loop through the rest of the players for collisions
         me.playerIDs.forEach(function(id2){
           var player2 = me.players[id2]; //reference to player to collide with
@@ -118,13 +119,14 @@ game.battleBalls = {
           }
         });
         //Bad code for resetting player if they leave the arena
-        if(!me.arena.inBounds(player)) {
+        /*if(!me.arena.inBounds(player)) {
           player.x = me.canvas.width/2;
           player.y = me.canvas.width/2;
-        }
+        }*/
         player.update(dt);//update the player
-      } else //if the player is koed
+      /*} else {//if the player is koed
         this.KOes++;
+      }*/
     });
     //If all players are knocked out end the game
    /* if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1) {
