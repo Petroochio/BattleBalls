@@ -59,7 +59,7 @@ game.battleBalls = {
         canStart = false;
     });
     //If all players are read and there are more than 2
-    if(me.playerIDs >= 2 && canStart) {
+    if(me.playerIDs.length >= 2 && canStart) {
       //Begin game
       console.log("GAME START")
       me.state = "GAME";
@@ -219,9 +219,12 @@ game.battleBalls = {
    * @param col : color of text
    */
   text: function(ctx, string, x, y, size, col) {
+    ctx.save();
     ctx.font = 'bold '+size+'px Monospace';
+    ctx.textAlign = "center";
     ctx.fillStyle = col;
     ctx.fillText(string, x, y);
+    ctx.restore();
   },
   //Render in game screen
   renderGame : function() {
