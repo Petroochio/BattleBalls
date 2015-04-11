@@ -47,7 +47,6 @@ game.battleBalls = {
     this.playerIDs.forEach(function(id, index){
       //me.players[id].setPosition(playerPositions[index].x, playerPositions[index].y);
       me.players[id].setPosition(me.canvas.width/2, me.canvas.height/2);
-      console.log(me.players[id]);
     });
   },
   //Update function for start menu
@@ -98,6 +97,7 @@ game.battleBalls = {
     //Loop through all players
     me.playerIDs.forEach(function(id) {
       var player = me.players[id];//get player reference
+      console.log(player);
       //If the player isn't knocked out
      // if(!player.KOed) {
         //loop through the rest of the players for collisions
