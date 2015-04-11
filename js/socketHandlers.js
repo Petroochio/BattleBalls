@@ -29,6 +29,7 @@ game.socketHandlers = {
     });
 
     socket.on('player ready', function(data){
+      console.log(data.id + " ready");
       if(app.players[data.id])
         app.players[data.id].ready = true;
     });
