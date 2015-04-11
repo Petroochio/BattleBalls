@@ -35,11 +35,11 @@ game.battleBalls = {
   setPlayerStarts : function() {
     var theta = 2*Math.PI/this.playerIDs.length; //Distance between each player
     var playerPositions = []; //Array of player start positions
-    var startDist = 70; //Distance from center of map
+    var startDist = 40; //Distance from center of map
     for(var i = 0; i < this.playerIDs.length; i++) {
       var point = {};
-      point.x = this.canvas.width/2 + startDist*Math.cos(theta);
-      point.y = this.canvas.width/2 + startDist*Math.sin(theta);
+      point.x = this.canvas.width/2 + startDist*Math.cos(theta * i);
+      point.y = this.canvas.height/2 + startDist*Math.sin(theta * i);
       playerPositions[i] = point;
     }
     var me = this;
@@ -127,10 +127,10 @@ game.battleBalls = {
         this.KOes++;
     });
     //If all players are knocked out end the game
-    if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1) {
+   /* if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1) {
       me.state = "END";
       game.socketHandlers.changeState("END");
-    }
+    }*/
     //Loop through and update akk if the booms
     me.booms.forEach(function(boom, index, array){
       boom.update(dt);//update boom
