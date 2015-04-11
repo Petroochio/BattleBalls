@@ -4,8 +4,12 @@
         <meta name="viewport" content="initial-scale=1, maximum-scale=1">
         <title>Socket.IO chat</title>
         <style>
+            @font-face {
+                font-family: BAAAAALLLLLLLLLLS;
+                src: url("assets/fonts/marqueemoon.ttf");
+            }
             * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font: 13px Helvetica, Arial; background: #000;}
+            body { font: 13px BAAAAALLLLLLLLLLS, Arial; background: #000;}
             form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
             form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
             form button { width: 8%; background: rgb(130, 224, 255); border: none; padding: 10px; user-select: none; -webkit-user-select: none;}
@@ -55,20 +59,22 @@
                 });
 
                 socket.on("state change", function(data){
-                  //temp code until I talk to you
-                  if(data.state === "END") {
-                    screenState = "START";
-                    //MAKE READY HERE
-                  }
+                    //temp code until I talk to you
+                    if(data.state === "END") {
+                        screenState = "START";
+                        startCanvas.style.display = "block";
+                        boomButton.style.visibility = "hidden";
+                        dashButton.style.visibility = "hidden";
+                    }
                 });
-                
+
                 ///////////////////
-                
+
                 //initialize start screen
                 startCanvas = document.querySelector("#start");
                 if(startCanvas.getContext) startCTX = startCanvas.getContext("2d");
                 startCTX.fillStyle = "white";
-                
+
                 //Event listener
                 startCanvas.addEventListener("touchend", function(e){
                     screenState = "GAME";
@@ -77,12 +83,12 @@
                     dashButton.style.visibility = "visible";
                     socket.emit('player ready', {id : id});
                 });
-                
+
                 //initialize Boom Button
                 var boomButton = document.querySelector("#button1");
                 var boomCTX;
                 if (boomButton.getContext) boomCTX = boomButton.getContext("2d");
-                
+
                 //Event listeners
                 boomButton.addEventListener("touchstart", function(e){
                     var data = { id: id };
@@ -100,7 +106,7 @@
                 var dashButton = document.querySelector("#button2");
                 var dashCTX;
                 if (dashButton.getContext) dashCTX = dashButton.getContext("2d");
-                
+
                 //Event listeners
                 dashButton.addEventListener("touchstart", function(e){
                     //hello peter
@@ -125,26 +131,26 @@
                         socket.emit('phone tilt', data);
                     }, false);
                 }
-                
+
                 loop();
             };
-            
+
             function loop(){
                 requestAnimationFrame(update);
             }
-            
+
             function updateStartMenu() {
                 startCTX.clearRect(0,0,startCanvas.width,startCanvas.height);
-                startCTX.font = 'bold 16px Monospace';
+                startCTX.font = '16px BAAAAALLLLLLLLLLS';
                 startCTX.textAlign = "center";
                 startCTX.textBaseline = "middle";
                 startCTX.fillText("READY",startCanvas.width/2,startCanvas.height/2);
             }
-            
+
             function updateGameLoop() {
-                
+
             }
-            
+
             function update() {
                 switch(screenState) {
                     case "START":
@@ -155,7 +161,7 @@
                         break;
                 }
             }
-            
+
             function draw(canvas, butt, ctx) {
                 ctx.save();
                 ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -180,7 +186,7 @@
                 ctx.closePath();
                 ctx.stroke();
 
-                ctx.font = 'bold 16px Monospace';
+                ctx.font = '60px BAAAAALLLLLLLLLLS';
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 ctx.fillText(butt,canvas.width/2,canvas.height/2);
@@ -208,7 +214,7 @@
                 ctx.closePath();
                 ctx.stroke();
 
-                ctx.font = 'bold 16px Monospace';
+                ctx.font = '40px BAAAAALLLLLLLLLLS';
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 ctx.fillText(butt,canvas.width/2,canvas.height/2);
