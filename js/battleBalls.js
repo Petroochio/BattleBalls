@@ -211,7 +211,7 @@ game.battleBalls = {
     me.ctx.fillStyle = 'black';
     me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
     me.ctx.restore();
-    me.text(me.ctx, "Players in " + me.playerIDs.length, me.canvas.width/2, me.canvas.height/2, 50, "white");
+    me.text(me.ctx, "Players in " + me.playerIDs.length, me.canvas.width/2, me.canvas.height/2, 100, "white");
   },
   /** Draws text to the screen
    * @param ctx : drawing context
@@ -223,7 +223,7 @@ game.battleBalls = {
    */
   text: function(ctx, string, x, y, size, col) {
     ctx.save();
-    ctx.font = 'bold '+size+'px Monospace';
+    ctx.font = size+'px BAAAAALLLLLLLLLLS';
     ctx.textAlign = "center";
     ctx.fillStyle = col;
     ctx.fillText(string, x, y);
@@ -258,7 +258,7 @@ game.battleBalls = {
     me.ctx.fillStyle = 'black';
     me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
     me.ctx.restore();
-    me.text(me.ctx, "Game Over", me.canvas.width/2, me.canvas.height/2, 50, "white");
+    me.text(me.ctx, "Game Over", me.canvas.width/2, me.canvas.height/2, 100, "white");
   },
   //Main render function that handles different render states
   render : function() {
