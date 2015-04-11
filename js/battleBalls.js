@@ -69,7 +69,7 @@ game.battleBalls = {
       me.playerIDs.forEach(function(id){
         me.players[id].ready = false;
       });
-      //me.setPlayerStarts();
+      me.setPlayerStarts();
     }
   },
   //update function for end game screen
