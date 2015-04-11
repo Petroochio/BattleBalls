@@ -63,7 +63,7 @@ game.battleBalls = {
       //Begin game
       console.log("GAME START")
       me.state = "GAME";
-      game.socketHandlers.stateChange("GAME");
+      game.socketHandlers.changeState("GAME");
       me.playerIDs.forEach(function(id){
         me.players[id].ready = false;
       });
@@ -82,7 +82,7 @@ game.battleBalls = {
     //If players are ready play again
     if(this.playerIDs.length >= 2 && canStart) {
       this.state = "GAME";
-      game.socketHandlers.stateChange("GAME");
+      game.socketHandlers.changeState("GAME");
       this.playerIDs.forEach(function(id){
         me.players[id].ready = false;
       });
@@ -97,7 +97,7 @@ game.battleBalls = {
     me.playerIDs.forEach(function(id) {
       var player = me.players[id];//get player reference
       //If the player isn't knocked out
-      if(!this.player.KOed) {
+      if(!player.KOed) {
         //loop through the rest of the players for collisions
         me.playerIDs.forEach(function(id2){
           var player2 = me.players[id2]; //reference to player to collide with
