@@ -35,7 +35,7 @@ game.battleBalls = {
   setPlayerStarts : function() {
     var theta = 2*Math.PI/this.playerIDs.length; //Distance between each player
     var playerPositions = []; //Array of player start positions
-    var startDist = 40; //Distance from center of map
+    var startDist = 100; //Distance from center of map
     for(var i = 0; i < this.playerIDs.length; i++) {
       var point = {};
       point.x = this.canvas.width/2 + startDist*Math.cos(theta * i);
@@ -45,8 +45,8 @@ game.battleBalls = {
     var me = this;
     //set each player's position
     this.playerIDs.forEach(function(id, index){
-      //me.players[id].setPosition(playerPositions[index].x, playerPositions[index].y);
-      me.players[id].setPosition(me.canvas.width/2, me.canvas.height/2);
+      me.players[id].setPosition(playerPositions[index].x, playerPositions[index].y);
+      //me.players[id].setPosition(me.canvas.width/2, me.canvas.height/2);
     });
   },
   //Update function for start menu
@@ -97,9 +97,8 @@ game.battleBalls = {
     //Loop through all players
     me.playerIDs.forEach(function(id) {
       var player = me.players[id];//get player reference
-      console.log(player);
       //If the player isn't knocked out
-     // if(!player.KOed) {
+     if(!player.KOed) {
         //loop through the rest of the players for collisions
         me.playerIDs.forEach(function(id2){
           var player2 = me.players[id2]; //reference to player to collide with
@@ -120,20 +119,21 @@ game.battleBalls = {
           }
         });
         //Bad code for resetting player if they leave the arena
-        /*if(!me.arena.inBounds(player)) {
-          player.x = me.canvas.width/2;
-          player.y = me.canvas.width/2;
-        }*/
+        if(!me.arena.inBounds(player)) {
+          /*player.x = me.canvas.width/2;
+          player.y = me.canvas.width/2;*/
+          player.KOed = true;
+        }
         player.update(dt);//update the player
-      /*} else {//if the player is koed
-        this.KOes++;
-      }*/
+      } else {//if the player is koed
+        KOes++;
+      }
     });
     //If all players are knocked out end the game
-   /* if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1) {
+    if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1) {
       me.state = "END";
       game.socketHandlers.changeState("END");
-    }*/
+    }
     //Loop through and update akk if the booms
     me.booms.forEach(function(boom, index, array){
       boom.update(dt);//update boom
