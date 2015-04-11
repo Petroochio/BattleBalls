@@ -53,6 +53,12 @@
                         id = data.id;
                     }
                 });
+
+                socket.on("state change", function(data){
+                  //temp code until I talk to you
+                  if(data.state === "END")
+                    screenState = "START";
+                });
                 
                 ///////////////////
                 
