@@ -23,7 +23,7 @@ game.battleBalls = {
     me.ctx.lineWidth = 5;
     me.arena = game.createArena('white', /*230*/me.canvas.height/2-10, me.canvas.width/2, me.canvas.height/2);
     //set up socket
-    game.socketHandlers.init(me); 
+    game.socketHandlers.init(me);
   },
   //main loop
   loop : function() {
@@ -78,7 +78,7 @@ game.battleBalls = {
         canStart = false;
     });
     //If players are ready play again
-    if(this.playerIDs >= 2 && canStart) {
+    if(this.playerIDs.length >= 2 && canStart) {
       this.state = "GAME";
       game.socketHandlers.stateChange("GAME");
       this.playerIDs.forEach(function(id){
