@@ -258,7 +258,7 @@ game.battleBalls = {
     me.ctx.fillStyle = 'black';
     me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
     me.ctx.restore();
-    me.text(me.ctx, "Game Over", me.canvas.width, me.canvas.height, 50, "white");
+    me.text(me.ctx, "Game Over", me.canvas.width/2, me.canvas.height/2, 50, "white");
   },
   //Main render function that handles different render states
   render : function() {
