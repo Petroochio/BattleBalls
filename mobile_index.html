@@ -140,15 +140,17 @@
             }
 
             function updateStartMenu() {
+                startCTX.rotate(Math.PI/2);
+                startCTX.translate(startCanvas.width/2,-300);
+                
                 startCTX.clearRect(0,0,startCanvas.width,startCanvas.height);
-                startCTX.font = '16px BAAAAALLLLLLLLLLS';
+                startCTX.font = '50px BAAAAALLLLLLLLLLS';
                 startCTX.textAlign = "center";
                 startCTX.textBaseline = "middle";
                 startCTX.fillText("READY",startCanvas.width/2,startCanvas.height/2);
             }
 
             function updateGameLoop() {
-
             }
 
             function update() {
@@ -226,6 +228,7 @@
         <div id="buttons">
             <canvas id="start" width="200px"height="400px"></canvas>
             <canvas id="button1"width="200px"height="200px"></canvas>
+            <br>
             <canvas id="button2"width="200px"height="200px"></canvas>
         </div>
     </body>
