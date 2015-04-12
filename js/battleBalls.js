@@ -86,7 +86,9 @@ game.battleBalls = {
       game.socketHandlers.changeState("GAME");
       this.playerIDs.forEach(function(id){
         me.players[id].ready = false;
+        me.players[id].KOed = false;
       });
+      me.setPlayerStarts();
     }
   },
   //Main game loop
