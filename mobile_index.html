@@ -46,11 +46,11 @@
                 var red = Math.floor(Math.random() * 105 +150);
                 var green = Math.floor(Math.random() * 105 +150);
                 var blue = Math.floor(Math.random() * 105 +150);
-                var col = 'rgb('+red+','+green+','+blue+')';
+                color = 'rgb('+red+','+green+','+blue+')';
                 //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
                 var socket = io.connect( window.location.origin, {query: 'user='+name});
 
-                var connectData = { id: id, color: col };
+                var connectData = { id: id, color: color };
 
                 socket.emit('player join', connectData);
 
@@ -75,7 +75,7 @@
                 //initialize start screen
                 startCanvas = document.querySelector("#start");
                 if(startCanvas.getContext) startCTX = startCanvas.getContext("2d");
-                startCTX.fillStyle = "white";
+                startCTX.fillStyle = color;
 
                 //Event listener
                 startCanvas.addEventListener("touchend", function(e){
@@ -173,14 +173,10 @@
                 ctx.rotate(Math.PI/2);
                 switch(butt){
                     case "BOOM":
-                        ctx.strokeStyle = "red";
-                        ctx.fillStyle = "red";
-                        ctx.shadowColor = "red";
-                        break;
                     case "DASH":
-                        ctx.strokeStyle = "blue";
-                        ctx.fillStyle = "blue";
-                        ctx.shadowColor = "blue";
+                        ctx.strokeStyle = color;
+                        ctx.fillStyle = color;
+                        ctx.shadowColor = color;
                         break;
                 }
                 ctx.lineWidth = 5;
@@ -204,12 +200,9 @@
                 ctx.rotate(Math.PI/2);
                 switch(butt){
                     case "BOOM":
-                        ctx.strokeStyle = "red";
-                        ctx.fillStyle = "red";
-                        break;
                     case "DASH":
-                        ctx.strokeStyle = "blue";
-                        ctx.fillStyle = "blue";
+                        ctx.strokeStyle = color;
+                        ctx.fillStyle = color;
                         break;
                 }
                 ctx.lineWidth = 5;

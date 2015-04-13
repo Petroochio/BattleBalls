@@ -217,16 +217,16 @@ game.battleBalls = {
         me.ctx.restore();
         me.text(me.ctx, "Players in " + me.playerIDs.length, me.canvas.width/2, me.canvas.height/4, 100, "white");
 
-        me.playerIDs.forEach(function(id) {
+        me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
             if(player.ready) {
                 me.ctx.save();
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player",me.canvas.width/2,me.canvas.height/2,50,player.color);
+                me.text(me.ctx, "player",me.canvas.width/2,me.canvas.height/2+index*50,50,player.color);
                 me.ctx.restore();
             } else {
-                me.text(me.ctx, "player",me.canvas.width/2,me.canvas.height/2,50,player.color);
+                me.text(me.ctx, "player",me.canvas.width/2,me.canvas.height/2+index*50,50,player.color);
             }
         });
 
