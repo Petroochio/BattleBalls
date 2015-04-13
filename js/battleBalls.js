@@ -11,6 +11,7 @@ game.battleBalls = {
     sparks : [],
     booms : [],
     state : "START",
+    startDelay : 500,
     arenaShrinkDelay : 1000,
 
     init : function(){
@@ -181,7 +182,10 @@ game.battleBalls = {
                 this.updateStartMenu();
                 break;
             case "GAME" :
-                this.updateGameLoop();
+                if(this.startDelay < 1)
+                  this.updateGameLoop();
+                else 
+                  this.startDelay--;
                 break;
             case "END" :
                 this.updateGameEnd();
@@ -193,6 +197,8 @@ game.battleBalls = {
     //Resets game to state at start of game loop
     reset : function() {
       var me = this;
+      me.arenaShrinkDelay = 10000;
+      me.startDelay = 500;
       me.arena.radius = me.canvas.height/2-10;
       this.playerIDs.forEach(function(id){
         me.players[id].ready = false;
