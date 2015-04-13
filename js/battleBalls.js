@@ -223,10 +223,10 @@ game.battleBalls = {
                 me.ctx.save();
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player",me.canvas.width/2,me.canvas.height/2+index*50,50,player.color);
+                me.text(me.ctx, "player "+(index+1),me.canvas.width/2,me.canvas.height/2+index*50,50,player.color);
                 me.ctx.restore();
             } else {
-                me.text(me.ctx, "player",me.canvas.width/2,me.canvas.height/2+index*50,50,player.color);
+                me.text(me.ctx, "player "+(index+1),me.canvas.width/2,me.canvas.height/2+index*50,50,player.color);
             }
         });
 
@@ -276,7 +276,21 @@ game.battleBalls = {
         me.ctx.fillStyle = 'black';
         me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
         me.ctx.restore();
-        me.text(me.ctx, "Game Over", me.canvas.width/2, me.canvas.height/2, 100, "white");
+        me.text(me.ctx, "Game Over", me.canvas.width/2, me.canvas.height/4, 100, "white");
+        me.text(me.ctx,"ready up to play again",me.canvas.width/2,me.canvas.height/4+50,50,"white");
+        
+        me.playerIDs.forEach(function(id, index) {
+            var player = me.players[id];
+            if(player.ready) {
+                me.ctx.save();
+                me.ctx.shadowBlur = 10;
+                me.ctx.shadowColor = player.color;
+                me.text(me.ctx, "player "+(index+1),me.canvas.width/2,me.canvas.height/2+25+index*50,50,player.color);
+                me.ctx.restore();
+            } else {
+                me.text(me.ctx, "player "+(index+1),me.canvas.width/2,me.canvas.height/2+25+index*50,50,player.color);
+            }
+        });
     },
     //Main render function that handles different render states
     render : function() {

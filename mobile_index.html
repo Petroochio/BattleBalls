@@ -25,6 +25,7 @@
             var boomButton, dashButton, startCanvas;
             var boomCTX, dashCTX, startCTX;
             var color;
+            var ready = false;
             
             var button = function(type,x,y,radius,col){
                 this.type = type;
@@ -67,10 +68,14 @@
                         startCanvas.style.display = "block";
                         boomButton.style.visibility = "hidden";
                         dashButton.style.visibility = "hidden";
+                    }else if(data.state === "GAME") {
+                        screenState = "GAME";
+                        startCanvas.style.display = "none";
+                        boomButton.style.visibility = "visible";
+                        dashButton.style.visibility = "visible";
+                        ready = false;
                     }
                 });
-
-                ///////////////////
 
                 //initialize start screen
                 startCanvas = document.querySelector("#start");
@@ -79,11 +84,8 @@
 
                 //Event listener
                 startCanvas.addEventListener("touchend", function(e){
-                    screenState = "GAME";
-                    startCanvas.style.display = "none";
-                    boomButton.style.visibility = "visible";
-                    dashButton.style.visibility = "visible";
                     socket.emit('player ready', {id : id});
+                    ready = !ready;
                 });
 
                 //initialize Boom Button
@@ -149,7 +151,15 @@
                 startCTX.font = '50px BAAAAALLLLLLLLLLS';
                 startCTX.textAlign = "center";
                 startCTX.textBaseline = "middle";
+                if(ready){
+                    startCTX.save();
+                    startCTX.shadowBlur = 10;
+                    startCTX.shadowColor = color;
+                    startCTX.fillText("READY",startCanvas.width/2,startCanvas.height/2);
+                    startCTX.restore();
+                } else {
                 startCTX.fillText("READY",startCanvas.width/2,startCanvas.height/2);
+                }
             }
 
             function updateGameLoop() {
@@ -171,14 +181,9 @@
                 ctx.clearRect(0,0,canvas.width,canvas.height);
                 ctx.translate(canvas.width,canvas.height/64);
                 ctx.rotate(Math.PI/2);
-                switch(butt){
-                    case "BOOM":
-                    case "DASH":
-                        ctx.strokeStyle = color;
-                        ctx.fillStyle = color;
-                        ctx.shadowColor = color;
-                        break;
-                }
+                ctx.strokeStyle = color;
+                ctx.fillStyle = color;
+                ctx.shadowColor = color;
                 ctx.lineWidth = 5;
                 ctx.shadowBlur = 10;
                 ctx.beginPath();
@@ -198,13 +203,8 @@
                 ctx.clearRect(0,0,canvas.width,canvas.height);
                 ctx.translate(canvas.width,canvas.height/64);
                 ctx.rotate(Math.PI/2);
-                switch(butt){
-                    case "BOOM":
-                    case "DASH":
-                        ctx.strokeStyle = color;
-                        ctx.fillStyle = color;
-                        break;
-                }
+                ctx.strokeStyle = color;
+                ctx.fillStyle = color;
                 ctx.lineWidth = 5;
                 ctx.beginPath();
                 ctx.arc(canvas.width/2,canvas.height/2,canvas.width/2-50,0,Math.PI*2,false);
