@@ -62,13 +62,9 @@ game.battleBalls = {
         //If all players are read and there are more than 2
         if(me.playerIDs.length >= 2 && canStart) {
             //Begin game
-            console.log("GAME START")
             me.state = "GAME";
             game.socketHandlers.changeState("GAME");
-            me.playerIDs.forEach(function(id){
-                me.players[id].ready = false;
-            });
-            me.setPlayerStarts();
+            me.reset();
         }
     },
     //update function for end game screen
@@ -84,11 +80,7 @@ game.battleBalls = {
         if(this.playerIDs.length >= 2 && canStart) {
             this.state = "GAME";
             game.socketHandlers.changeState("GAME");
-            this.playerIDs.forEach(function(id){
-                me.players[id].ready = false;
-                me.players[id].KOed = false;
-            });
-            me.setPlayerStarts();
+            me.reset();
         }
     },
     //Main game loop
@@ -194,6 +186,16 @@ game.battleBalls = {
             default :
                 break;
         }
+    },
+    //Resets game to state at start of game loop
+    reset : function() {
+      var me = this;
+      me.arena.radius = me.canvas.height/2-10;
+      this.playerIDs.forEach(function(id){
+        me.players[id].ready = false;
+        me.players[id].KOed = false;
+      });
+      me.setPlayerStarts();
     },
     /** Creates sparks based on an impulse
    * @param c1 : first circle object in collison
