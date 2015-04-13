@@ -11,6 +11,7 @@ game.battleBalls = {
     sparks : [],
     booms : [],
     state : "START",
+    arenaShrinkDelay : 1000,
 
     init : function(){
         var me = this;
@@ -168,8 +169,10 @@ game.battleBalls = {
                 array.splice(index, 1);
             }
         });
-
-        this.arena.radius -= 0.01;
+        if(this.arenaShrinkDelay < 1)
+          this.arena.radius -= 0.03;
+        else
+          this.arenaShrinkDelay--;
     },
     //Update loop that handles all states
     update : function() {
