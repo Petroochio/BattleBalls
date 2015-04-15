@@ -96,7 +96,7 @@
 
                 //Event listeners
                 boomButton.addEventListener("touchstart", function(e){
-                    var data = { id: id };
+                    var data = { id: id, type: "boom" };
                     socket.emit('charge start', data);
                     redraw(boomButton, "BOOM",boomCTX);
                 }, false);
@@ -111,14 +111,17 @@
                 var dashButton = document.querySelector("#button2");
                 var dashCTX;
                 if (dashButton.getContext) dashCTX = dashButton.getContext("2d");
-
+                  
                 //Event listeners
                 dashButton.addEventListener("touchstart", function(e){
                     //hello peter
+                    var data = { id: id, type: "boom" };
+                    socket.emit('charge start', data);
                     redraw(dashButton, "DASH",dashCTX);
                 }, false);
                 dashButton.addEventListener("touchend", function(e){
                     //hello peter
+                    socket.emit('charge end', data);
                     draw(dashButton, "DASH",dashCTX);
                 }, false);
                 draw(dashButton, "DASH",dashCTX);

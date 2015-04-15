@@ -37,11 +37,11 @@ game.socketHandlers = {
     });
 
     socket.on('charge start', function(data){
-      app.players[data.id].beginCharge();
+      app.players[data.id].beginCharge(data.type);
     });
 
     socket.on('charge end', function(data){
-      app.players[data.id].endCharge();
+      app.players[data.id].endCharge(data.type);
     });
 
     socket.on('phone tilt', function(data) {

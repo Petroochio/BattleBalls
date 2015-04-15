@@ -41,7 +41,7 @@ game.Player = function() {
   p.beginCharge = function(type) {
     if(!this.stunned && !this.charging) {
       this.charging = (this.coolDown <= 0);
-      this.chargeType = "boom";
+      this.chargeType = type;
     }
   };
 
