@@ -234,10 +234,24 @@ game.battleBalls = {
                 me.ctx.save();
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/2,me.canvas.height/2+index*50,50,player.color);
+                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*50,50,player.color);
+                me.ctx.beginPath();
+                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-(25/2)-5+index*25,25,0,Math.PI*2,false);
+                me.ctx.closePath();
+                me.ctx.strokeStyle = player.color;
+                me.ctx.fill();
+                me.ctx.stroke();
                 me.ctx.restore();
             } else {
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/2,me.canvas.height/2+index*50,50,player.color);
+                me.ctx.save();
+                me.ctx.strokeStyle = player.color;
+                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*50,50,player.color);
+                
+                me.ctx.beginPath();
+                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-(25/2)-5+index*25,25,0,Math.PI*2,false);
+                me.ctx.closePath();
+                me.ctx.stroke();
+                me.ctx.restore();
             }
         });
 
