@@ -215,8 +215,8 @@ game.Player = function() {
     ctx.shadowColor=this.color;
     ctx.beginPath();
     ctx.moveTo(this.x, this.y);
-    ctx.lineTo(this.x + forward.x * this.charge/this.maxCharge * 10,
-              this.y + forward.y * this.charge/this.maxCharge * 10);
+    ctx.lineTo(this.x + forward.x * (this.charge/this.maxCharge + 0.1)* 10,
+              this.y + forward.y * (this.charge/this.maxCharge + 0.1)* 10);
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
