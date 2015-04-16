@@ -230,33 +230,32 @@ game.battleBalls = {
 
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
+            me.ctx.save();
+            me.ctx.strokeStyle = player.color;
+            me.ctx.fillStyle = player.color;
             if(player.ready) {
-                me.ctx.save();
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
-                me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
-                me.ctx.closePath();
-                me.ctx.strokeStyle = player.color;
-                me.ctx.stroke();
-                me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,10,0,Math.PI*2,false);
-                me.ctx.closePath();
-                me.ctx.fillStyle = player.color;
-                me.ctx.fill();
-                me.ctx.restore();
-            } else {
-                me.ctx.save();
-                me.ctx.strokeStyle = player.color;
                 me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
                 
                 me.ctx.beginPath();
                 me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
-                me.ctx.restore();
+                
+                me.ctx.beginPath();
+                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,10,0,Math.PI*2,false);
+                me.ctx.closePath();
+                me.ctx.fill();
+            } else {
+                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                
+                me.ctx.beginPath();
+                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.closePath();
+                me.ctx.stroke();
             }
+            me.ctx.restore();
         });
 
     },
@@ -310,15 +309,34 @@ game.battleBalls = {
         
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
+//            if(!player.KOed) me.text(me.ctx,"player "+index+" won",me.canvas.width/2,me.canvas.height/4+75,50,"white");
+            
+            me.ctx.save();
+            me.ctx.strokeStyle = player.color;
+            me.ctx.fillStyle = player.color;
             if(player.ready) {
-                me.ctx.save();
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/2,me.canvas.height/2+25+index*50,50,player.color);
-                me.ctx.restore();
+                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                
+                me.ctx.beginPath();
+                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.closePath();
+                me.ctx.stroke();
+                
+                me.ctx.beginPath();
+                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,10,0,Math.PI*2,false);
+                me.ctx.closePath();
+                me.ctx.fill();
             } else {
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/2,me.canvas.height/2+25+index*50,50,player.color);
+                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                
+                me.ctx.beginPath();
+                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.closePath();
+                me.ctx.stroke();
             }
+            me.ctx.restore();
         });
     },
     //Main render function that handles different render states

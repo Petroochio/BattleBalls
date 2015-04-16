@@ -32,8 +32,9 @@ game.socketHandlers = {
 
     socket.on('player ready', function(data){
       console.log(data.id + " ready");
-      if(app.players[data.id])
-        app.players[data.id].ready = true;
+      if(app.players[data.id].ready)
+        app.players[data.id].ready = false;
+        else app.players[data.id].ready = true;
     });
 
     socket.on('charge start', function(data){

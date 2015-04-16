@@ -62,7 +62,7 @@
                     }
                 });
 
-                socket.on("state change", function(data){
+                socket.on('state change', function(data){
                     //temp code until I talk to you
                     if(data.state === "END") {
                         screenState = "START";
@@ -159,10 +159,10 @@
                     startCTX.save();
                     startCTX.shadowBlur = 10;
                     startCTX.shadowColor = color;
-                    startCTX.fillText("READY",startCanvas.width/2,startCanvas.height/2);
+                    startCTX.fillText("UNREADY",startCanvas.width/2,startCanvas.height/2);
                     startCTX.restore();
                 } else {
-                startCTX.fillText("READY",startCanvas.width/2,startCanvas.height/2);
+                    startCTX.fillText("READY",startCanvas.width/2,startCanvas.height/2);
                 }
             }
 
