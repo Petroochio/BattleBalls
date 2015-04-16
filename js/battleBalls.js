@@ -182,10 +182,10 @@ game.battleBalls = {
                 this.updateStartMenu();
                 break;
             case "GAME" :
-                if(this.startDelay < 1)
+                //if(this.startDelay < 1)
                   this.updateGameLoop();
-                else 
-                  this.startDelay--;
+                //else 
+                  //this.startDelay--;
                 break;
             case "END" :
                 this.updateGameEnd();

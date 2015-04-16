@@ -87,8 +87,8 @@ game.Player = function() {
   };
 
   p.doDash = function() {
-    var aX = this.xAcc * this.charge/maxCharge * 10;
-    var aY = this.yAcc * this.charge/maxCharge * 10;
+    var aX = this.xAcc * this.charge/this.maxCharge * 200;
+    var aY = this.yAcc * this.charge/this.maxCharge * 200;
     this.updateAcceleration(aX, aY);
     this.charge = 0;
     this.charging = false;
