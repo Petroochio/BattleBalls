@@ -48,6 +48,8 @@ game.battleBalls = {
         //set each player's position
         this.playerIDs.forEach(function(id, index){
             me.players[id].setPosition(playerPositions[index].x, playerPositions[index].y);
+            me.players[id].updateAcceleration(0,0);
+            me.players[id].velocity = {x: 0, y: 0};
             //me.players[id].setPosition(me.canvas.width/2, me.canvas.height/2);
         });
     },
