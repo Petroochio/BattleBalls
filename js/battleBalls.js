@@ -12,7 +12,7 @@ game.battleBalls = {
     booms : [],
     state : "START",
     startDelay : 500,
-    arenaShrinkDelay : 1000,
+    arenaShrinkDelay : /*1000*/500,
 
     init : function(){
         var me = this;
@@ -306,12 +306,12 @@ game.battleBalls = {
         me.ctx.fillStyle = 'black';
         me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
         me.ctx.restore();
-        me.text(me.ctx, "Game Over", me.canvas.width/2, me.canvas.height/4, 100, "white");
+//        me.text(me.ctx, "Game Over", me.canvas.width/2, me.canvas.height/4, 100, "white");
         me.text(me.ctx,"ready up to play again",me.canvas.width/2,me.canvas.height/4+50,50,"white");
         
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
-//            if(!player.KOed) me.text(me.ctx,"player "+index+" won",me.canvas.width/2,me.canvas.height/4+75,50,"white");
+            if(!player.KOed) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
             
             me.ctx.save();
             me.ctx.strokeStyle = player.color;
