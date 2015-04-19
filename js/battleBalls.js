@@ -13,6 +13,8 @@ game.battleBalls = {
     state : "START",
     startDelay : 500,
     arenaShrinkDelay : /*1000*/500,
+    
+    bgMusic : undefined,
 
     init : function(){
         var me = this;
@@ -26,6 +28,11 @@ game.battleBalls = {
         me.arena = game.createArena('white', me.canvas.height/2-10, me.canvas.width/2, me.canvas.height/2);
         //set up socket
         game.socketHandlers.init(me);
+        
+        //set up sounds
+        me.bgMusic = document.querySelector("#bgMusic");
+        me.bgMusic.volume = 0.5;
+        me.bgMusic.play();
     },
     //main loop
     loop : function() {
@@ -70,6 +77,9 @@ game.battleBalls = {
             game.socketHandlers.changeState("GAME");
             me.reset();
         }
+        
+        //audio controls
+        if(me.bgMusic.currentTime >= 120) me.bgMusic.currentTime = 0;
     },
     //update function for end game screen
     updateGameEnd : function() {
