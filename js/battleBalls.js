@@ -78,7 +78,7 @@ game.battleBalls = {
         }
         
         //audio controls
-        if(me.bgMusic.currentTime >= 120) me.bgMusic.currentTime = 0;
+        if(me.bgMusic.currentTime >= 80) me.bgMusic.currentTime = 0;
     },
     //update function for end game screen
     updateGameEnd : function() {
@@ -93,6 +93,7 @@ game.battleBalls = {
         if(this.playerIDs.length >= 2 && canStart) {
             this.state = "GAME";
             game.socketHandlers.changeState("GAME");
+            me.bgMusic.currentTime = 80;
             me.reset();
         }
     },
@@ -185,6 +186,8 @@ game.battleBalls = {
           this.arena.radius -= 0.03;
         else
           this.arenaShrinkDelay--;
+        
+        if(me.bgMusic.currentTime < 80) me.bgMusic.currentTime = 80;
     },
     //Update loop that handles all states
     update : function() {
