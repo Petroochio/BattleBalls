@@ -31,7 +31,7 @@ game.battleBalls = {
         me.bgMusic.volume = 0.5;
         me.bgMusic.play();
         //set up socket
-        game.socketHandlers.init(me);
+        game.socketHandlers.init(me);//This line of code needs to be called last
     },
     //main loop
     loop : function() {
