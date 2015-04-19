@@ -26,13 +26,12 @@ game.battleBalls = {
         me.ctx = me.canvas.getContext('2d');
         me.ctx.lineWidth = 5;
         me.arena = game.createArena('white', me.canvas.height/2-10, me.canvas.width/2, me.canvas.height/2);
-        //set up socket
-        game.socketHandlers.init(me);
-        
         //set up sounds
         me.bgMusic = document.querySelector("#bgMusic");
         me.bgMusic.volume = 0.5;
         me.bgMusic.play();
+        //set up socket
+        game.socketHandlers.init(me);
     },
     //main loop
     loop : function() {
