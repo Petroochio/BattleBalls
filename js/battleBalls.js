@@ -12,10 +12,15 @@ game.battleBalls = {
     booms : [],
     state : "START",
     startDelay : 500,
-    arenaShrinkDelay : /*1000*/500,
+    arenaShrinkDelay : /*1000*/200,
     
     bgMusic : undefined,
     chargeSound : undefined,
+    dashSound : undefined,
+    boomSound : undefined,
+    readySound : undefined,
+    collideSound : undefined,
+    
 
     init : function(){
         var me = this;
@@ -29,11 +34,24 @@ game.battleBalls = {
         me.arena = game.createArena('white', me.canvas.height/2-10, me.canvas.width/2, me.canvas.height/2);
         //set up sounds
         me.bgMusic = document.querySelector("#bgMusic");
-        me.bgMusic.volume = 0.5;
+        me.bgMusic.volume = 0.2;
         me.bgMusic.play();
         
         me.chargeSound = document.querySelector("#chargeSound");
-        me.chargeSound.volume = 0.3;
+        me.chargeSound.volume = 1;
+
+        me.dashSound = document.querySelector("#dashSound");
+        me.dashSound.volume = 1;
+        
+        me.boomSound = document.querySelector("#boomSound");
+        me.boomSound.volume = 1;
+        
+        me.readySound = document.querySelector("#readySound");
+        me.readySound.volume = 1;
+        
+        me.collideSound = document.querySelector("#collideSound");
+        me.collideSound.volume = 1;
+        
         //set up socket
         game.socketHandlers.init(me);//This line of code needs to be called last
     },
@@ -117,6 +135,7 @@ game.battleBalls = {
                     if(player2.id !== player.id){//if the players aren't the same
                         //Check collision if they aren't already colliding
                         if(game.physicsUtils.circleCollision(player, player2) && !player.colliding(player2)) {
+                            me.collideSound.play();
                             //get impulse
                             var impulse = game.physicsUtils.getImpulse(player, player2, 1.5);
                             player.applyImpulse(impulse);//apply impluse to first player
@@ -186,10 +205,10 @@ game.battleBalls = {
                 array.splice(index, 1);
             }
         });
-        if(this.arenaShrinkDelay < 1)
+//        if(this.arenaShrinkDelay < 1)
           this.arena.radius -= 0.03;
-        else
-          this.arenaShrinkDelay--;
+//        else
+//          this.arenaShrinkDelay--;
         
         if(me.bgMusic.currentTime < 80) me.bgMusic.currentTime = 80;
     },

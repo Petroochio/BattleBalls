@@ -5,12 +5,16 @@
     <style>
       * { margin: 0; padding: 0; box-sizing: border-box; }
       body { font: 13px BAAAAALLLLLLLLLLS; }
+        canvas {margin: 0 25%;}
       form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
       form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
       form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
       #messages { list-style-type: none; margin: 0; padding: 0; }
       #messages li { padding: 5px 10px; }
       #messages li:nth-child(odd) { background: #eee; }
+        #audioControls {
+            display: none;
+        }
         @font-face {
             font-family: BAAAAALLLLLLLLLLS;
             src: url("assets/fonts/marqueemoon.ttf");
@@ -30,14 +34,17 @@
 	</script>
   </head>
   <body>
-    <canvas id="area" width="640px" height="480px"></canvas>
+      <div width="100%">
+      <canvas id="area" width="640px" height="480px"></canvas>
+      </div>
+    
       <section id="audioControls">
         <audio id="bgMusic" src="assets/sound/music.mp3" controls loop></audio>
-        <audio id="chargeSound" src="assets/sound/charge.wav" controls loop></audio>
-        <audio id="dashSound" src="assets/sound/dashHappens.wav" controls loop></audio>
-        <audio id="boomSound" src="assets/sound/boomHappens.wav" controls loop></audio>
-        <audio id="collideSound" src="assets/sound/collide.wav" controls loop></audio>
-        <audio id="readySound" src="assets/sound/ready.wav" controls loop></audio>
+        <audio id="chargeSound" src="assets/sound/charge.wav" controls></audio>
+        <audio id="dashSound" src="assets/sound/dashHappens.wav" controls></audio>
+        <audio id="boomSound" src="assets/sound/boomHappens.wav" controls></audio>
+        <audio id="collideSound" src="assets/sound/collide.wav" controls></audio>
+        <audio id="readySound" src="assets/sound/ready.wav" controls></audio>
       </section>
   </body>
 </html>

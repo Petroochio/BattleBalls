@@ -34,15 +34,21 @@ game.socketHandlers = {
       console.log(data.id + " ready");
       if(app.players[data.id].ready)
         app.players[data.id].ready = false;
-        else app.players[data.id].ready = true;
+        else {
+            app.players[data.id].ready = true;
+            app.readySound.play();
+        }
     });
 
     socket.on('charge start', function(data){
       app.players[data.id].beginCharge(data.type);
+        app.chargeSound.play();
     });
 
     socket.on('charge end', function(data){
       app.players[data.id].endCharge(data.type);
+        app.chargeSound.pause();
+        app.chargeSound.currentTime = 0;
     });
 
     socket.on('phone tilt', function(data) {

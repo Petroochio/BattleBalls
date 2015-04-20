@@ -84,6 +84,7 @@ game.Player = function() {
     this.charge = 0;
     this.charging = false;
     this.coolDown = 20;
+      game.battleBalls.boomSound.play();
   };
 
   p.doDash = function() {
@@ -93,6 +94,7 @@ game.Player = function() {
     this.charge = 0;
     this.charging = false;
     this.coolDown = 20;
+      game.battleBalls.dashSound.play();
   };
   /*
   p.startDash = function() {
