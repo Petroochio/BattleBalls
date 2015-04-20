@@ -15,6 +15,7 @@ game.battleBalls = {
     arenaShrinkDelay : /*1000*/500,
     
     bgMusic : undefined,
+    chargeSound : undefined,
 
     init : function(){
         var me = this;
@@ -30,6 +31,9 @@ game.battleBalls = {
         me.bgMusic = document.querySelector("#bgMusic");
         me.bgMusic.volume = 0.5;
         me.bgMusic.play();
+        
+        me.chargeSound = document.querySelector("#chargeSound");
+        me.chargeSound.volume = 0.3;
         //set up socket
         game.socketHandlers.init(me);//This line of code needs to be called last
     },
