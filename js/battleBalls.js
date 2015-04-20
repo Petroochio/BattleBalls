@@ -13,6 +13,7 @@ game.battleBalls = {
     state : "START",
     startDelay : 500,
     arenaShrinkDelay : /*1000*/200,
+    ticker: 100,
     
     bgMusic : undefined,
     chargeSound : undefined,
@@ -94,7 +95,7 @@ game.battleBalls = {
         //If all players are read and there are more than 2
         if(me.playerIDs.length >= 2 && canStart) {
             //Begin game
-            me.state = "GAME";
+            me.state = "ONBOARD";
             game.socketHandlers.changeState("GAME");
             me.reset();
         }
@@ -212,11 +213,21 @@ game.battleBalls = {
         
         if(me.bgMusic.currentTime < 80) me.bgMusic.currentTime = 80;
     },
+    updateOnboard: function() {
+        if(this.ticker <= 0){
+            this.state = "GAME";
+        }
+        this.ticker--;
+        console.log(this.ticker);
+    },
     //Update loop that handles all states
     update : function() {
         switch(this.state) {
             case "START" :
                 this.updateStartMenu();
+                break;
+            case "ONBOARD" :
+                this.updateOnboard();
                 break;
             case "GAME" :
                 //if(this.startDelay < 1)
@@ -263,7 +274,8 @@ game.battleBalls = {
         me.ctx.fillStyle = 'black';
         me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
         me.ctx.restore();
-        me.text(me.ctx, "Players in " + me.playerIDs.length, me.canvas.width/2, me.canvas.height/4, 100, "white");
+        me.text(me.ctx, "battle balls", me.canvas.width/2, me.canvas.height/4, 100, "white");
+        me.text(me.ctx, "battleballs.herokuapp.com to connect", me.canvas.width/2, me.canvas.height/4+35, 30, "white");
 
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
@@ -376,11 +388,24 @@ game.battleBalls = {
             me.ctx.restore();
         });
     },
+    
+    renderOnboard: function() {
+        var me = this;
+        me.ctx.fillStyle = "black"
+        me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
+        me.text(me.ctx,"tilt phone to move",me.canvas.width/2,me.canvas.height/4,50,"white");
+        me.text(me.ctx,"power controls on phone",me.canvas.width/2,me.canvas.height/4+100,50,"white");
+        console.log("h");
+    },
+    
     //Main render function that handles different render states
     render : function() {
         switch(this.state) {
             case "START" :
                 this.renderStart();
+                break;
+            case "ONBOARD" :
+                this.renderOnboard();
                 break;
             case "GAME" :
                 this.renderGame();
