@@ -7,6 +7,9 @@ game.controller = {
     state: "START",
     color: undefined,
     ready: false,
+    touchType: undefined,
+    xTap: undefined,
+    yTap: undefined,
 
     init: function(){
         //initialize variables
@@ -54,7 +57,7 @@ game.controller = {
                 case "END":
                     break;
                 case "GAME":
-                    var data = { id: id };
+                    var data = { id: id, type: me.touchType };
                     socket.emit('charge start', data);
                     break;
             }
@@ -68,7 +71,7 @@ game.controller = {
                     me.ready = !me.ready;
                     break;
                 case "GAME":
-                    var data = { id: id };
+                    var data = { id: id, type: me.touchType }
                     socket.emit('charge end', data);
                     break;
             }
@@ -132,11 +135,20 @@ game.controller = {
         this.update();
         this.render();
     },
+    setInput: function(data){
+        this.xTap = data.pageX-this.offset.left;
+        this.yTap = data.pageY-this.offset.top;
+    },
+    updateGameLoop: function(){
+        var me = this;
+        me.touchType = "boom";
+    },
     update: function(){
         switch(this.state){
             case "START":
                 break;
             case "GAME":
+                this.updateGameLoop();
                 break;
             case "END":
                 break;
@@ -150,12 +162,21 @@ game.controller = {
         me.ctx.restore();
         me.text(me.ctx,"ready",me.canvas.width/2,me.canvas.height/2,40,me.color);
     },
+    renderGame: function(){
+        var me = this;
+        me.ctx.save();
+        me.ctx.fillStyle = 'black';
+        me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
+        me.ctx.restore();
+        me.text(me.ctx,"game",me.canvas.width/2,me.canvas.height/2,40,me.color);
+    },
     render: function(){
         switch(this.state){
             case "START":
                 this.renderStart();
                 break;
             case "GAME":
+                this.renderGame();
                 break;
             case "END":
                 break;
