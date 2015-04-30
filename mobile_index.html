@@ -13,6 +13,7 @@
             form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
             form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
             form button { width: 8%; background: rgb(130, 224, 255); border: none; padding: 10px; user-select: none; -webkit-user-select: none;}
+            #myCanvas { user-select: none; -webkit-user-select: none; }
             #start {position: absolute;}
             #button1 {user-select: none; visibility: hidden;}
             #button2 {user-select: none; visibility: hidden;}
@@ -20,7 +21,9 @@
         </style>
         <script src="/socket.io/socket.io.js"></script>
         <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-        <script>
+        <script src="js/controller.js"></script>
+        <script> window.onload = function() { game.controller.init(); };</script>
+        <!--<script>
             var screenState = "START";
             var boomButton, dashButton, startCanvas;
             var boomCTX, dashCTX, startCTX;
@@ -222,14 +225,17 @@
                 ctx.fillText(butt,canvas.width/2,canvas.height/2);
                 ctx.restore();
             };
-        </script>
+        </script> -->
     </head>
     <body>
-        <div id="buttons">
+        <div id="wrapper" width="100%" height="100%">
+            <canvas id="myCanvas"></canvas>
+        </div>
+        <!-- <div id="buttons">
             <canvas id="start" width="200px"height="400px"></canvas>
             <canvas id="button1"width="200px"height="200px"></canvas>
             <br>
             <canvas id="button2"width="200px"height="200px"></canvas>
-        </div>
+        </div> -->
     </body>
 </html>

@@ -53,7 +53,6 @@ io.on('connection', function(socket){
       io.emit('player join', data);
     } else {
       socket.disconnect();
-
     }
   });
 
