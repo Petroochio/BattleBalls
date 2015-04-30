@@ -96,26 +96,10 @@ game.Player = function() {
     this.coolDown = 20;
       game.battleBalls.dashSound.play();
   };
-  /*
-  p.startDash = function() {
-    this.dashTime = this.charge/maxCharge * 2;
-    this.
-  };
 
-  p.updateDash = function(dt) {
-    this.dashTime--;
-    if(this.dashTime <= 0)
-      this.endDash();
-  };
-
-  p.endDash = function() {
-    this.
-  };
-  */
   p.updateCollisions = function() {
     var self = this;
     this.collisions.forEach(function(ball, index, array){
-      //console.log(ball);
       if(!game.physicsUtils.circleCollision(ball.player, self))
         array.splice(index, 1);
       // else
