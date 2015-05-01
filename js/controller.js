@@ -8,6 +8,7 @@ game.controller = {
     color: undefined,
     ready: false,
     touchType: undefined,
+    touching: undefined,
     xTap: undefined,
     yTap: undefined,
     readyButton: undefined,
@@ -51,8 +52,13 @@ game.controller = {
                 me.ready = false;
             }
         });
+        
+        me.touching = false;
+        
         //Event listeners
         me.canvas.addEventListener("touchstart", function(e){
+            me.touching = true;
+            me.setInput(e);
             switch(me.state){
                 case "START":
                 case "END":
@@ -64,7 +70,12 @@ game.controller = {
             }
         });
         
+        me.canvas.addEventListener("touchmove", function(e){
+            me.setInput(e);
+        });
+        
         me.canvas.addEventListener("touchend", function(e){
+            me.touching = false;
             switch(me.state){
                 case "START":
                 case "END":
@@ -139,14 +150,18 @@ game.controller = {
         this.render();
     },
     setInput: function(data){
-        this.xTap = data.pageX-this.offset.left;
-        this.yTap = data.pageY-this.offset.top;
+        this.xTap = data.touches[0].pageX;
+        this.yTap = data.touches[0].pageY;
     },
     updateGameLoop: function(){
         var me = this;
         me.touchType = "boom";
     },
     update: function(){
+        if(this.touching)
+        {
+            console.log("X: " + this.xTap + ", Y: " + this.yTap);
+        }
         switch(this.state){
             case "START":
                 this.readyButton.update();
@@ -163,6 +178,7 @@ game.controller = {
         me.ctx.save();
         me.ctx.fillStyle = 'black';
         me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
+        //game.DrawLib.drawRect(me.ctx, 0, 0, me.canvas.width, me.canvas.height, 'black', 'black')
         me.ctx.restore();
         me.text(me.ctx,"ready",me.canvas.width/2,me.canvas.height/2,40,me.color);
     },
