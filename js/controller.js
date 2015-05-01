@@ -10,6 +10,7 @@ game.controller = {
     touchType: undefined,
     xTap: undefined,
     yTap: undefined,
+    readyButton: undefined,
 
     init: function(){
         //initialize variables
@@ -76,6 +77,8 @@ game.controller = {
                     break;
             }
         });
+
+        me.readyButton = new game.Button(me.ctx, me.canvas.width/2,me.canvas.height/2, 120, 80, 'ready',me.color);
 /*
         //initialize Boom Button
         var boomButton = document.querySelector("#button1");
@@ -146,6 +149,7 @@ game.controller = {
     update: function(){
         switch(this.state){
             case "START":
+                this.readyButton.update();
                 break;
             case "GAME":
                 this.updateGameLoop();
@@ -174,6 +178,7 @@ game.controller = {
         switch(this.state){
             case "START":
                 this.renderStart();
+                this.readyButton.render();
                 break;
             case "GAME":
                 this.renderGame();
