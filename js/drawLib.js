@@ -2,13 +2,7 @@
 "use strict";
 var game = game || {};
 
-game.DrawLib = function() {
-    
-    init = function(ctx){
-        this.ctx  = ctx;
-    }
-
-    var p = DrawLib.prototype;
+game.DrawLib = {
     
     /** rectangle draw method
     * @param x : new x coord
@@ -18,12 +12,14 @@ game.DrawLib = function() {
     * @param fillColor : fill color
     * @param strokeColor : stroke color
    */
-    p.drawRect = function(x, y, width, height, fillColor, strokeColor) {
-        this.ctx.save();
-        this.ctx.strokeStyle = this.color;
-        this.ctx.strokeRect(this.x - this.width/2, this.y - this.height/2,this.width, this.height);
-        this.ctx.restore();
-    };
+    drawRect: function(ctx, x, y, width, height, fillColor, strokeColor) {
+        ctx.save();
+        ctx.strokeStyle = strokeColor;
+        ctx.fillStyle = fillColor;
+        ctx.strokeRect(x - width/2, y - height/2, width, height);
+        ctx.fillRect(x - width/2, y - height/2, width, height);
+        ctx.restore();
+    },
     
     /** circle draw method
     * @param x : new x coord
@@ -32,17 +28,17 @@ game.DrawLib = function() {
     * @param fillColor : fill color
     * @param strokeColor : stroke color
    */
-    p.drawCircle = function(x, y, radius, fillColor, strokeColor) {
-        this.ctx.save();
-        this.ctx.fillStyle = fillColor;
-        this.ctx.strokeStyle = strokeColor;
-        this.ctx.beginPath();
-        this.ctx.arc(x, y, this.radius, 0, Math.PI * 2);
-        this.ctx.closePath();
-        this.ctx.fill();
-        this.ctx.stroke();
-        this.ctx.restore();
-    };
+    drawCircle: function(ctx, x, y, radius, fillColor, strokeColor) {
+        ctx.save();
+        ctx.fillStyle = fillColor;
+        ctx.strokeStyle = strokeColor;
+        ctx.beginPath();
+        ctx.arc(x, y, radius, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.restore();
+    },
     
  
     /** Draws text to the screen
@@ -53,14 +49,12 @@ game.DrawLib = function() {
    * @param size : size of text
    * @param col : color of text
    */
-    p.drawText = function(string, x, y, size, col) {
-        this.ctx.save();
-        this.ctx.font = size+'px BAAAAALLLLLLLLLLS';
-        this.ctx.textAlign = "center";
-        this.ctx.fillStyle = col;
-        this.ctx.fillText(string, x, y);
-        this.ctx.restore();
+    drawText: function(ctx, string, x, y, size, col) {
+        ctx.save();
+        ctx.font = size+'px BAAAAALLLLLLLLLLS';
+        ctx.textAlign = "center";
+        ctx.fillStyle = col;
+        ctx.fillText(string, x, y);
+        ctx.restore();
     },
-
-    return DrawLib;
-}();
+};

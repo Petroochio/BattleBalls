@@ -64,12 +64,30 @@ game.Button = function() {
         if(this.radius != undefined)
         {
             //this.circleRender();
-            game.DrawLib.drawCircle(this.x, this.y, this.radius, 'black', this.color);
+            game.DrawLib.drawCircle(this.ctx, this.x, this.y, this.radius, 'black', this.color);
         }
         else
         {
-            //this.rectRender()
-            game.DrawLib.drawRect(this.x, this.y, this.width, this.height, 'black', this.color)
+            this.ctx.save();
+            this.ctx.lineWidth = 5;
+            this.ctx.shadowBlur=15;
+            
+            //draw based on current press state
+            if(this.currentlyPressed != true)
+            {
+                this.ctx.shadowColor = this.color;
+                game.DrawLib.drawRect(this.ctx, this.x, this.y, this.width, this.height, 'black', this.color);
+                this.ctx.restore();
+                game.DrawLib.drawText(this.ctx, this.id, this.x, this.y + this.height/5, 40, this.color);
+            }
+            else{
+                this.ctx.shadowColor = 'white';
+                game.DrawLib.drawRect(this.ctx, this.x, this.y, this.width, this.height, this.color, 'white');
+                this.ctx.restore();
+                game.DrawLib.drawText(this.ctx, this.id, this.x, this.y + this.height/5, 40, 'white');
+            }
+            
+            
         }
     }
 
