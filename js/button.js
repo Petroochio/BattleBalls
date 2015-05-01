@@ -63,11 +63,13 @@ game.Button = function() {
         //render as circle if a radius exists
         if(this.radius != undefined)
         {
-            this.circleRender();
+            //this.circleRender();
+            game.DrawLib.drawCircle(this.x, this.y, this.radius, 'black', this.color);
         }
         else
         {
-            this.rectRender()
+            //this.rectRender()
+            game.DrawLib.drawRect(this.x, this.y, this.width, this.height, 'black', this.color)
         }
     }
 
