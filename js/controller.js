@@ -45,6 +45,9 @@ game.controller = {
         socket.on('player connect', function(data){
             if(data.id !== -1) {
                 id = data.id;
+                me.readyButton.player = id;
+                me.boomButton.player = id;
+                me.dashButton.player = id;
             }
         });
 
@@ -62,7 +65,7 @@ game.controller = {
         //Event listeners
         me.canvas.addEventListener("touchstart", function(e){
             me.touching = true;
-            console.log(me.state);
+            //console.log(me.state);
             me.setInput(e);
             switch(me.state){
                 case "START":
@@ -70,8 +73,8 @@ game.controller = {
                     break;
                 case "GAME":
                     me.setTouchType();
-                    var data = { id: id, type: me.touchType };
-                    socket.emit('charge start', data);
+                    //var data = { id: id, type: me.touchType };
+                    //socket.emit('charge start', data);
                     break;
             }
         });
@@ -89,16 +92,16 @@ game.controller = {
                     me.ready = !me.ready;
                     break;
                 case "GAME":
-                    console.log(me.touchType);
-                    var data = { id: id, type: me.touchType }
-                    socket.emit('charge end', data);
+                    //console.log(me.touchType);
+                    //var data = { id: id, type: me.touchType }
+                    //socket.emit('charge end', data);
                     break;
             }
         });
 
-        me.readyButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/2,me.canvas.width/3,"ready",this.color);
-        me.boomButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/4,me.canvas.width/4,"boom",this.color);
-        me.dashButton = new game.Button(me.ctx,me.canvas.width/2,(me.canvas.height/4)*3,me.canvas.width/4,"dash",this.color);
+        me.readyButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/2,me.canvas.width/3,"ready",id,this.color);
+        me.boomButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/4,me.canvas.width/4,"boom",id,this.color);
+        me.dashButton = new game.Button(me.ctx,me.canvas.width/2,(me.canvas.height/4)*3,me.canvas.width/4,"dash",id,this.color);
 
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', function(e) {
@@ -122,8 +125,19 @@ game.controller = {
     },
     setTouchType: function(){
         var me = this;
-        if(me.boomButton.currentlyPressed) me.touchType = me.boomButton.id;
-        else if(me.dashButton.currentlyPressed) me.touchType = me.dashButton.id;
+        if(me.boomButton.currentlyPressed) 
+        {
+            me.touchType = me.boomButton.id;
+        }
+        else if(me.dashButton.currentlyPressed) 
+        {
+            me.touchType = me.dashButton.id;
+        }
+        
+        else
+        {
+            me.touchType = undefined;
+        }
     },
     setInput: function(data){
         this.xTap = data.touches[0].pageX;
@@ -137,7 +151,6 @@ game.controller = {
         me.boomButton.update();
         me.dashButton.update();
         me.setTouchType();
-        console.log(me.touchType);
     },
     update: function(){
         if(this.touching)

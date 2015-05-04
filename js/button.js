@@ -11,7 +11,7 @@ game.Button = function() {
     * @param id : string  for the button
     * @param color : rendering color
    */
-    var Button = function(ctx, x, y, radius, id, color) {
+    var Button = function(ctx, x, y, radius, id, player, color) {
         this.ctx = ctx;
         this.x = x;
         this.y = y;
@@ -20,6 +20,9 @@ game.Button = function() {
         //        this.height = undefined;
         this.id = id;
         this.color = color;
+        this.player = player;
+        
+        this.socket = io.connect( window.location.origin, {query: 'user='+name});
 
         this.held = false;
         this.currentlyPressed = false;
@@ -56,11 +59,16 @@ game.Button = function() {
         if(game.controller.touching &&
            game.controller.xTap >= this.x-this.radius && game.controller.xTap <= this.x+this.radius &&
            game.controller.yTap >= this.y-this.radius && game.controller.yTap <= this.y+this.radius){
-            this.currentlyPressed = true;
+            this.updateState(true);
+            this.throwEvents();
+            
         }else if(!game.controller.touching){
-            this.currentlyPressed = false;
+            this.updateState(false);
+            this.throwEvents();
         }
-
+        this.updatePreviousState();
+        this.setHeld();
+        this.throwEvents();
     };
 
     //render the button
@@ -103,6 +111,30 @@ game.Button = function() {
         this.previouslyPressed = this.currentlyPressed;
         this.currentlyPressed = state;
     };
+    
+    p.updatePreviousState = function()
+    {
+        this.previouslyPressed = this.currentlyPressed;
+    }
+    
+    p.throwEvents = function(){
+        if(this.id != "ready"){
+            if(this.previouslyPressed == false && this.currentlyPressed == true) //begin press event
+            {
+                var data = { id: this.player, type: this.id };
+                this.socket.emit('charge start', data);
+            }
+            else if(this.previouslyPressed == true && this.currentlyPressed == true) //held event
+            {
+              console.log("held");  
+            }
+            else if(this.previouslyPressed == true && this.currentlyPressed == false) // end press event
+            {
+                var data = { id: this.player, type: this.id };
+                this.socket.emit('charge end', data);
+            }
+        }
+    }
 
     return Button;
 }();
