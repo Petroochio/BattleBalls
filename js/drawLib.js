@@ -30,12 +30,12 @@ game.DrawLib = {
    */
     drawCircle: function(ctx, x, y, radius, fillColor, strokeColor) {
         ctx.save();
-        ctx.fillStyle = fillColor;
+//        ctx.fillStyle = fillColor;
         ctx.strokeStyle = strokeColor;
         ctx.beginPath();
         ctx.arc(x, y, radius, 0, Math.PI * 2);
         ctx.closePath();
-        ctx.fill();
+//        ctx.fill();
         ctx.stroke();
         ctx.restore();
     },
