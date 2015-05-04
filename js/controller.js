@@ -62,13 +62,14 @@ game.controller = {
         //Event listeners
         me.canvas.addEventListener("touchstart", function(e){
             me.touching = true;
+            console.log(me.state);
             me.setInput(e);
             switch(me.state){
                 case "START":
                 case "END":
                     break;
                 case "GAME":
-//                    me.setTouchType();
+                    me.setTouchType();
                     var data = { id: id, type: me.touchType };
                     socket.emit('charge start', data);
                     break;
@@ -88,6 +89,7 @@ game.controller = {
                     me.ready = !me.ready;
                     break;
                 case "GAME":
+                    console.log(me.touchType);
                     var data = { id: id, type: me.touchType }
                     socket.emit('charge end', data);
                     break;
@@ -97,45 +99,7 @@ game.controller = {
         me.readyButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/2,me.canvas.width/3,"ready",this.color);
         me.boomButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/4,me.canvas.width/4,"boom",this.color);
         me.dashButton = new game.Button(me.ctx,me.canvas.width/2,(me.canvas.height/4)*3,me.canvas.width/4,"dash",this.color);
-/*
-        //initialize Boom Button
-        var boomButton = document.querySelector("#button1");
-        var boomCTX;
-        if (boomButton.getContext) boomCTX = boomButton.getContext("2d");
 
-        //Event listeners
-        boomButton.addEventListener("touchstart", function(e){
-            var data = { id: id, type: "boom" };
-            socket.emit('charge start', data);
-            redraw(boomButton, "BOOM",boomCTX);
-        }, false);
-        boomButton.addEventListener("touchend", function(e){
-            var data = { id: id };
-            socket.emit('charge end', data);
-            draw(boomButton, "BOOM",boomCTX);
-        }, false);
-        draw(boomButton, "BOOM",boomCTX);
-
-        //initialize Dash Button
-        var dashButton = document.querySelector("#button2");
-        var dashCTX;
-        if (dashButton.getContext) dashCTX = dashButton.getContext("2d");
-
-        //Event listeners
-        dashButton.addEventListener("touchstart", function(e){
-            //hello peter
-            var data = { id: id, type: "dash" };
-            socket.emit('charge start', data);
-            redraw(dashButton, "DASH",dashCTX);
-        }, false);
-        dashButton.addEventListener("touchend", function(e){
-            //hello peter
-            var data = { id: id };
-            socket.emit('charge end', data);
-            draw(dashButton, "DASH",dashCTX);
-        }, false);
-        draw(dashButton, "DASH",dashCTX);
-*/
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', function(e) {
                 // gamma is the left-to-right tilt in degrees, where right is positive
@@ -178,7 +142,7 @@ game.controller = {
     update: function(){
         if(this.touching)
         {
-            console.log("X: " + this.xTap + ", Y: " + this.yTap);
+            //console.log("X: " + this.xTap + ", Y: " + this.yTap);
         }
         switch(this.state){
             case "START":

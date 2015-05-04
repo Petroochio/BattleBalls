@@ -65,6 +65,7 @@ io.on('connection', function(socket){
   });
 
   socket.on('charge start', function(data){
+      console.log(data);
     io.emit('charge start', data);
   });
 
