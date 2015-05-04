@@ -12,6 +12,10 @@ game.controller = {
     xTap: undefined,
     yTap: undefined,
     readyButton: undefined,
+    
+    //Will eventually be replaced with power1Button&power2Button
+    boomButton: undefined,
+    dashButton: undefined,
 
     init: function(){
         //initialize variables
@@ -64,6 +68,7 @@ game.controller = {
                 case "END":
                     break;
                 case "GAME":
+//                    me.setTouchType();
                     var data = { id: id, type: me.touchType };
                     socket.emit('charge start', data);
                     break;
@@ -90,6 +95,8 @@ game.controller = {
         });
 
         me.readyButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/2,me.canvas.width/3,"ready",this.color);
+        me.boomButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/4,me.canvas.width/4,"boom",this.color);
+        me.dashButton = new game.Button(me.ctx,me.canvas.width/2,(me.canvas.height/4)*3,me.canvas.width/4,"dash",this.color);
 /*
         //initialize Boom Button
         var boomButton = document.querySelector("#button1");
@@ -149,13 +156,24 @@ game.controller = {
         this.update();
         this.render();
     },
+    setTouchType: function(){
+        var me = this;
+        if(me.boomButton.currentlyPressed) me.touchType = me.boomButton.id;
+        else if(me.dashButton.currentlyPressed) me.touchType = me.dashButton.id;
+    },
     setInput: function(data){
         this.xTap = data.touches[0].pageX;
         this.yTap = data.touches[0].pageY;
     },
+    updateStartScreen: function(){
+        this.readyButton.update();
+    },
     updateGameLoop: function(){
         var me = this;
-        me.touchType = "boom";
+        me.boomButton.update();
+        me.dashButton.update();
+        me.setTouchType();
+        console.log(me.touchType);
     },
     update: function(){
         if(this.touching)
@@ -164,7 +182,7 @@ game.controller = {
         }
         switch(this.state){
             case "START":
-                this.readyButton.update();
+                this.updateStartScreen();
                 break;
             case "GAME":
                 this.updateGameLoop();
@@ -180,7 +198,6 @@ game.controller = {
         me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
         me.readyButton.render();
         me.ctx.restore();
-        //me.text(me.ctx,"ready",me.canvas.width/2,me.canvas.height/2,40,me.color);
     },
     renderGame: function(){
         var me = this;
@@ -188,13 +205,13 @@ game.controller = {
         me.ctx.fillStyle = 'black';
         me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
         me.ctx.restore();
-        me.text(me.ctx,"game",me.canvas.width/2,me.canvas.height/2,40,me.color);
+        me.boomButton.render();
+        me.dashButton.render();
     },
     render: function(){
         switch(this.state){
             case "START":
                 this.renderStart();
-                this.readyButton.render();
                 break;
             case "GAME":
                 this.renderGame();
@@ -202,13 +219,5 @@ game.controller = {
             case "END":
                 break;
         }
-    },
-    text: function(ctx, string, x, y, size, col) {
-        ctx.save();
-        ctx.font = size+'px BAAAAALLLLLLLLLLS';
-        ctx.textAlign = "center";
-        ctx.fillStyle = col;
-        ctx.fillText(string, x, y);
-        ctx.restore();
-    },
+    }
 }

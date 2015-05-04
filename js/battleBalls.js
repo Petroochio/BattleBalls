@@ -36,7 +36,7 @@ game.battleBalls = {
         //set up sounds
         me.bgMusic = document.querySelector("#bgMusic");
         me.bgMusic.volume = 0.2;
-        me.bgMusic.play();
+//        me.bgMusic.play();
         
         me.chargeSound = document.querySelector("#chargeSound");
         me.chargeSound.volume = 1;
@@ -84,7 +84,6 @@ game.battleBalls = {
     },
     //Update function for start menu
     updateStartMenu : function() {
-        //console.log("START MENU");
         var canStart = true;
         var me = this;
         //Check if all players are ready
@@ -218,7 +217,6 @@ game.battleBalls = {
             this.state = "GAME";
         }
         this.ticker--;
-        console.log(this.ticker);
     },
     //Update loop that handles all states
     update : function() {
@@ -395,7 +393,6 @@ game.battleBalls = {
         me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
         me.text(me.ctx,"tilt phone to move",me.canvas.width/2,me.canvas.height/4,50,"white");
         me.text(me.ctx,"power controls on phone",me.canvas.width/2,me.canvas.height/4+100,50,"white");
-        console.log("h");
     },
     
     //Main render function that handles different render states
