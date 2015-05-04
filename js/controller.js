@@ -89,7 +89,7 @@ game.controller = {
             }
         });
 
-        me.readyButton = new game.Button(me.ctx, me.canvas.width/2,me.canvas.height/2, 120, 80, 'ready',me.color);
+        me.readyButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/2,me.canvas.width/3,"ready",this.color);
 /*
         //initialize Boom Button
         var boomButton = document.querySelector("#button1");
@@ -178,9 +178,9 @@ game.controller = {
         me.ctx.save();
         me.ctx.fillStyle = 'black';
         me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
-        //game.DrawLib.drawRect(me.ctx, 0, 0, me.canvas.width, me.canvas.height, 'black', 'black')
+        me.readyButton.render();
         me.ctx.restore();
-        me.text(me.ctx,"ready",me.canvas.width/2,me.canvas.height/2,40,me.color);
+        //me.text(me.ctx,"ready",me.canvas.width/2,me.canvas.height/2,40,me.color);
     },
     renderGame: function(){
         var me = this;

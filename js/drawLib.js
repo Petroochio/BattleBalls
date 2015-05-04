@@ -3,7 +3,7 @@
 var game = game || {};
 
 game.DrawLib = {
-    
+
     /** rectangle draw method
     * @param x : new x coord
     * @param y : new y coord
@@ -20,7 +20,7 @@ game.DrawLib = {
         ctx.fillRect(x - width/2, y - height/2, width, height);
         ctx.restore();
     },
-    
+
     /** circle draw method
     * @param x : new x coord
     * @param y : new y coord
@@ -39,8 +39,8 @@ game.DrawLib = {
         ctx.stroke();
         ctx.restore();
     },
-    
- 
+
+
     /** Draws text to the screen
    * @param ctx : drawing context
    * @param string : text to be rendered
