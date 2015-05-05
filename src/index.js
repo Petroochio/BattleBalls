@@ -8,32 +8,32 @@ var users = {};
 var players = 0;
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-app.use('/assets', express.static(path.resolve(__dirname) + '/assets'));
+app.use('/assets', express.static(path.resolve(__dirname) + '../../assets'));
 app.get('/', function(req, res){
-	//the html string being sent
-	var md = new MobileDetect(req.headers['user-agent']);
-	var filepath = path.resolve(__dirname + '/index.html');
-	if(md.mobile() != null) {
-		filepath = path.resolve(__dirname + '/mobile_index.html');
-	}
-	res.sendFile(filepath);
+  //the html string being sent
+  var md = new MobileDetect(req.headers['user-agent']);
+  var filepath = path.resolve(__dirname + '/../assets/views/index.html');
+  if(md.mobile() != null) {
+    filepath = path.resolve(__dirname + '/../assets/views/mobile_index.html');
+  }
+  res.sendFile(filepath);
 });
 // **** ACTIONS DONE BY SERVER HAVE HIGHER PRIORITY AND INIT BEFORE CLIENT ACTIONS
 
 // Setup socket.io
 // listen to connection
 io.on('connection', function(socket){
-	//broadcast that a user has connected
-	//pass an object containing user informatiojn?
-	// handle disconnects
-	socket.on('disconnect', function(){
-		io.emit('player leave', {id: socket.id});
+  //broadcast that a user has connected
+  //pass an object containing user informatiojn?
+  // handle disconnects
+  socket.on('disconnect', function(){
+    io.emit('player leave', {id: socket.id});
     
     if(users[socket.id]){
       delete users[socket.id];
       players--;
     }
-	});
+  });
 /*
   socket.on('host connect', function(data){
 
@@ -75,5 +75,5 @@ io.on('connection', function(socket){
 });
 
 http.listen(port, function(){
-	console.log('listening on *:3000');
+  console.log('listening on *:3000');
 });
