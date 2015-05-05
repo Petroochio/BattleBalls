@@ -8,7 +8,6 @@ var users = {};
 var players = 0;
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 
-app.use('/js', express.static(path.resolve(__dirname) + '/js'));
 app.use('/assets', express.static(path.resolve(__dirname) + '/assets'));
 app.get('/', function(req, res){
 	//the html string being sent
