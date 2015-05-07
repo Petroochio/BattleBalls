@@ -3,18 +3,21 @@ var game = game || {};
 
 game.socketHandlers = {
   socket : undefined,
+  room: "",
   init : function(app) {
     //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
     var socket = io.connect( window.location.origin, {query: 'user='+name, type: 'desktop'});
     this.socket = socket;
-    var room = "";
+    var self = this;
+    var room = this.room;
     var password = "";
     var connectData = {};
     var me = this;
     socket.emit('hostConnect', connectData);//BEFORE ROOM
     socket.on('hostEstablish', function(data){
-      console.log(data.password);
+      console.log("ROOM: " + data.room);
       room = data.room;
+      self.room = data.room;
       app.room = data.room;
     });
     //Set up socket events --Ha Andrew don't look at this --You can't stop me
@@ -67,8 +70,8 @@ game.socketHandlers = {
   },
 
   changeState : function(newState) {
-    var data = {state : newState};
-    this.socket.emit('state change', data);//ROOM CODE
+    var data = {state : newState, room: this.room};
+    this.socket.emit('state change', data);
   },
   //sends snapshot to server to update other views with
   sendSnapshot : function(data) {
