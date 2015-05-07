@@ -6,9 +6,8 @@ var io = require('socket.io')(http);
 var MobileDetect = require('mobile-detect');
 var users = {};
 var rooms = {};
-var players = 0;
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
-
+//Function for generating a random room key
 var generateRoomKey = function(){
   var pw = "";
   var chars = "ABCDEFGHIJKLMNOPQRSTUVWXTZABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -38,7 +37,7 @@ io.on('connection', function(socket){
   //broadcast that a user has connected
   //pass an object containing user informatiojn?
   //Create a new room to host the game
-  socket.on('hostConnect', function(socket){
+  socket.on('hostConnect', function(){
     //generate a room key
     var rm = ""
     //if the room key already exists get a new one
@@ -47,10 +46,10 @@ io.on('connection', function(socket){
     }
     //create a room object to hold server values
     rooms[rm] = {
-      players: 0,
-      users: {}
+      players: 0
     };
     var data = {room: rm};
+    console.log(rm);
     //join the room
     socket.join(rm);
     io.to(socket.id).emit('hostEstablish', data);
@@ -60,8 +59,8 @@ io.on('connection', function(socket){
     io.emit('player leave', {id: socket.id});
     
     if(users[socket.id]){
+      rooms[users[socket.id].room].players--;
       delete users[socket.id];
-      players--;
     }
   });
 /*
@@ -74,10 +73,13 @@ io.on('connection', function(socket){
   });
 
   socket.on('player join', function(data){//ROOM CODE NEEDED HERE
-    if(data.id === -1 && players < 15){
-      players++;
+    if(data.id === -1 && rooms[data.room].players < 8){
       data.id = socket.id;
-      users[socket.id] = socket;
+      rooms[data.room].players++;
+      users[socket.id] = {
+        socket: socket,
+        room: data.room
+      };
       io.to(socket.id).emit('player connect', data);
       io.emit('player join', data);
     } else {
