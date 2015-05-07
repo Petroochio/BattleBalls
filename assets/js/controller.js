@@ -4,7 +4,7 @@ var game = game || {};
 game.controller = {
     canvas: undefined,
     ctx: undefined,
-    state: "START",
+    state: "JOIN",
     color: undefined,
     ready: false,
     touchType: undefined,
@@ -48,6 +48,7 @@ game.controller = {
                 me.readyButton.player = id;
                 me.boomButton.player = id;
                 me.dashButton.player = id;
+                me.state = "START";
             }
         });
 
@@ -158,6 +159,8 @@ game.controller = {
             //console.log("X: " + this.xTap + ", Y: " + this.yTap);
         }
         switch(this.state){
+            case "JOIN":
+                break;
             case "START":
                 this.updateStartScreen();
                 break;
@@ -187,6 +190,8 @@ game.controller = {
     },
     render: function(){
         switch(this.state){
+            case "JOIN":
+                break;
             case "START":
                 this.renderStart();
                 break;
