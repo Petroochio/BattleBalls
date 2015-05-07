@@ -42,7 +42,7 @@ game.controller = {
         join.onsubmit= function(e){ e.preventDefault();};
         var joinButton = document.getElementById("joinButton");
         var codeField = document.querySelector("#code");
-        document.querySelector("#error").style.visibility;
+        document.querySelector("#error").style.display = "none";
         
         
             joinButton.addEventListener("click", function(){
@@ -59,8 +59,8 @@ game.controller = {
                     var connectData = { id: id, color: me.color, room: roomID};
                     socket.emit('player join', connectData);//ADD ROOM TO DATA
                     
-                    codeField.style.visibility = false;
-                    joinButton.style.visibility = false;
+                    codeField.style.display = "none";
+                    joinButton.style.display = "none";
                 }
                 else{
                     codeField.value = "";
@@ -241,7 +241,7 @@ game.controller = {
             var error = "Non-valid Code";
             console.log(error);
             errorDiv.innerHTML = "<p>" + error + "</p>";
-            errorDiv.style.visibility = true;
+            errorDiv.style.display = "block";
         }
         else
         {
@@ -254,9 +254,8 @@ game.controller = {
             {
                 var error = "Contains more than uppercase letters";
                 console.log(error);
-                innerHTML = "<p>" + error + "</p>";
                 errorDiv.innerHTML = "<p>" + error + "</p>";
-                errorDiv.style.visibility = true;
+                errorDiv.style.display = "block";
             }
         }
         
