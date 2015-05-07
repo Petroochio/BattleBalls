@@ -40,16 +40,30 @@ game.controller = {
         var socket = io.connect( window.location.origin, {query: 'user='+name});
         
         var joinButton = document.getElementById("joinButton");
+        var codeField = document.querySelector("#code");
+        document.querySelector("#error").style.visibility;
+        
+        
             joinButton.addEventListener("click", function(){
-                var roomID = document.querySelector("#code").value;
+                var roomID = codeField.value;
                 roomID.toUpperCase();
                 me.room = roomID;
                 
                 console.log(roomID);
                 
-                var connectData = { id: id, color: me.color, room: roomID};
-
-                socket.emit('player join', connectData);//ADD ROOM TO DATA
+                var validInput = me.validateRoom(roomID);
+                
+                if(validInput == true)
+                {
+                    var connectData = { id: id, color: me.color, room: roomID};
+                    socket.emit('player join', connectData);//ADD ROOM TO DATA
+                    
+                    codeField.style.visibility = false;
+                    joinButton.style.visibility = false;
+                }
+                else{
+                    codeField.value = "";
+                }
             });
         
         /*var connectData = { id: id, color: me.color };
@@ -215,5 +229,36 @@ game.controller = {
             case "END":
                 break;
         }
+    },
+    
+    //check if the code for the room is valid
+    validateRoom: function(id){
+        var valid = false;
+        var errorDiv = document.querySelector("#error");
+        if(id.length < 4) //ID is 
+        {
+            var error = "Non-valid Code";
+            console.log(error);
+            errorDiv.innerHTML = "<p>" + error + "</p>";
+            errorDiv.style.visibility = true;
+        }
+        else
+        {
+           if(id.match(/^[A-Z]+$/))
+           {
+               console.log("Valid code");
+               valid = true;
+           }
+            else
+            {
+                var error = "Contains more than uppercase letters";
+                console.log(error);
+                innerHTML = "<p>" + error + "</p>";
+                errorDiv.innerHTML = "<p>" + error + "</p>";
+                errorDiv.style.visibility = true;
+            }
+        }
+        
+        return valid;
     }
 }
