@@ -38,7 +38,8 @@ game.controller = {
         me.color = 'rgb('+red+','+green+','+blue+')';
         //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
         var socket = io.connect( window.location.origin, {query: 'user='+name});
-        
+        var join = document.getElementById("join");
+        join.onsubmit= function(e){ e.preventDefault();};
         var joinButton = document.getElementById("joinButton");
         var codeField = document.querySelector("#code");
         document.querySelector("#error").style.visibility;
@@ -46,7 +47,7 @@ game.controller = {
         
             joinButton.addEventListener("click", function(){
                 var roomID = codeField.value;
-                roomID.toUpperCase();
+                roomID = roomID.toUpperCase();
                 me.room = roomID;
                 
                 console.log(roomID);
@@ -117,7 +118,7 @@ game.controller = {
             switch(me.state){
                 case "START":
                 case "END":
-                    socket.emit('player ready', {id : id});//ADD ROOM CODE
+                    socket.emit('player ready', {id : id, room: me.room});//ADD ROOM CODE
                     me.ready = !me.ready;
                     break;
                 case "GAME":
@@ -141,7 +142,7 @@ game.controller = {
                 // alpha is the compass direction the device is facing in degrees
                 var rot = e.alpha
 
-                var data = { id: id, xAcc : xTilt, yAcc : yTilt };//ADD ROOM
+                var data = { id: id, xAcc : xTilt, yAcc : yTilt, room: me.room };//ADD ROOM
                 socket.emit('phone tilt', data);
             }, false);
         }

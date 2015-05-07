@@ -74,6 +74,7 @@ io.on('connection', function(socket){
 
   socket.on('player join', function(data){//ROOM CODE NEEDED HERE
     if(rooms[data.room] === undefined){
+      console.log("no room" + data.room);
       io.to(socket.id).emit('player connect', data);
       return;
     }
