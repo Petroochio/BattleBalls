@@ -40,7 +40,7 @@ game.controller = {
 
         var connectData = { id: id, color: me.color };
 
-        socket.emit('player join', connectData);
+        socket.emit('player join', connectData);//ADD ROOM TO DATA
 
         socket.on('player connect', function(data){
             if(data.id !== -1) {
@@ -88,7 +88,7 @@ game.controller = {
             switch(me.state){
                 case "START":
                 case "END":
-                    socket.emit('player ready', {id : id});
+                    socket.emit('player ready', {id : id});//ADD ROOM CODE
                     me.ready = !me.ready;
                     break;
                 case "GAME":
@@ -112,7 +112,7 @@ game.controller = {
                 // alpha is the compass direction the device is facing in degrees
                 var rot = e.alpha
 
-                var data = { id: id, xAcc : xTilt, yAcc : yTilt };
+                var data = { id: id, xAcc : xTilt, yAcc : yTilt };//ADD ROOM
                 socket.emit('phone tilt', data);
             }, false);
         }

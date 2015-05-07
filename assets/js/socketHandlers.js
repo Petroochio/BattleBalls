@@ -10,10 +10,13 @@ game.socketHandlers = {
     var room = "";
     var password = "";
     var connectData = {};
-    /*socket.emit('host connect', connectData);
-    socket.on('host establish', function(data){
+    var me = this;
+    socket.emit('hostConnect', connectData);//BEFORE ROOM
+    socket.on('hostEstablish', function(data){
       console.log(data.password);
-    });*/
+      room = data.room;
+      app.room = data.room;
+    });
     //Set up socket events --Ha Andrew don't look at this --You can't stop me
     socket.on('player join', function(data){
       if(app.state === "START") {
@@ -56,11 +59,19 @@ game.socketHandlers = {
         app.players[data.id].updateAcceleration(data.yAcc/300, -data.xAcc/300);
       //my eyes are everywhere --I will gouge your eyes out
     });
+    //use for sending data between different views
+    socket.on('getSnapshot', function(data){
+      me.sendSnapshot(data);
+    });
     app.loop();
   },
 
   changeState : function(newState) {
     var data = {state : newState};
-    this.socket.emit('state change', data);
+    this.socket.emit('state change', data);//ROOM CODE
+  },
+  //sends snapshot to server to update other views with
+  sendSnapshot : function(data) {
+
   }
 }
