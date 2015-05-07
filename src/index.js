@@ -69,10 +69,15 @@ io.on('connection', function(socket){
   });
 */
   socket.on('state change', function(data){//ROOM CODE NEEDED HERE
-    io.emit('state change', data);
+    io.to(data.room).emit('state change', data);
   });
 
   socket.on('player join', function(data){//ROOM CODE NEEDED HERE
+    if(rooms[data.room] === undefined){
+      io.to(socket.id).emit('player connect', data);
+      return;
+    }
+
     if(data.id === -1 && rooms[data.room].players < 8){
       data.id = socket.id;
       rooms[data.room].players++;
@@ -81,27 +86,27 @@ io.on('connection', function(socket){
         room: data.room
       };
       io.to(socket.id).emit('player connect', data);
-      io.emit('player join', data);
+      io.to(data.room).emit('player join', data);
     } else {
       socket.disconnect();
     }
   });
 
   socket.on('phone tilt', function(data){//ROOM CODE
-    io.emit('phone tilt', data);
+    io.to(data.room).emit('phone tilt', data);
   });
 
   socket.on('player ready', function(data){//ROOM CODE
-    io.emit('player ready', data);
+    io.to(data.room).emit('player ready', data);
   });
 
   socket.on('charge start', function(data){//ROOM CODE
       console.log(data);
-    io.emit('charge start', data);
+    io.to(data.room).emit('charge start', data);
   });
 
   socket.on('charge end', function(data){//ROOM CODE
-    io.emit('charge end', data);
+    io.to(data.room).emit('charge end', data);
   });
 
 });
