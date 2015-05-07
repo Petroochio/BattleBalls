@@ -16,6 +16,7 @@ game.controller = {
     //Will eventually be replaced with power1Button&power2Button
     boomButton: undefined,
     dashButton: undefined,
+    room: undefined,
 
     init: function(){
         //initialize variables
@@ -37,10 +38,23 @@ game.controller = {
         me.color = 'rgb('+red+','+green+','+blue+')';
         //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
         var socket = io.connect( window.location.origin, {query: 'user='+name});
+        
+        var joinButton = document.getElementById("joinButton");
+            joinButton.addEventListener("click", function(){
+                var roomID = document.querySelector("#code").value;
+                roomID.toUpperCase();
+                me.room = roomID;
+                
+                console.log(roomID);
+                
+                var connectData = { id: id, color: me.color, room: roomID};
 
-        var connectData = { id: id, color: me.color };
+                socket.emit('player join', connectData);//ADD ROOM TO DATA
+            });
+        
+        /*var connectData = { id: id, color: me.color };
 
-        socket.emit('player join', connectData);//ADD ROOM TO DATA
+        socket.emit('player join', connectData);//ADD ROOM TO DATA*/
 
         socket.on('player connect', function(data){
             if(data.id !== -1) {
