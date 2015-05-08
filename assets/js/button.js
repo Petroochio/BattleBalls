@@ -11,7 +11,7 @@ game.Button = function() {
     * @param id : string  for the button
     * @param color : rendering color
    */
-    var Button = function(ctx, x, y, radius, id, player, color) {
+    var Button = function(ctx, x, y, radius, id, player, controller) {
         this.ctx = ctx;
         this.x = x;
         this.y = y;
@@ -19,8 +19,10 @@ game.Button = function() {
         //        this.width = undefined;
         //        this.height = undefined;
         this.id = id;
-        this.color = color;
+        this.color = controller.color;
         this.player = player;
+        
+        this.controller = controller;
         
         this.socket = io.connect( window.location.origin, {query: 'user='+name});
 
@@ -132,6 +134,13 @@ game.Button = function() {
             {
                 var data = { id: this.player, type: this.id };
                 this.socket.emit('charge end', data);
+            }
+        }
+        else{
+            if(this.previouslyPressed == true && this.currentlyPressed == false)
+            {
+                this.socket.emit('player ready', {id : this.player, room: this.controller.room});//ADD ROOM CODE
+                this.controller.ready = !this.controller.ready;  
             }
         }
     }

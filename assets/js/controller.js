@@ -118,8 +118,8 @@ game.controller = {
             switch(me.state){
                 case "START":
                 case "END":
-                    socket.emit('player ready', {id : id, room: me.room});//ADD ROOM CODE
-                    me.ready = !me.ready;
+                    //socket.emit('player ready', {id : id, room: me.room});//ADD ROOM CODE
+                    //me.ready = !me.ready;
                     break;
                 case "GAME":
                     //console.log(me.touchType);
@@ -129,9 +129,9 @@ game.controller = {
             }
         });
 
-        me.readyButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/2,me.canvas.width/3,"ready",id,this.color);
-        me.boomButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/4,me.canvas.width/4,"boom",id,this.color);
-        me.dashButton = new game.Button(me.ctx,me.canvas.width/2,(me.canvas.height/4)*3,me.canvas.width/4,"dash",id,this.color);
+        me.readyButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/6*5,me.canvas.width/6,"ready",id, me);
+        me.boomButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/4,me.canvas.width/4,"boom",id, me);
+        me.dashButton = new game.Button(me.ctx,me.canvas.width/2,(me.canvas.height/4)*3,me.canvas.width/4,"dash", id, me);
 
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', function(e) {
