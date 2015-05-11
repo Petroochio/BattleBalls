@@ -14,11 +14,10 @@ game.Speed = function() {
     this.color = color;
     this.mu = 0.95;
     this.mass = 10;
-    this.charges = {brake: false, sling: false}
-    this.canBrake = true;
-    this.canSling = true;
-    this.charge = 0;
-    this.maxCharge = 170;
+    this.charges = {brake: false, sling: false};
+    this.chargesReady = {brake: true, sling: true};
+    this.slingTime = 0;
+    this.maxCharge = 200;
     this.brakePower  50;
     this.collisions = [];
     this.target = {x: 0, y:0};
@@ -38,10 +37,13 @@ game.Speed = function() {
 
   s.beginCharge = function(type) {
     if(!this.stunned && !this.charges[type]) {
-      if(chargeType === 'brake')
-        this.charges[type] = this.canBrake;
-      else
-        this.charges[type] = this.canSling;
+      if(type === 'brake')
+        this.charges[type] = this.chargesReady.brake;
+      else {
+        this.charges[type] = this.chargesReady.sling;
+        this.target.x = this.x;
+        this.target.y = this.y;
+      }
     }
   };
 
@@ -50,59 +52,50 @@ game.Speed = function() {
       this.stunTime--;
     this.stunned = !(this.stunTime <= 0);
   };
-
+  //////////////////
+  //CLASS SPECIFIC
+  //////////////////
   s.updateCharge = function(dt) {
     //weird break logic
     this.handleBrakes();
+    this.handleSling();
   };
 
   s.handleBrakes = function(){
-    if( this.canBrake && this.charges.brake && this.breakPower > 0 ){
+    if(this.chargesReady.brake && this.charges.brake && this.breakPower > 0){
       this.brakePower--;
       this.mu = .5;
     } else {
       this.mu = .95;
-      this.endCharge();
+      this.endCharge('brake');
     }
 
     if(this.brakePower < 1)
-      this.canBrake = false;
+      this.chargesReady.brake = false
 
     if(!this.canBrake)
-      this.canBrake = (this.brakePower >= 50);
+      this.chargesReady.brake = (this.brakePower >= 50);
   }
 
-  s.endCharge = function() {
-    if(this.charging && this.charge < this.maxCharge) {
-      
-
-    } else if(this.charging) {
-      //this.stunned = true;
-      this.stunTime = 200;
-      this.charge = 0;
-      this.charging = false;
-      this.coolDown = 20;
+  s.handleSling = function() {
+    this.slingTime ++;
+    if(this.slingTime >= this.maxCharge) {
+      this.endCharge(sling);
+      this.slingCooldown = 100;
     }
+    this.slingCooldown--;
+    this.chargesReady.sling = (this.slingCooldown < 1);
+
   };
 
-  s.doBoom = function() {
-    var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/4) + .25);
-    game.battleBalls.booms.push(boom);
-    this.charge = 0;
-    this.charging = false;
-    this.coolDown = 20;
-      game.battleBalls.boomSound.play();
+  s.endCharge = function(type) {
+    this.charges[type] = false;
+    //send sling
+    
   };
-
-  s.doDash = function() {
-    var aX = this.xAcc * this.charge/this.maxCharge * 200;
-    var aY = this.yAcc * this.charge/this.maxCharge * 200;
-    this.updateAcceleration(aX, aY);
-    this.charge = 0;
-    this.charging = false;
-    this.coolDown = 20;
-      game.battleBalls.dashSound.play();
-  };
+  /////////////////////////
+  //BASE CODE
+  /////////////////////////
 
   s.updateCollisions = function() {
     var self = this;
@@ -158,7 +151,9 @@ game.Speed = function() {
     this.velocity.x += impulse.x/this.mass;
     this.velocity.y += impulse.y/this.mass;
   };
-
+  ///////////////////
+  //RENDER FUNCTIONS
+  ///////////////////
   s.render = function(ctx) {
     ctx.save();
     ctx.fillStyle = this.color;
@@ -171,8 +166,8 @@ game.Speed = function() {
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
-    if(this.charging)
-      this.renderCharge(ctx);
+    //if(this.charging)
+      //this.renderCharge(ctx);
   };
 
   s.renderCharge = function(ctx) {
