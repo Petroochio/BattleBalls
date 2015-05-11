@@ -38,6 +38,7 @@ game.controller = {
         me.color = 'rgb('+red+','+green+','+blue+')';
         //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
         var socket = io.connect( window.location.origin, {query: 'user='+name});
+        
         var join = document.getElementById("join");
         join.onsubmit= function(e){ e.preventDefault();};
         var joinButton = document.getElementById("joinButton");
@@ -61,6 +62,7 @@ game.controller = {
                     
                     codeField.style.display = "none";
                     joinButton.style.display = "none";
+                    me.canvas.style.display = "block";
                 }
                 else{
                     codeField.value = "";
@@ -183,6 +185,7 @@ game.controller = {
         me.setTouchType();
     },
     update: function(){
+        console.log(this.state);
         if(this.touching)
         {
             //console.log("X: " + this.xTap + ", Y: " + this.yTap);
