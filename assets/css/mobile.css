@@ -1,0 +1,48 @@
+@font-face{
+    font-family: BAAAAALLLLLLLLLLS;
+    src: url("../fonts/marqueemoon.ttf");
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font: 30px BAAAAALLLLLLLLLLS, Arial;
+    background: black;
+}
+
+form{
+    position: inherit;
+    width: 100%;
+}
+form input{
+    border: 0;
+    padding: 10px;
+    width: 90%;
+    margin-right: .5%;
+}
+form button{
+    width: 8%;
+    background: rgb(130, 224, 255);
+    border: none;
+    padding: 10px;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#myCanvas{
+    user-select: none;
+    -webkit-user-select: none;
+    display: none;
+}
+
+#join{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    color: white;
+    text-align: center;
+}

@@ -241,7 +241,7 @@ game.controller = {
         var errorDiv = document.querySelector("#error");
         if(id.length < 4) //ID is 
         {
-            var error = "Non-valid Code";
+            var error = "Invalid Code";
             console.log(error);
             errorDiv.innerHTML = "<p>" + error + "</p>";
             errorDiv.style.display = "block";
