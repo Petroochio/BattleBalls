@@ -90,7 +90,9 @@ io.on('connection', function(socket){
       socket.join(data.room);
       io.to(data.room).emit('player join', data);
     } else {
-      socket.disconnect();
+      console.log("room full " + data.room);
+      io.to(socket.id).emit('player connect', data);
+      return;
     }
   });
 
