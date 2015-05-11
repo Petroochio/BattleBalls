@@ -12,7 +12,7 @@ game.controller = {
     xTap: undefined,
     yTap: undefined,
     readyButton: undefined,
-    
+
     //Will eventually be replaced with power1Button&power2Button
     boomButton: undefined,
     dashButton: undefined,
@@ -23,10 +23,10 @@ game.controller = {
         var me = this;
         me.canvas = document.querySelector("#myCanvas");
         me.ctx = me.canvas.getContext("2d");
-        
+
         me.canvas.width = window.innerWidth;
         me.canvas.height = window.innerHeight;
-        
+
         // create new instance of socket.io
         var num = Math.floor(Math.random()*10);
         var name ='user'+num;
@@ -38,37 +38,37 @@ game.controller = {
         me.color = 'rgb('+red+','+green+','+blue+')';
         //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
         var socket = io.connect( window.location.origin, {query: 'user='+name});
-        
+
         var join = document.getElementById("join");
         join.onsubmit= function(e){ e.preventDefault();};
         var joinButton = document.getElementById("joinButton");
         var codeField = document.querySelector("#code");
         document.querySelector("#error").style.display = "none";
-        
-        
-            joinButton.addEventListener("click", function(){
-                var roomID = codeField.value;
-                roomID = roomID.toUpperCase();
-                me.room = roomID;
-                
-                console.log(roomID);
-                
-                var validInput = me.validateRoom(roomID);
-                
-                if(validInput == true)
-                {
-                    var connectData = { id: id, color: me.color, room: roomID};
-                    socket.emit('player join', connectData);//ADD ROOM TO DATA
-                    
-                    codeField.style.display = "none";
-                    joinButton.style.display = "none";
-                    me.canvas.style.display = "block";
-                }
-                else{
-                    codeField.value = "";
-                }
-            });
-        
+
+
+        joinButton.addEventListener("click", function(){
+            var roomID = codeField.value;
+            roomID = roomID.toUpperCase();
+            me.room = roomID;
+
+            console.log(roomID);
+
+            var validInput = me.validateRoom(roomID);
+
+            if(validInput == true)
+            {
+                var connectData = { id: id, color: me.color, room: roomID};
+                socket.emit('player join', connectData);//ADD ROOM TO DATA
+
+                codeField.style.display = "none";
+                joinButton.style.display = "none";
+                me.canvas.style.display = "block";
+            }
+            else{
+                codeField.value = "";
+            }
+        });
+
         /*var connectData = { id: id, color: me.color };
 
         socket.emit('player join', connectData);//ADD ROOM TO DATA*/
@@ -91,9 +91,9 @@ game.controller = {
                 me.ready = false;
             }
         });
-        
+
         me.touching = false;
-        
+
         //Event listeners
         me.canvas.addEventListener("touchstart", function(e){
             me.touching = true;
@@ -110,11 +110,11 @@ game.controller = {
                     break;
             }
         });
-        
+
         me.canvas.addEventListener("touchmove", function(e){
             me.setInput(e);
         });
-        
+
         me.canvas.addEventListener("touchend", function(e){
             me.touching = false;
             switch(me.state){
@@ -165,7 +165,7 @@ game.controller = {
         {
             me.touchType = me.dashButton.id;
         }
-        
+
         else
         {
             me.touchType = undefined;
@@ -234,7 +234,7 @@ game.controller = {
                 break;
         }
     },
-    
+
     //check if the code for the room is valid
     validateRoom: function(id){
         var valid = false;
@@ -248,11 +248,11 @@ game.controller = {
         }
         else
         {
-           if(id.match(/^[A-Z]+$/) && id == game.socketHandlers.room)
-           {
-               console.log("Valid code");
-               valid = true;
-           }
+            if(id.match(/^[A-Z]+$/))
+            {
+                console.log("Valid code");
+                valid = true;
+            }
             else
             {
                 var error = "Error: Invalid code";
@@ -261,7 +261,7 @@ game.controller = {
                 errorDiv.style.display = "block";
             }
         }
-        
+
         return valid;
     }
 }
