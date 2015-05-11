@@ -241,21 +241,21 @@ game.controller = {
         var errorDiv = document.querySelector("#error");
         if(id.length < 4) //ID is 
         {
-            var error = "Invalid Code";
+            var error = "Error: Code too short";
             console.log(error);
             errorDiv.innerHTML = "<p>" + error + "</p>";
             errorDiv.style.display = "block";
         }
         else
         {
-           if(id.match(/^[A-Z]+$/))
+           if(id.match(/^[A-Z]+$/) && id == game.socketHandlers.room)
            {
                console.log("Valid code");
                valid = true;
            }
             else
             {
-                var error = "Contains more than uppercase letters";
+                var error = "Error: Invalid code";
                 console.log(error);
                 errorDiv.innerHTML = "<p>" + error + "</p>";
                 errorDiv.style.display = "block";
