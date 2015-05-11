@@ -87,6 +87,7 @@ io.on('connection', function(socket){
         room: data.room
       };
       io.to(socket.id).emit('player connect', data);
+      socket.join(data.room);
       io.to(data.room).emit('player join', data);
     } else {
       socket.disconnect();

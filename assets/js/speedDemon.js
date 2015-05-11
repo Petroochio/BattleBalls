@@ -14,15 +14,12 @@ game.Speed = function() {
     this.color = color;
     this.mu = 0.95;
     this.mass = 10;
-    this.charging = false;
-    this.chargeType = undefined;
+    this.charges = {brake: false, sling: false}
+    this.canBrake = true;
+    this.canSling = true;
     this.charge = 0;
     this.maxCharge = 170;
-    this.coolDown = 0;
-    this.stunned = false;
-    this.stunTime = 0;
-    this.dashTime = 0;
-    this.dashSpeed = 1;
+    this.brakePower  50;
     this.collisions = [];
     this.target = {x: 0, y:0};
     this.KOed = false;
@@ -40,9 +37,11 @@ game.Speed = function() {
   };
 
   s.beginCharge = function(type) {
-    if(!this.stunned && !this.charging) {
-      this.charging = (this.coolDown <= 0);
-      this.chargeType = type;
+    if(!this.stunned && !this.charges[type]) {
+      if(chargeType === 'brake')
+        this.charges[type] = this.canBrake;
+      else
+        this.charges[type] = this.canSling;
     }
   };
 
@@ -53,22 +52,29 @@ game.Speed = function() {
   };
 
   s.updateCharge = function(dt) {
-    if(this.charging)
-      this.charge++;
-    else
-      this.coolDown--;
-
-    if(this.charge >= this.maxCharge)
-       this.endCharge();
+    //weird break logic
+    this.handleBrakes();
   };
+
+  s.handleBrakes = function(){
+    if( this.canBrake && this.charges.brake && this.breakPower > 0 ){
+      this.brakePower--;
+      this.mu = .5;
+    } else {
+      this.mu = .95;
+      this.endCharge();
+    }
+
+    if(this.brakePower < 1)
+      this.canBrake = false;
+
+    if(!this.canBrake)
+      this.canBrake = (this.brakePower >= 50);
+  }
 
   s.endCharge = function() {
     if(this.charging && this.charge < this.maxCharge) {
-      //2 references to global game obj, fix this
-      if(this.chargeType === "boom")
-        this.doBoom();
-      else if(this.chargeType === "dash")
-        this.doDash();
+      
 
     } else if(this.charging) {
       //this.stunned = true;
