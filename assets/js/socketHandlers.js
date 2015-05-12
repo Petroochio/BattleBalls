@@ -49,6 +49,7 @@ game.socketHandlers = {
     socket.on('charge start', function(data){
       app.players[data.id].beginCharge(data.type);
         app.chargeSound.play();
+        console.log("The Bugs Bunny and Roadrunner Show");
     });
 
     socket.on('charge end', function(data){

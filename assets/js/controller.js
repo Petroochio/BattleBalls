@@ -43,7 +43,8 @@ game.controller = {
         join.onsubmit= function(e){ e.preventDefault();};
         var joinButton = document.getElementById("joinButton");
         var codeField = document.querySelector("#code");
-        document.querySelector("#error").style.display = "none";
+        var errorDiv = document.querySelector("#error")
+        errorDiv.style.display = "none";
 
 
         joinButton.addEventListener("click", function(){
@@ -59,10 +60,6 @@ game.controller = {
             {
                 var connectData = { id: id, color: me.color, room: roomID};
                 socket.emit('player join', connectData);//ADD ROOM TO DATA
-
-                codeField.style.display = "none";
-                joinButton.style.display = "none";
-                me.canvas.style.display = "block";
             }
             else{
                 codeField.value = "";
@@ -80,6 +77,16 @@ game.controller = {
                 me.boomButton.player = id;
                 me.dashButton.player = id;
                 me.state = "START";
+                
+                codeField.style.display = "none";
+                joinButton.style.display = "none";
+                me.canvas.style.display = "block";
+                errorDiv.style.display = "none";
+            }
+            else{
+                var error = "Error: Room Not Found";
+                errorDiv.innerHTML = "<p>" + error + "</p>";
+                errorDiv.style.display = "block";
             }
         });
 
@@ -242,7 +249,6 @@ game.controller = {
         if(id.length < 4) //ID is 
         {
             var error = "Error: Code too short";
-            console.log(error);
             errorDiv.innerHTML = "<p>" + error + "</p>";
             errorDiv.style.display = "block";
         }
@@ -256,7 +262,6 @@ game.controller = {
             else
             {
                 var error = "Error: Invalid code";
-                console.log(error);
                 errorDiv.innerHTML = "<p>" + error + "</p>";
                 errorDiv.style.display = "block";
             }

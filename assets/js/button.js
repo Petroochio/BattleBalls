@@ -84,12 +84,34 @@ game.Button = function() {
         //draw based on current press state
         if(!this.currentlyPressed){
             game.DrawLib.drawCircle(this.ctx, this.x, this.y, this.radius, 'black', this.color);
-            game.DrawLib.drawText(this.ctx, this.id, this.x, this.y+(this.radius-(this.radius/4))/2, this.radius-(this.radius/4), this.color);
+            if(this.id != "ready")
+            {
+                this.ctx.save();
+                this.ctx.translate(this.x - (this.radius/3),this.y);
+                this.ctx.rotate(Math.PI/2);
+                game.DrawLib.drawText(this.ctx, this.id, 0, 0, this.radius-(this.radius/4), this.color);
+                this.ctx.restore();
+            }
+            else{
+                game.DrawLib.drawText(this.ctx, this.id, this.x, this.y+(this.radius-(this.radius/4))/2, this.radius-(this.radius/4), this.color);
+            }
         }
         else{
             this.ctx.shadowBlur = 0;
             game.DrawLib.drawCircle(this.ctx, this.x, this.y, this.radius-this.radius/4, 'black', this.color);
-            game.DrawLib.drawText(this.ctx, this.id, this.x, this.y+(this.radius-(this.radius/2))/2, this.radius-(this.radius/2), this.color);
+            if(this.id != "ready")
+            {
+                this.ctx.save();
+                this.ctx.translate(this.x - (this.radius/5), this.y);
+                this.ctx.rotate(Math.PI/2);
+                
+                game.DrawLib.drawText(this.ctx, this.id, 0, 0, this.radius-(this.radius/2), this.color);
+                this.ctx.restore();
+            }
+            else{
+                game.DrawLib.drawText(this.ctx, this.id, this.x, this.y+(this.radius-(this.radius/2))/2, this.radius-(this.radius/2), this.color);
+            }
+            
         }
         this.ctx.restore();
     }
@@ -123,7 +145,7 @@ game.Button = function() {
         if(this.id != "ready"){
             if(this.previouslyPressed == false && this.currentlyPressed == true) //begin press event
             {
-                var data = { id: this.player, type: this.id };
+                var data = { id: this.player, type: this.id, room: this.controller.room };
                 this.socket.emit('charge start', data);
             }
             else if(this.previouslyPressed == true && this.currentlyPressed == true) //held event
@@ -132,7 +154,7 @@ game.Button = function() {
             }
             else if(this.previouslyPressed == true && this.currentlyPressed == false) // end press event
             {
-                var data = { id: this.player, type: this.id };
+                var data = { id: this.player, type: this.id, room: this.controller.room };
                 this.socket.emit('charge end', data);
             }
         }
