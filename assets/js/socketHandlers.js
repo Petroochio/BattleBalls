@@ -24,7 +24,7 @@ game.socketHandlers = {
     socket.on('player join', function(data){
       if(app.state === "START") {
         var x = app.canvas.width/2, y = app.canvas.height/2;
-        app.players[data.id] = new game.Player(data.id, data.color, x, y);
+        app.players[data.id] = new game.Newbie(data.id, data.color, x, y);
         app.playerIDs.push(data.id);
         console.log(app.playerIDs);
       }
@@ -49,7 +49,6 @@ game.socketHandlers = {
     socket.on('charge start', function(data){
       app.players[data.id].beginCharge(data.type);
         app.chargeSound.play();
-        console.log("The Bugs Bunny and Roadrunner Show");
     });
 
     socket.on('charge end', function(data){
