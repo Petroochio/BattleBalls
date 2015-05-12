@@ -60,3 +60,11 @@ form button{
 #subtitleText {
     font-size: 1em;
 }
+#ballSelect{
+    display: none;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 65%;
+    background: white;
+}

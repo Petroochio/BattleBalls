@@ -79,6 +79,7 @@ game.controller = {
                 me.state = "START";
                 
                 document.getElementById("join").style.display = "none";
+                document.getElementById("ballSelect").style.display = "block";
 //                codeField.style.display = "none";
 //                joinButton.style.display = "none";
                 me.canvas.style.display = "block";
@@ -94,7 +95,9 @@ game.controller = {
         socket.on('state change', function(data){
             if(data.state === "END") {
                 me.state = "START";
+                document.getElementById("ballSelect").style.display = "block";
             }else if(data.state === "GAME") {
+                document.getElementById("ballSelect").style.display = "none";
                 me.state = "GAME";
                 me.ready = false;
             }
