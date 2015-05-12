@@ -112,10 +112,7 @@ io.on('connection', function(socket){
   socket.on('charge end', function(data){//ROOM CODE
     io.to(data.room).emit('charge end', data);
   });
-
 });
-
-
 
 http.listen(port, function(){
   console.log('listening on *:3000');

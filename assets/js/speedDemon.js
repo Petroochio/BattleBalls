@@ -91,7 +91,18 @@ game.Speed = function() {
   s.endCharge = function(type) {
     this.charges[type] = false;
     //send sling
-    
+    if(this.type = "sling"){
+      //calc distance
+      var xDist = this.target.x - this.x;
+      var yDist = this.target.y - this.y;
+      //apply force
+      var impulse = {x:xDist, y:yDist};
+      impulse.x /= 2;
+      impulse.y /= 2;
+
+      this.applyImpulse(impulse);
+      //reset
+    }
   };
   /////////////////////////
   //BASE CODE
@@ -171,13 +182,13 @@ game.Speed = function() {
   };
 
   s.renderCharge = function(ctx) {
-    if(this.chargeType === "boom")
-      this.drawBoomCharge(ctx);
-    else if(this.chargeType === "dash")
-      this.drawDashCharge(ctx);
+    if(this.charges.sling)
+      this.drawSling(ctx);
+    else if(this.charges.brake)
+      this.drawBrake(ctx);
   };
 
-  s.drawBoomCharge = function(ctx) {
+  s.drawSling = function(ctx) {
     ctx.save();
     ctx.fillStyle = this.color;
     ctx.strokeStyle = this.color;
@@ -191,7 +202,7 @@ game.Speed = function() {
     ctx.restore();
   };
   
-  s.drawDashCharge = function(ctx) {
+  s.drawBrake = function(ctx) {
     var forward = { x: this.velocity.x, y: this.velocity.y };
     forward = game.physicsUtils.normalize(forward);
 
