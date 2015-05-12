@@ -161,8 +161,6 @@ game.Button = function() {
         else{
             if(this.previouslyPressed == true && this.currentlyPressed == false)
             {
-//                document.getElementById("join").style.display = "none";
-//                document.getElementById("myCanvas").style.display = "block";
                 this.socket.emit('player ready', {id : this.player, room: this.controller.room});//ADD ROOM CODE
                 this.controller.ready = !this.controller.ready;
             }

@@ -78,8 +78,9 @@ game.controller = {
                 me.dashButton.player = id;
                 me.state = "START";
                 
-                codeField.style.display = "none";
-                joinButton.style.display = "none";
+                document.getElementById("join").style.display = "none";
+//                codeField.style.display = "none";
+//                joinButton.style.display = "none";
                 me.canvas.style.display = "block";
                 errorDiv.style.display = "none";
             }

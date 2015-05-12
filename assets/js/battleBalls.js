@@ -273,7 +273,8 @@ game.battleBalls = {
         me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
         me.ctx.restore();
         me.text(me.ctx, "battle balls", me.canvas.width/2, me.canvas.height/4, 100, "white");
-        me.text(me.ctx, "battleballs.herokuapp.com to connect", me.canvas.width/2, me.canvas.height/4+35, 30, "white");
+        me.text(me.ctx, "battleballs.herokuapp.com on phone to connect", me.canvas.width/2, me.canvas.height/4+35, 30, "white");
+        me.text(me.ctx, "room code: "+game.socketHandlers.room, me.canvas.width/2, me.canvas.height/4+80, 40, "white");
 
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
