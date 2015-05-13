@@ -25,7 +25,7 @@ game.controller = {
         me.canvas = document.querySelector("#myCanvas");
         me.ctx = me.canvas.getContext("2d");
         
-        me.selectedClass = "matador";
+        me.selectedClass = "speed";
 
         me.canvas.width = window.innerWidth;
         me.canvas.height = window.innerHeight;

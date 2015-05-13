@@ -94,7 +94,7 @@ game.Speed = function() {
   s.endCharge = function(type) {
     this.charges[type] = false;
     //send sling
-    if(this.type = "sling"){
+    if(type === "sling"){
       //calc distance
       var xDist = this.target.x - this.x;
       var yDist = this.target.y - this.y;
