@@ -322,16 +322,16 @@ game.controller = {
     selectClass: function(indexChange){
         this.classIndex += indexChange;
         
-        if(this.classIndex === this.numOfClasses + 1)
+        if(this.classIndex === this.numOfClasses)
         {
             this.classIndex = 0;
         }
         else if(this.classIndex === -1)
         {
-            this.classIndex = this.numOfClasses;
+            this.classIndex = this.numOfClasses - 1;
         }
         
-        switch(this.numOfClasses)
+        switch(this.classIndex)
         {
             case 0:
                 this.selectedClass = "newbie";

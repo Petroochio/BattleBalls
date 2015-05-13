@@ -84,7 +84,7 @@ game.Button = function() {
         //draw based on current press state
         if(!this.currentlyPressed){
             game.DrawLib.drawCircle(this.ctx, this.x, this.y, this.radius, 'black', this.color);
-            if(this.id != "ready")
+            if(this.id != "ready" && this.id != "<" && this.id != ">")
             {
                 this.ctx.save();
                 this.ctx.translate(this.x - (this.radius/3),this.y);
@@ -99,7 +99,7 @@ game.Button = function() {
         else{
             this.ctx.shadowBlur = 0;
             game.DrawLib.drawCircle(this.ctx, this.x, this.y, this.radius-this.radius/4, 'black', this.color);
-            if(this.id != "ready")
+            if(this.id != "ready" && this.id != "<" && this.id != ">")
             {
                 this.ctx.save();
                 this.ctx.translate(this.x - (this.radius/5), this.y);
@@ -142,22 +142,7 @@ game.Button = function() {
     }
     
     p.throwEvents = function(){
-        if(this.id != "ready"){
-            if(this.previouslyPressed == false && this.currentlyPressed == true) //begin press event
-            {
-                var data = { id: this.player, type: this.id, room: this.controller.room };
-                this.socket.emit('charge start', data);
-            }
-            else if(this.previouslyPressed == true && this.currentlyPressed == true) //held event
-            {
-            }
-            else if(this.previouslyPressed == true && this.currentlyPressed == false) // end press event
-            {
-                var data = { id: this.player, type: this.id, room: this.controller.room };
-                this.socket.emit('charge end', data);
-            }
-        }
-        else if(this.id === "ready"){
+        if(this.id === "ready"){
             if(this.previouslyPressed == true && this.currentlyPressed == false)
             {
                 this.socket.emit('player ready', {id : this.player, room: this.controller.room});//ADD ROOM CODE
@@ -175,6 +160,21 @@ game.Button = function() {
             if(this.previouslyPressed == true && this.currentlyPressed == false)
             {
                 this.controller.selectClass(1);
+            }
+        }
+        else{
+            if(this.previouslyPressed == false && this.currentlyPressed == true) //begin press event
+            {
+                var data = { id: this.player, type: this.id, room: this.controller.room };
+                this.socket.emit('charge start', data);
+            }
+            else if(this.previouslyPressed == true && this.currentlyPressed == true) //held event
+            {
+            }
+            else if(this.previouslyPressed == true && this.currentlyPressed == false) // end press event
+            {
+                var data = { id: this.player, type: this.id, room: this.controller.room };
+                this.socket.emit('charge end', data);
             }
         }
     }
