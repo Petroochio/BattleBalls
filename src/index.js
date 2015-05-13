@@ -112,6 +112,10 @@ io.on('connection', function(socket){
   socket.on('charge end', function(data){//ROOM CODE
     io.to(data.room).emit('charge end', data);
   });
+
+  socket.on('select class', function(data){//ROOM CODE
+    io.to(data.room).emit('select class', data);
+  });
 });
 
 http.listen(port, function(){
