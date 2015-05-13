@@ -25,7 +25,7 @@ game.controller = {
         me.canvas = document.querySelector("#myCanvas");
         me.ctx = me.canvas.getContext("2d");
         
-        me.selectedClass = "speed";
+        me.selectedClass = "ghost";
 
         me.canvas.width = window.innerWidth;
         me.canvas.height = window.innerHeight;
@@ -291,6 +291,10 @@ game.controller = {
             case "matador":
                 this.power1Button.id = "dodge";
                 this.power2Button.id = "rush";
+                break;
+            case "ghost":
+                this.power1Button.id = "tele";
+                this.power2Button.id = "scare";
                 break;
                 
         }
