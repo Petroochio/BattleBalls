@@ -20,12 +20,11 @@ game.Speed = function() {
     this.maxCharge = 200;
     this.brakePower =  50;
     this.collisions = [];
-    this.target = {x: 0, y:0};
+    this.target = {x: x, y: y};
     this.KOed = false;
     this.ready = false;
     this.power1Name = "sling";
     this.power2Name = "break";
-      
   };
 
   var s = Speed.prototype;
@@ -83,7 +82,7 @@ game.Speed = function() {
   s.handleSling = function() {
     this.slingTime ++;
     if(this.slingTime >= this.maxCharge) {
-      this.endCharge(sling);
+      this.endCharge('sling');
       this.slingCooldown = 100;
     }
     this.slingCooldown--;
@@ -181,7 +180,7 @@ game.Speed = function() {
     ctx.stroke();
     ctx.restore();
     //if(this.charging)
-      //this.renderCharge(ctx);
+    this.renderCharge(ctx);
   };
 
   s.renderCharge = function(ctx) {
@@ -199,29 +198,14 @@ game.Speed = function() {
     ctx.shadowBlur=10;
     ctx.shadowColor=this.color;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, (this.charge / 20) + 3, 0, Math.PI * 2, false);
+    ctx.arc(this.target.x, this.target.y, 10, 0, Math.PI * 2, false);
     ctx.closePath();
     ctx.stroke();
     ctx.restore();
   };
   
   s.drawBrake = function(ctx) {
-    var forward = { x: this.velocity.x, y: this.velocity.y };
-    forward = game.physicsUtils.normalize(forward);
-
-    ctx.save();
-    ctx.fillStyle = this.color;
-    ctx.strokeStyle = this.color;
-    ctx.lineWidth = 3;
-    ctx.shadowBlur=10;
-    ctx.shadowColor=this.color;
-    ctx.beginPath();
-    ctx.moveTo(this.x, this.y);
-    ctx.lineTo(this.x + forward.x * (this.charge/this.maxCharge + 0.1)* 10,
-              this.y + forward.y * (this.charge/this.maxCharge + 0.1)* 10);
-    ctx.closePath();
-    ctx.stroke();
-    ctx.restore();
+    
   };
 
   return Speed;
