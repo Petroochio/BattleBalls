@@ -16,8 +16,13 @@ game.controller = {
     //Will eventually be replaced with power1Button&power2Button
     power1Button: undefined,
     power2Button: undefined,
+    leftButton: undefined,
+    rightButton: undefined,
+    
     room: undefined,
     selectedClass: undefined,
+    classIndex: 0,
+    numOfClasses: 4,
 
     init: function(){
         //initialize variables
@@ -25,7 +30,7 @@ game.controller = {
         me.canvas = document.querySelector("#myCanvas");
         me.ctx = me.canvas.getContext("2d");
         
-        me.selectedClass = "ghost";
+        me.selectedClass = "speed";
 
         me.canvas.width = window.innerWidth;
         me.canvas.height = window.innerHeight;
@@ -82,7 +87,7 @@ game.controller = {
                 me.state = "START";
                 
                 document.getElementById("join").style.display = "none";
-                document.getElementById("ballSelect").style.display = "block";
+                //document.getElementById("ballSelect").style.display = "block";
 //                codeField.style.display = "none";
 //                joinButton.style.display = "none";
                 me.canvas.style.display = "block";
@@ -106,6 +111,10 @@ game.controller = {
                 me.ready = false;
             }
         });
+        
+        socket.on('select class', function(data){
+                me.setButtonNames();
+            });
         
         /*socket.on('player ready', function(data){
             me.power1Button.id = me.power1Button.player.power1Name;
@@ -152,8 +161,12 @@ game.controller = {
         });
 
         me.readyButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/6*5,me.canvas.width/6,"ready",id, me);
+        me.leftButton = new game.Button(me.ctx,me.canvas.width/4,me.canvas.height/2,me.canvas.width/8,"<",id, me);
+        me.rightButton = new game.Button(me.ctx,3 * me.canvas.width/4,me.canvas.height/2,me.canvas.width/8,">",id, me);
+        
         me.power1Button = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/4,me.canvas.width/4,undefined,id, me);
         me.power2Button = new game.Button(me.ctx,me.canvas.width/2,(me.canvas.height/4)*3,me.canvas.width/4,undefined, id, me);
+        
 
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', function(e) {
@@ -196,6 +209,8 @@ game.controller = {
         this.yTap = data.touches[0].pageY;
     },
     updateStartScreen: function(){
+        this.leftButton.update();
+        this.rightButton.update();
         this.readyButton.update();
     },
     updateGameLoop: function(){
@@ -223,6 +238,9 @@ game.controller = {
         me.ctx.save();
         me.ctx.fillStyle = 'black';
         me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
+        game.DrawLib.drawText(me.ctx, me.selectedClass, me.canvas.width/2, me.canvas.height/3, 40, me.color);
+        this.leftButton.render();
+        this.rightButton.render();
         me.readyButton.render();
         me.ctx.restore();
     },
@@ -279,6 +297,8 @@ game.controller = {
     },
     
     setButtonNames: function(){
+        //this.power1Button.id = this.selectedClass.power1Name;
+        //this.power2Button.id = this.selectedClass.power2Name;
         switch(this.selectedClass){
             case "newbie":
                 this.power1Button.id = "boom";
@@ -295,9 +315,37 @@ game.controller = {
             case "ghost":
                 this.power1Button.id = "tele";
                 this.power2Button.id = "scare";
+                break;       
+        }             
+    },
+    
+    selectClass: function(indexChange){
+        this.classIndex += indexChange;
+        
+        if(this.classIndex === this.numOfClasses + 1)
+        {
+            this.classIndex = 0;
+        }
+        else if(this.classIndex === -1)
+        {
+            this.classIndex = this.numOfClasses;
+        }
+        
+        switch(this.numOfClasses)
+        {
+            case 0:
+                this.selectedClass = "newbie";
+                break;
+            case 1:
+                this.selectedClass = "speed";
+                break;
+            case 2:
+                this.selectedClass = "matador";
+                break;
+            case 3:
+                this.selectedClass = "ghost";
                 break;
                 
         }
-                    
     }
 }

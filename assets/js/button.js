@@ -157,11 +157,24 @@ game.Button = function() {
                 this.socket.emit('charge end', data);
             }
         }
-        else{
+        else if(this.id === "ready"){
             if(this.previouslyPressed == true && this.currentlyPressed == false)
             {
                 this.socket.emit('player ready', {id : this.player, room: this.controller.room});//ADD ROOM CODE
+                this.socket.emit('select class', {id : this.player, color: this.color, room: this.controller.room, class: this.controller.selectedClass});
                 this.controller.ready = !this.controller.ready;
+            }
+        }
+        else if(this.id === "<"){
+            if(this.previouslyPressed == true && this.currentlyPressed == false)
+            {
+                this.controller.selectClass(-1);
+            }
+        }
+        else if(this.id === ">"){
+            if(this.previouslyPressed == true && this.currentlyPressed == false)
+            {
+                this.controller.selectClass(1);
             }
         }
     }

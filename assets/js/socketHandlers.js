@@ -48,7 +48,7 @@ game.socketHandlers = {
             newClass = new game.Matador(data.id, data.color, x, y);
             break;
           case 'newbie':
-            newClass = new game.Player(data.id, data.color, x, y);
+            newClass = new game.Newbie(data.id, data.color, x, y);
             break;
         }
         app.players[data.id] = newClass;
