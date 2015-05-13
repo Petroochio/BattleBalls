@@ -24,7 +24,7 @@ game.socketHandlers = {
     socket.on('player join', function(data){
       if(app.state === "START") {
         var x = app.canvas.width/2, y = app.canvas.height/2;
-        app.players[data.id] = new game.Player(data.id, data.color, x, y);
+        app.players[data.id] = new game.Newbie(data.id, data.color, x, y);
         app.playerIDs.push(data.id);
         console.log(app.playerIDs);
       }
@@ -40,6 +40,7 @@ game.socketHandlers = {
       if(app.players[data.id]){
         delete app.players[data.id];
         var newClass = undefined;
+        var x = app.canvas.width/2, y = app.canvas.height/2;
         switch(data.class) {
           case 'speed':
             newClass = new game.Speed(data.id, data.color, x, y);
@@ -54,6 +55,7 @@ game.socketHandlers = {
             newClass = new game.Ghost(data.id, data.color, x, y);
             break;
         }
+        newClass.ready = true;
         app.players[data.id] = newClass;
       }
 
