@@ -80,7 +80,8 @@ game.Speed = function() {
   }
 
   s.handleSling = function() {
-    this.slingTime ++;
+    if(this.charges.sling)
+      this.slingTime ++;
     if(this.slingTime >= this.maxCharge) {
       this.endCharge('sling');
       this.slingCooldown = 100;
