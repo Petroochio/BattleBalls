@@ -285,7 +285,7 @@ game.controller = {
                 this.power2Button.id = "dash";
                 break;
             case "speed":
-                this.power1Button.id = "break";
+                this.power1Button.id = "brake";
                 this.power2Button.id = "sling";
                 break;
             case "matador":

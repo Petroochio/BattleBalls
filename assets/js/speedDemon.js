@@ -24,25 +24,27 @@ game.Speed = function() {
     this.KOed = false;
     this.ready = false;
     this.power1Name = "sling";
-    this.power2Name = "break";
+    this.power2Name = "brake";
   };
 
   var s = Speed.prototype;
 
   s.update = function(dt) {
+    this.stunned = false;
     this.updateCollisions();
     this.updateCharge(dt);
-    this.updateStun(dt);
+    //this.updateStun(dt);
     this.calculateVelocity(dt);
     this.move(dt);
   };
 
   s.beginCharge = function(type) {
-    if(!this.stunned && !this.charges[type]) {
-      if(type === 'brake')
-        this.charges[type] = this.chargesReady.brake;
-      else {
-        this.charges[type] = this.chargesReady.sling;
+
+    if(!this.charges[type]) {
+      if(type === 'brake'){
+        this.charges[type] = true;
+      } else {
+        this.charges[type] = true;
         this.target.x = this.x;
         this.target.y = this.y;
       }
@@ -64,12 +66,13 @@ game.Speed = function() {
   };
 
   s.handleBrakes = function(){
-    if(this.chargesReady.brake && this.charges.brake && this.breakPower > 0){
+    if(/*this.chargesReady.brake && */this.charges.brake /*&& this.breakPower > 0*/){
       this.brakePower--;
-      this.mu = .5;
+      this.mu = .2;
+      console.log('brake')
     } else {
       this.mu = .95;
-      this.endCharge('brake');
+      //this.endCharge('brake');
     }
 
     if(this.brakePower < 1)
@@ -82,8 +85,10 @@ game.Speed = function() {
   s.handleSling = function() {
     if(this.charges.sling)
       this.slingTime ++;
+
     if(this.slingTime >= this.maxCharge) {
       this.endCharge('sling');
+      this.slingTime = 0;
       this.slingCooldown = 100;
     }
     this.slingCooldown--;
@@ -100,8 +105,8 @@ game.Speed = function() {
       var yDist = this.target.y - this.y;
       //apply force
       var impulse = {x:xDist, y:yDist};
-      impulse.x /= 2;
-      impulse.y /= 2;
+      impulse.x *= 1.7;
+      impulse.y *= 1.7;
 
       this.applyImpulse(impulse);
       //reset
@@ -185,10 +190,13 @@ game.Speed = function() {
   };
 
   s.renderCharge = function(ctx) {
-    if(this.charges.sling)
+    console.log(this.charges);
+    if(this.charges.sling){
+      console.log('drawSling')
       this.drawSling(ctx);
-    else if(this.charges.brake)
+    } else if(this.charges.brake) {
       this.drawBrake(ctx);
+    }
   };
 
   s.drawSling = function(ctx) {
