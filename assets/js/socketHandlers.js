@@ -50,6 +50,9 @@ game.socketHandlers = {
           case 'newbie':
             newClass = new game.Newbie(data.id, data.color, x, y);
             break;
+          case 'ghost':
+            newClass = new game.Ghost(data.id, data.color, x, y);
+            break;
         }
         app.players[data.id] = newClass;
       }
