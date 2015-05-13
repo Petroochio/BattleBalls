@@ -290,7 +290,7 @@ game.controller = {
                 break;
             case "matador":
                 this.power1Button.id = "dodge";
-                this.power2Button.id = "charge";
+                this.power2Button.id = "rush";
                 break;
                 
         }

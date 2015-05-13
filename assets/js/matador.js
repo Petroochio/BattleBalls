@@ -2,8 +2,8 @@
 "use strict";
 var game = game || {};
 
-game.Newbie = function() {
-  var Newbie = function(id, color, x, y) {
+game.Matador = function() {
+  var Matador = function(id, color, x, y) {
     this.x = x;
     this.y = y;
     this.xAcc = 0;
@@ -26,13 +26,16 @@ game.Newbie = function() {
     this.collisions = [];
     this.KOed = false;
     this.ready = false;
-    this.power1Name = "boom";
-    this.power2Name = "dash";
-    this.dashSpeed = 200;
+      
+    this.power1Name = "dodge";
+    this.power2Name = "rush";
+    this.rushPower = 300;
+    this.dodgeSpeed = 200;
     this.maxVelocity = 5;
+    this.velocityMag = 0;
   };
 
-  var p = Newbie.prototype;
+  var p = Matador.prototype;
 
   p.update = function(dt) {
     this.updateCollisions();
@@ -40,19 +43,19 @@ game.Newbie = function() {
     this.updateStun(dt);
     this.calculateVelocity(dt);
     this.move(dt);
-      
-    
   };
 
   p.beginCharge = function(type) {
-      if (type === "boom"){
+      if(type === "rush")
+      {
         if(!this.stunned && !this.charging) {
           this.charging = (this.coolDown <= 0);
           this.chargeType = type;
         }
       }
-      else if(type === "dash"){ //do dash on button press
-          this.doDash();
+      else if (type === "dodge")
+      {
+         this.doDodge(); 
       }
   };
 
@@ -74,11 +77,10 @@ game.Newbie = function() {
 
   p.endCharge = function() {
     if(this.charging && this.charge < this.maxCharge) {
-      //2 references to global game obj, fix this
-      if(this.chargeType === "boom")
+      if(this.chargeType === "dodge")
         this.doBoom();
-      //else if(this.chargeType === "dash")
-        //this.doDash();
+      else if(this.chargeType === "rush")
+        this.doRush();
 
     } else if(this.charging) {
       //this.stunned = true;
@@ -89,24 +91,59 @@ game.Newbie = function() {
     }
   };
 
-  p.doBoom = function() {
-    var boom = new game.Boom(this.id, this, this.charge/(this.maxCharge/4) + .25);
-    game.battleBalls.booms.push(boom);
-    this.charge = 0;
-    this.charging = false;
-    this.coolDown = 20;
-      game.battleBalls.boomSound.play();
-  };
-
-  p.doDash = function() //quick speed boost in a single direction
-  {
-    var aX = this.xAcc * this.dashSpeed;
-    var aY = this.yAcc * this.dashSpeed;
-    this.updateAcceleration(aX, aY);
+  p.doDodge = function(){
+      var forward = {x: 0, y: 0};
+      if(this.velocityMag != 0)
+      {
+        forward = {x:this.velocity.x / this.velocityMag, y: this.velocity.y / this.velocityMag};
+      }
+    var forwardAngle = Math.atan2(forward.x, forward.y); //calculate the direction the ball is facing
+    var sideAngle = forwardAngle + Math.PI/2;
+      
+    var side = {x: Math.cos(sideAngle) * this.dodgeSpeed, y: Math.sin(sideAngle) * this.dodgeSpeed};
+      
+    //var sideX = this.xAcc * this.dashSpeed;
+    //var aY = this.yAcc * this.dashSpeed;
+    //this.updateAcceleration(aX, aY);
+      
+      if (sideAngle > 0){
+                if(sideAngle > Math.PI/2) {
+                    // Quadrant II, sin is positive
+                    this.velocity.x += side.x;
+                    this.velocity.y += (side.y * -1);
+                } else {
+                    // Quadrant I, both are positve
+                    this.velocity.x += (side.x * -1);
+                    this.velocity.y += (side.y * -1);
+                }
+            } else {
+                if (sideAngle > -Math.PI/2) {
+                    // Quadrant III, neither are positive
+                    this.velocity.x += (side.x * -1);
+                    this.velocity.y += (side.y * -1);
+                } else {
+                    // Quadrant IV, cos is positive
+                    this.velocity.x += side.x;
+                    this.velocity.y += side.y;
+                }
+            }
+    this.velocity.x += side.x;
+    this.velocity.y += (side.y * -1);
+      
     this.charge = 0;
     this.charging = false;
     this.coolDown = 0;
       game.battleBalls.dashSound.play();
+  };
+
+  p.doRush = function() {
+    var aX = this.xAcc * this.charge/this.maxCharge * this.rushPower;
+    var aY = this.yAcc * this.charge/this.maxCharge * this.rushPower;
+    this.updateAcceleration(aX, aY);
+    this.charge = 0;
+    this.charging = false;
+    this.coolDown = 20;
+    game.battleBalls.dashSound.play();
   };
 
   p.updateCollisions = function() {
@@ -141,19 +178,13 @@ game.Newbie = function() {
     this.velocity.x += this.xAcc;
     this.velocity.y += this.yAcc;
       
-    var velocityMag = Math.sqrt((this.velocity.x * this.velocity.x) + (this.velocity.y*this.velocity.y));   
-    
-    if(velocityMag > this.maxVelocity)
-    {
-        this.clampVelocity(velocityMag);
-    }
+      this.velocityMag = Math.sqrt((this.velocity.x * this.velocity.x) + (this.velocity.y*this.velocity.y));   
+      
+      if(this.velocityMag > this.maxVelocity)
+      {
+          this.clampVelocity();
+      }
   };
-    
-    p.clampVelocity = function(mag){
-        var normVelocity = {x: this.velocity.x / mag, y: this.velocity.y / mag};
-        var clampedVelocity = {x: normVelocity.x * this.maxVelocity, y: normVelocity.y * this.maxVelocity};
-        this.velocity = clampedVelocity;
-    }
 
   p.updateAcceleration = function(x,y) {
     this.xAcc = x;
@@ -196,25 +227,11 @@ game.Newbie = function() {
   p.renderCharge = function(ctx) {
     if(this.chargeType === "boom")
       this.drawBoomCharge(ctx);
-    else if(this.chargeType === "dash")
-      this.drawDashCharge(ctx);
-  };
-
-  p.drawBoomCharge = function(ctx) {
-    ctx.save();
-    ctx.fillStyle = this.color;
-    ctx.strokeStyle = this.color;
-    ctx.lineWidth = 3;
-    ctx.shadowBlur=10;
-    ctx.shadowColor=this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, (this.charge / 20) + 3, 0, Math.PI * 2, false);
-    ctx.closePath();
-    ctx.stroke();
-    ctx.restore();
+    else if(this.chargeType === "rush")
+      this.drawRushCharge(ctx);
   };
   
-  p.drawDashCharge = function(ctx) {
+  p.drawRushCharge = function(ctx) {
     var forward = { x: this.velocity.x, y: this.velocity.y };
     forward = game.physicsUtils.normalize(forward);
 
@@ -232,6 +249,12 @@ game.Newbie = function() {
     ctx.stroke();
     ctx.restore();
   };
+    
+    p.clampVelocity = function(){ // prevent the velocity from becoming too high for the player to control
+        var normVelocity = {x: this.velocity.x / this.velocityMag, y: this.velocity.y / this.velocityMag};
+        var clampedVelocity = {x: normVelocity.x * this.maxVelocity, y: normVelocity.y * this.maxVelocity};
+        this.velocity = clampedVelocity;
+    };
 
-  return Newbie;
+  return Matador;
 }();
