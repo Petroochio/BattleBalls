@@ -14,15 +14,18 @@ game.controller = {
     readyButton: undefined,
 
     //Will eventually be replaced with power1Button&power2Button
-    boomButton: undefined,
-    dashButton: undefined,
+    power1Button: undefined,
+    power2Button: undefined,
     room: undefined,
+    selectedClass: undefined,
 
     init: function(){
         //initialize variables
         var me = this;
         me.canvas = document.querySelector("#myCanvas");
         me.ctx = me.canvas.getContext("2d");
+        
+        me.selectedClass = "matador";
 
         me.canvas.width = window.innerWidth;
         me.canvas.height = window.innerHeight;
@@ -74,8 +77,8 @@ game.controller = {
             if(data.id !== -1) {
                 id = data.id;
                 me.readyButton.player = id;
-                me.boomButton.player = id;
-                me.dashButton.player = id;
+                me.power1Button.player = id;
+                me.power2Button.player = id;
                 me.state = "START";
                 
                 document.getElementById("join").style.display = "none";
@@ -98,10 +101,16 @@ game.controller = {
                 document.getElementById("ballSelect").style.display = "block";
             }else if(data.state === "GAME") {
                 document.getElementById("ballSelect").style.display = "none";
+                me.setButtonNames();
                 me.state = "GAME";
                 me.ready = false;
             }
         });
+        
+        /*socket.on('player ready', function(data){
+            me.power1Button.id = me.power1Button.player.power1Name;
+            me.power2Button.id = me.power2Button.player.power2Name;
+        });*/
 
         me.touching = false;
 
@@ -143,8 +152,8 @@ game.controller = {
         });
 
         me.readyButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/6*5,me.canvas.width/6,"ready",id, me);
-        me.boomButton = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/4,me.canvas.width/4,"boom",id, me);
-        me.dashButton = new game.Button(me.ctx,me.canvas.width/2,(me.canvas.height/4)*3,me.canvas.width/4,"dash", id, me);
+        me.power1Button = new game.Button(me.ctx,me.canvas.width/2,me.canvas.height/4,me.canvas.width/4,undefined,id, me);
+        me.power2Button = new game.Button(me.ctx,me.canvas.width/2,(me.canvas.height/4)*3,me.canvas.width/4,undefined, id, me);
 
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', function(e) {
@@ -168,13 +177,13 @@ game.controller = {
     },
     setTouchType: function(){
         var me = this;
-        if(me.boomButton.currentlyPressed) 
+        if(me.power1Button.currentlyPressed) 
         {
-            me.touchType = me.boomButton.id;
+            me.touchType = me.power1Button.id;
         }
-        else if(me.dashButton.currentlyPressed) 
+        else if(me.power2Button.currentlyPressed) 
         {
-            me.touchType = me.dashButton.id;
+            me.touchType = me.power2Button.id;
         }
 
         else
@@ -191,16 +200,11 @@ game.controller = {
     },
     updateGameLoop: function(){
         var me = this;
-        me.boomButton.update();
-        me.dashButton.update();
+        me.power1Button.update();
+        me.power2Button.update();
         me.setTouchType();
     },
     update: function(){
-        console.log(this.state);
-        if(this.touching)
-        {
-            //console.log("X: " + this.xTap + ", Y: " + this.yTap);
-        }
         switch(this.state){
             case "JOIN":
                 break;
@@ -228,8 +232,8 @@ game.controller = {
         me.ctx.fillStyle = 'black';
         me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
         me.ctx.restore();
-        me.boomButton.render();
-        me.dashButton.render();
+        me.power1Button.render();
+        me.power2Button.render();
     },
     render: function(){
         switch(this.state){
@@ -272,5 +276,24 @@ game.controller = {
         }
 
         return valid;
+    },
+    
+    setButtonNames: function(){
+        switch(this.selectedClass){
+            case "newbie":
+                this.power1Button.id = "boom";
+                this.power2Button.id = "dash";
+                break;
+            case "speed":
+                this.power1Button.id = "break";
+                this.power2Button.id = "sling";
+                break;
+            case "matador":
+                this.power1Button.id = "dodge";
+                this.power2Button.id = "charge";
+                break;
+                
+        }
+                    
     }
 }

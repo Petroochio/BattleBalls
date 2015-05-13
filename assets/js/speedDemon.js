@@ -18,11 +18,14 @@ game.Speed = function() {
     this.chargesReady = {brake: true, sling: true};
     this.slingTime = 0;
     this.maxCharge = 200;
-    this.brakePower  50;
+    this.brakePower =  50;
     this.collisions = [];
     this.target = {x: 0, y:0};
     this.KOed = false;
     this.ready = false;
+    this.power1Name = "sling";
+    this.power2Name = "break";
+      
   };
 
   var s = Speed.prototype;

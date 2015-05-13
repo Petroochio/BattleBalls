@@ -150,7 +150,6 @@ game.Button = function() {
             }
             else if(this.previouslyPressed == true && this.currentlyPressed == true) //held event
             {
-              console.log("held");  
             }
             else if(this.previouslyPressed == true && this.currentlyPressed == false) // end press event
             {
