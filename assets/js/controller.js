@@ -103,7 +103,7 @@ game.controller = {
         socket.on('state change', function(data){
             if(data.state === "END") {
                 me.state = "START";
-                document.getElementById("ballSelect").style.display = "block";
+                //document.getElementById("ballSelect").style.display = "block";
             }else if(data.state === "GAME") {
                 document.getElementById("ballSelect").style.display = "none";
                 me.setButtonNames();
@@ -345,7 +345,6 @@ game.controller = {
             case 3:
                 this.selectedClass = "ghost";
                 break;
-                
         }
     }
 }

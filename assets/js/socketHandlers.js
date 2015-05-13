@@ -38,9 +38,10 @@ game.socketHandlers = {
 
     socket.on('select class', function(data){
       if(app.players[data.id]){
+        var x = app.players[data.id].x, y = app.players[data.id].y;
         delete app.players[data.id];
         var newClass = undefined;
-        var x = app.canvas.width/2, y = app.canvas.height/2;
+        
         switch(data.class) {
           case 'speed':
             newClass = new game.Speed(data.id, data.color, x, y);
