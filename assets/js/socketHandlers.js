@@ -24,7 +24,7 @@ game.socketHandlers = {
     socket.on('player join', function(data){
       if(app.state === "START") {
         var x = app.canvas.width/2, y = app.canvas.height/2;
-        app.players[data.id] = new game.Speed(data.id, data.color, x, y);
+        app.players[data.id] = new game.Ghost(data.id, data.color, x, y);
         app.playerIDs.push(data.id);
         console.log(app.playerIDs);
       }
