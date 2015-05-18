@@ -9,8 +9,8 @@ var users = {};
 var rooms = {};
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 //models
-var models = require('/models');
-var Account = models.Account;
+//var models = require('/models');
+//var Account = models.Account;
 //For creating new accounts
 var intialClassList = {
   newbie: true,
@@ -19,14 +19,14 @@ var intialClassList = {
   matadore: true
 }
 
-var dbURL = process.env.MONGOLAB_URI || "mongodb://localhost/BirdMaker";
+//var dbURL = process.env.MONGOLAB_URI || "mongodb://localhost/BirdMaker";
 
-var db = mongoose.connect(dbURL, function(err) {
+/*var db = mongoose.connect(dbURL, function(err) {
     if(err) {
         console.log("Could not connect to database");
         throw err;
     }
-});
+});*/
 //Function for generating a random room key
 var generateRoomKey = function(){
   var pw = "";
@@ -123,7 +123,7 @@ io.on('connection', function(socket){
   //ACCOUNT EVENTS
   //////////////////
   //Login event for the player
-  socket.on('account login', function(data){
+  /*socket.on('account login', function(data){
     var username = data.username;
     var password = data.pass;
 
@@ -143,7 +143,7 @@ io.on('connection', function(socket){
   });
   //Event for creating account
   socket.on('account create', function(data){
-    if(!data.username || !data.pass /*|| !req.body.pass2*/) {
+    if(!data.username || !data.pass || !req.body.pass2) {
         return false;//res.status(400).json({error: "RAWR! All fields are required"});
     }
 
@@ -174,11 +174,10 @@ io.on('connection', function(socket){
             
       io.to(socket.id).emit('login success', reqData);
     });
-  });
+  });*/
   //////////////////
   //GAME EVENTS
   //////////////////
-  });
   //Ready event to start the game
   socket.on('player ready', function(data){//ROOM CODE
     io.to(data.room).emit('player ready', data);

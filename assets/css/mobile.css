@@ -28,6 +28,9 @@ form input{
 .hidden{
     display: none;
 }
+.shown{
+    display: block;
+}
 
 form button{
     width: 8%;
