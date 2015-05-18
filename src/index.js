@@ -4,9 +4,29 @@ var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
 var MobileDetect = require('mobile-detect');
+var mongoose = require('mongoose'); 
 var users = {};
 var rooms = {};
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
+//models
+var models = require('/models');
+var Account = models.Account;
+//For creating new accounts
+var intialClassList = {
+  newbie: true,
+  ghost: true,
+  speed: true,
+  matadore: true
+}
+
+var dbURL = process.env.MONGOLAB_URI || "mongodb://localhost/BirdMaker";
+
+var db = mongoose.connect(dbURL, function(err) {
+    if(err) {
+        console.log("Could not connect to database");
+        throw err;
+    }
+});
 //Function for generating a random room key
 var generateRoomKey = function(){
   var pw = "";
@@ -99,11 +119,71 @@ io.on('connection', function(socket){
   socket.on('phone tilt', function(data){//ROOM CODE
     io.to(data.room).emit('phone tilt', data);
   });
+  //////////////////
+  //ACCOUNT EVENTS
+  //////////////////
+  //Login event for the player
+  socket.on('account login', function(data){
+    var username = data.username;
+    var password = data.pass;
 
+    if(!username || !password) {
+        //return res.status(400).json({error: "RAWR! All fields are required"});
+    }
+    Account.AccountModel.authenticate(username, password, function(err, account) {
+        if(err || !account) {
+            //return res.status(401).json({error: "Wrong username or password"});
+            io.to(socket.id).emit('login fail', {result: 'Login Fail, Bad username or password'});
+            return false;
+        }
+        var reqData = {};
+        reqData.account = account.toAPI();
+        io.to(socket.id).emit('login success', reqData);
+    });
+  });
+  //Event for creating account
+  socket.on('account create', function(data){
+    if(!data.username || !data.pass /*|| !req.body.pass2*/) {
+        return false;//res.status(400).json({error: "RAWR! All fields are required"});
+    }
+
+    if(data.pass !== data.pass2) {
+        return false;//res.status(400).json({error: "RAWR! Passwords do not match"});
+    }
+  
+  Account.AccountModel.generateHash(data.pass, function(salt, hash) {
+
+    var accountData = {
+      username: data.username,
+      salt: salt,
+      password: hash,
+      losses: 0,
+      wins: 0,
+      classes: intialClassList
+    };
+    
+    var newAccount = new Account.AccountModel(accountData);
+    var reqData = {};
+    newAccount.save(function(err) {
+      if(err) {
+        console.log(err);
+        return false;//res.status(400).json({error:'An error occurred'}); 
+      }
+
+      reqData.account = newAccount.toAPI();
+            
+      io.to(socket.id).emit('login success', reqData);
+    });
+  });
+  //////////////////
+  //GAME EVENTS
+  //////////////////
+  });
+  //Ready event to start the game
   socket.on('player ready', function(data){//ROOM CODE
     io.to(data.room).emit('player ready', data);
   });
-
+  //Touch event for starting ability charges
   socket.on('charge start', function(data){//ROOM CODE
       console.log(data);
     io.to(data.room).emit('charge start', data);
