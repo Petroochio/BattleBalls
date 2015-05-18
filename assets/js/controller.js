@@ -24,6 +24,8 @@ game.controller = {
     classIndex: 0,
     numOfClasses: 4,
 
+    account: undefined,
+
     init: function(){
         //initialize variables
         var me = this;
@@ -46,14 +48,16 @@ game.controller = {
         me.color = 'rgb('+red+','+green+','+blue+')';
         //setting client's own properties (MIGHT NOT BE THE BEST PRACTICE);
         var socket = io.connect( window.location.origin, {query: 'user='+name});
-
+        ////////////////////
+        //FORMS
+        ////////////////////
+        //ROOM JOIN
         var join = document.getElementById("join");
         join.onsubmit= function(e){ e.preventDefault();};
         var joinButton = document.getElementById("joinButton");
         var codeField = document.querySelector("#code");
         var errorDiv = document.querySelector("#error")
         errorDiv.style.display = "none";
-
 
         joinButton.addEventListener("click", function(){
             var roomID = codeField.value;
@@ -73,7 +77,66 @@ game.controller = {
                 codeField.value = "";
             }
         });
+        //SIGN IN
+        var signIn = document.getElementById("sign-in");
+        var signUp = document.getElementById("sign-up");
+        signIn.onsubmit= function(e){ e.preventDefault();};
+        var loginButton = document.getElementById("loginButton");
+        var createButton = document.getElementById("createButton");
+        var nameField = document.querySelector("#usernameL");
+        var passField = document.querySelector("#passwordL");
+        var errorLoginDiv = document.querySelector("#error-login")
+        errorLoginDiv.style.display = "none";
 
+        loginButton.addEventListener("click", function(){
+            if(!nameField.value || !passField.value){
+                //error code
+            }else {
+                var data = {
+                    name:nameField.value,
+                    pass:passField.value
+                }
+                socket.emit('account login', data);
+            }
+        });
+        createButton.addEventListener("click", function(){
+            signIn.classList.toggle("hidden");
+            signUp.classList.toggle("hidden");
+        });
+        //SIGN UP
+        signUp.onsubmit= function(e){ e.preventDefault();};
+        var confirmButton = document.getElementById("confirmButton");
+        var nameCreateField = document.querySelector("#usernameC");
+        var pass1Field = document.querySelector("#password1");
+        var pass2Field = document.querySelector("#password2");
+        var errorCreateDiv = document.querySelector("#error-create")
+        errorCreateDiv.style.display = "none";
+
+        confirmButton.addEventListener("click", function(){
+            console.log('click');
+            if(!nameCreateField.value || !pass1Field.value || !pass2Field.value){
+                //error code
+                console.log('error sign up');
+            } else {
+                var data = {
+                    name:nameCreateField.value,
+                    pass:pass1Field.value,
+                    pass2:pass2Field.value
+                }
+                socket.emit('account create', data);
+            }
+        });
+        ///////////////////////////
+        //SOCKET EVENT FOR SIGN IN
+        ///////////////////////////
+        socket.on('login success', function(data){
+            console.log(data);
+            me.account = data.account;
+            signIn.classList.add("hidden");
+            signUp.classList.add("hidden");
+            join.classList.remove("hidden");
+        });
+        ///////////////////////////
         /*var connectData = { id: id, color: me.color };
 
         socket.emit('player join', connectData);//ADD ROOM TO DATA*/
