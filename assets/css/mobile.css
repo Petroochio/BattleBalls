@@ -25,6 +25,9 @@ form input{
     width: 90%;
     margin-right: .5%;
 }
+.hidden{
+    display: none;
+}
 
 form button{
     width: 8%;
