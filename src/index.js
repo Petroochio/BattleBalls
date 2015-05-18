@@ -9,8 +9,8 @@ var users = {};
 var rooms = {};
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 //models
-//var models = require('/models');
-//var Account = models.Account;
+var models = require('./models');
+var Account = models.Account;
 //For creating new accounts
 var intialClassList = {
   newbie: true,
@@ -19,14 +19,14 @@ var intialClassList = {
   matadore: true
 }
 
-//var dbURL = process.env.MONGOLAB_URI || "mongodb://localhost/BirdMaker";
+var dbURL = process.env.MONGOLAB_URI || "mongodb://localhost/BirdMaker";
 
-/*var db = mongoose.connect(dbURL, function(err) {
+var db = mongoose.connect(dbURL, function(err) {
     if(err) {
         console.log("Could not connect to database");
         throw err;
     }
-});*/
+});
 //Function for generating a random room key
 var generateRoomKey = function(){
   var pw = "";
