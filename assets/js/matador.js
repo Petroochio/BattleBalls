@@ -3,7 +3,7 @@
 var game = game || {};
 
 game.Matador = function() {
-  var Matador = function(id, color, x, y, name) {
+  var Matador = function(id, color, x, y) {
     this.x = x;
     this.y = y;
     this.xAcc = 0;
@@ -26,7 +26,6 @@ game.Matador = function() {
     this.collisions = [];
     this.KOed = false;
     this.ready = false;
-    this.name = name;
       
     this.power1Name = "dodge";
     this.power2Name = "rush";

@@ -66,12 +66,7 @@ game.controller = {
 
             if(validInput == true)
             {
-                var connectData = { 
-                    id: id, 
-                    color: me.color, 
-                    room: roomID, 
-                    name: me.account.username
-                };
+                var connectData = { id: id, color: me.color, room: roomID};
                 socket.emit('player join', connectData);//ADD ROOM TO DATA
             }
             else{
