@@ -310,28 +310,41 @@ game.battleBalls = {
 
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
+            var xSpacing = index%2;
             me.ctx.save();
             me.ctx.strokeStyle = player.color;
             me.ctx.fillStyle = player.color;
             if(player.ready) {
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                me.text(me.ctx, "player "+(index+1),
+                        me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
+                        me.canvas.height/2+index*55+20,
+                        50,player.color);
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55+20,
+                           20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,10,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55+20,
+                           10,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.fill();
             } else {
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                me.text(me.ctx, "player "+(index+1),
+                        me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
+                        me.canvas.height/2+index*55+20,
+                        50,player.color);
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55+20,
+                           20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
             }
@@ -392,6 +405,7 @@ game.battleBalls = {
         
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
+            var xSpacing = index%2
             if(player.id == me.winner.id) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
             
             me.ctx.save();
@@ -400,22 +414,34 @@ game.battleBalls = {
             if(player.ready) {
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                me.text(me.ctx, "player "+(index+1),
+                        me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
+                        me.canvas.height/2+index*55,
+                        50,player.color);
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55,
+                           20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,10,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55,
+                           10,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.fill();
             } else {
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                me.text(me.ctx, "player "+(index+1),
+                        me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
+                        me.canvas.height/2+index*55,
+                        50,player.color);
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55,
+                           20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
             }
