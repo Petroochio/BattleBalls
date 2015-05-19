@@ -10,6 +10,7 @@ game.battleBalls = {
     players : {},
     sparks : [],
     booms : [],
+    scares : [],
     state : "START",
     startDelay : 500,
     arenaShrinkDelay : /*1000*/200,
@@ -165,6 +166,31 @@ game.battleBalls = {
             me.state = "END";
             game.socketHandlers.changeState("END");
         }
+        me.scares.forEach(function(scare,index,array){
+            scare.update(dt);
+            var scarec = {
+                x: scare.play.x,
+                y: scare.play.y,
+                velocity: {x:0,y:0},
+                radius: scare.radius
+                //other stuff?
+            };
+            me.playerIDs.forEach(function(id){
+                var player = me.players[id];
+                if(scare.id !== player.id){
+                    if(game.physicsUtils.circleCollision(player, scarec)){
+                        var impulse = {x:0,y:0};
+                        impulse = game.physicsUtils.normalize(game.physicsUtils.vecDiff(player,scarec));
+//                        impulse *= 2;
+//                        impulse *= 2;
+                        player.applyImpulse(impulse);
+                    }
+                }
+            });
+            if(scare.remove){
+                array.splice(index,1);
+            }
+        });
         //Loop through and update akk if the booms
         me.booms.forEach(function(boom, index, array){
             boom.update(dt);//update boom
@@ -251,6 +277,7 @@ game.battleBalls = {
         me.players[id].KOed = false;
       });
       me.setPlayerStarts();
+        me.scares = [];
     },
     /** Creates sparks based on an impulse
    * @param c1 : first circle object in collison
@@ -339,6 +366,9 @@ game.battleBalls = {
         //loop through and draw each boom
         me.booms.forEach(function(boom) {
             boom.render(me.ctx);
+        });
+        me.scares.forEach(function(scare){
+            scare.render(me.ctx);
         });
         //loop through and draw each spark
         me.sparks.forEach(function(spark) {

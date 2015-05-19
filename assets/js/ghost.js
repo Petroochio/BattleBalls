@@ -16,9 +16,10 @@ game.Ghost = function() {
         this.mass = 10;
         this.stunned = false;
         this.stunTime = 0;
-//        this.charge = 0;
+        this.charge = 0;
         this.charging = false;
         this.chargeType = undefined;
+        this.coolDown = 0;
         this.maxCharge = 200;
         this.collisions = [];
         this.target = {x: x, y: y};
@@ -28,6 +29,7 @@ game.Ghost = function() {
         this.child = {x:0,y:0,r:0,velocity:{x:0,y:0},xAcc:0,yAcc:0};
         this.childActive = false;
         this.power2Name = "scare";
+        this.scare = undefined;
     };
 
     var g = Ghost.prototype;
@@ -54,14 +56,20 @@ game.Ghost = function() {
         this.velocity.y=0;
         this.xAcc=0;
         this.yAcc=0;
+    };
+    
+    g.beginScare = function() {
+        this.scare = new game.Scare(this.id,this);
+        game.battleBalls.scares.push(this.scare);
     }
 
     g.beginCharge = function(type) {
-        if(!this.stunned){
+        if(!this.stunned && this.coolDown <= 0){
             this.charging = true;
             this.chargeType = type;
-            if(type === "tele") {
-                this.beginTele();
+            if(type === "tele") this.beginTele();
+            else if(type === "scare" && this.coolDown == 0) {
+                this.beginScare();
             }
         }
     };
@@ -78,12 +86,18 @@ game.Ghost = function() {
         if(this.charging){
             if(this.chargeType == "tele") this.handleTele();
             else if(this.chargeType == "scare") this.handleScare();
-        }
+        } else if(this.coolDown > 0)
+            this.coolDown--;
     };
     
     g.handleTele = function() {
         this.child.r -= 0.05;
         if(this.child.r <= 0) this.endCharge("tele");
+    };
+    
+    g.handleScare = function() {
+        this.charge++;
+        if(this.charge >= this.maxCharge) this.endCharge("scare");
     };
 
     g.endCharge = function(type) {
@@ -96,6 +110,15 @@ game.Ghost = function() {
                 this.y = this.child.y;
             }
             this.childActive = false;
+        }
+        if(type === "scare") {
+            if(this.charge >= this.maxCharge){
+                this.stunned = true;
+                this.stunTime = 200;
+            }
+            this.scare.remove = true;
+            this.charge = 0;
+            this.coolDown = 30;
         }
         this.charging = false;
     };
@@ -171,8 +194,11 @@ game.Ghost = function() {
     };
 
     g.applyImpulse = function(impulse) {
-        this.velocity.x += impulse.x/this.mass;
-        this.velocity.y += impulse.y/this.mass;
+        if(this.charging && this.chargeType == "scare"){}
+        else {
+            this.velocity.x += impulse.x/this.mass;
+            this.velocity.y += impulse.y/this.mass;
+        }
     };
     ///////////////////
     //RENDER FUNCTIONS
@@ -181,7 +207,7 @@ game.Ghost = function() {
         ctx.save();
         ctx.fillStyle = this.color;
 //        ctx.strokeStyle = this.color;
-        ctx.strokeStyle = this.stunned ? 'grey' : this.color;
+        ctx.strokeStyle = this.stunned || this.coolDown > 0 ? 'grey' : this.color;
         ctx.lineWidth = 3;
         ctx.shadowBlur = 10;
         ctx.shadowColor = this.color;
@@ -195,7 +221,6 @@ game.Ghost = function() {
 
     g.renderCharge = function(ctx) {
         if(this.chargeType == "tele") this.drawTele(ctx);
-        else if(this.chargeType == "scare") this.drawScare(ctx);
     };
     
     g.drawTele = function(ctx){
@@ -209,7 +234,7 @@ game.Ghost = function() {
             ctx.fill();
             ctx.restore();
         }
-    }
+    };
 
     return Ghost;
 }();
