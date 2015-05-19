@@ -10,10 +10,12 @@ game.battleBalls = {
     players : {},
     sparks : [],
     booms : [],
+    scares : [],
     state : "START",
     startDelay : 500,
     arenaShrinkDelay : /*1000*/200,
-    ticker: 100,
+    ticker: 200,
+    winner: undefined,
     
     bgMusic : undefined,
     chargeSound : undefined,
@@ -162,9 +164,38 @@ game.battleBalls = {
         });
         //If all players are knocked out end the game
         if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1) {
+            me.playerIDs.forEach(function(id){
+                var player = me.players[id];
+                if(!player.KOed) me.winner = player;
+            });
             me.state = "END";
             game.socketHandlers.changeState("END");
         }
+        me.scares.forEach(function(scare,index,array){
+            scare.update(dt);
+            var scarec = {
+                x: scare.play.x,
+                y: scare.play.y,
+                velocity: {x:0,y:0},
+                radius: scare.radius
+                //other stuff?
+            };
+            me.playerIDs.forEach(function(id){
+                var player = me.players[id];
+                if(scare.id !== player.id){
+                    if(game.physicsUtils.circleCollision(player, scarec)){
+                        var impulse = {x:0,y:0};
+                        impulse = game.physicsUtils.normalize(game.physicsUtils.vecDiff(player,scarec));
+//                        impulse *= 2;
+//                        impulse *= 2;
+                        player.applyImpulse(impulse);
+                    }
+                }
+            });
+            if(scare.remove){
+                array.splice(index,1);
+            }
+        });
         //Loop through and update akk if the booms
         me.booms.forEach(function(boom, index, array){
             boom.update(dt);//update boom
@@ -251,6 +282,7 @@ game.battleBalls = {
         me.players[id].KOed = false;
       });
       me.setPlayerStarts();
+        me.scares = [];
     },
     /** Creates sparks based on an impulse
    * @param c1 : first circle object in collison
@@ -278,28 +310,41 @@ game.battleBalls = {
 
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
+            var xSpacing = index%2;
             me.ctx.save();
             me.ctx.strokeStyle = player.color;
             me.ctx.fillStyle = player.color;
             if(player.ready) {
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, player.name+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                me.text(me.ctx, "player "+(index+1),
+                        me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
+                        me.canvas.height/2+index*55+20,
+                        50,player.color);
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55+20,
+                           20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,10,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55+20,
+                           10,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.fill();
             } else {
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                me.text(me.ctx, "player "+(index+1),
+                        me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
+                        me.canvas.height/2+index*55+20,
+                        50,player.color);
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55+20,
+                           20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
             }
@@ -340,6 +385,9 @@ game.battleBalls = {
         me.booms.forEach(function(boom) {
             boom.render(me.ctx);
         });
+        me.scares.forEach(function(scare){
+            scare.render(me.ctx);
+        });
         //loop through and draw each spark
         me.sparks.forEach(function(spark) {
             spark.render(me.ctx);
@@ -357,7 +405,8 @@ game.battleBalls = {
         
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
-            if(!player.KOed) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
+            var xSpacing = index%2
+            if(player.id == me.winner.id) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
             
             me.ctx.save();
             me.ctx.strokeStyle = player.color;
@@ -365,22 +414,34 @@ game.battleBalls = {
             if(player.ready) {
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                me.text(me.ctx, "player "+(index+1),
+                        me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
+                        me.canvas.height/2+index*55,
+                        50,player.color);
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55,
+                           20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,10,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55,
+                           10,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.fill();
             } else {
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                me.text(me.ctx, "player "+(index+1),
+                        me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
+                        me.canvas.height/2+index*55,
+                        50,player.color);
                 
                 me.ctx.beginPath();
-                me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);
+                me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
+                           me.canvas.height/2-20+index*55,
+                           20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
             }
@@ -392,8 +453,9 @@ game.battleBalls = {
         var me = this;
         me.ctx.fillStyle = "black"
         me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
-        me.text(me.ctx,"tilt phone to move",me.canvas.width/2,me.canvas.height/4,50,"white");
-        me.text(me.ctx,"power controls on phone",me.canvas.width/2,me.canvas.height/4+100,50,"white");
+        me.text(me.ctx,"hold phone horizontal",me.canvas.width/2,me.canvas.height/4,50,"white");
+        me.text(me.ctx,"tilt phone to move",me.canvas.width/2,me.canvas.height/4+50,50,"white");
+        me.text(me.ctx,"power controls on phone",me.canvas.width/2,me.canvas.height/4+150,50,"white");
     },
     
     //Main render function that handles different render states
