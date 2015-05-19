@@ -284,7 +284,7 @@ game.battleBalls = {
             if(player.ready) {
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
+                me.text(me.ctx, player.name+(index+1),me.canvas.width/3,me.canvas.height/2+index*55,50,player.color);
                 
                 me.ctx.beginPath();
                 me.ctx.arc(me.canvas.width*2/3,me.canvas.height/2-20+index*55,20,0,Math.PI*2,false);

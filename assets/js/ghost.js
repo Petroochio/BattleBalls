@@ -6,8 +6,6 @@ game.Ghost = function() {
     var Ghost = function(id, color, x, y) {
         this.x = x;
         this.y = y;
-        this.oldX = undefined;
-        this.oldY = undefined;
         this.xAcc = 0;
         this.yAcc = 0;
         this.velocity = {x: 0, y: 0};
@@ -16,54 +14,74 @@ game.Ghost = function() {
         this.color = color;
         this.mu = 0.95;
         this.mass = 10;
+        this.stunned = false;
         this.charging = false;
         this.chargeType = undefined;
-        this.charge = 0;
-        this.maxCharge = 170;
-        this.coolDown = 0;
-        this.stunned = false;
-        this.stunTime = 0;
+//        this.charges = {brake: false, sling: false};
+//        this.chargesReady = {brake: true, sling: true};
+//        this.slingTime = 0;
+        this.maxCharge = 200;
+//        this.brakePower =  50;
         this.collisions = [];
+        this.target = {x: x, y: y};
         this.KOed = false;
         this.ready = false;
-
         this.power1Name = "tele";
-        this.power2Name = "scare";
-        this.child = {x: 0, y: 0, r: 0, accel: {x: 0, y: 0}, velocity: {x: 0, y: 0}, setPos: function(x,y,r) {this.x = x; this.y = y; this.r = r; }};
+//        this.oldX = 0;
+//        this.oldY = 0;
+        this.child = {x:0,y:0,r:0,velocity:{x:0,y:0},xAcc:0,yAcc:0};
         this.childActive = false;
-        //    this.rushPower = 300;
-        //    this.dodgeSpeed = 200;
-        this.maxVelocity = 5;
-        this.velocityMag = 0;
+        this.power2Name = "scare";
     };
 
     var g = Ghost.prototype;
 
     g.update = function(dt) {
+//        this.stunned = false;
         this.updateCollisions();
         this.updateCharge(dt);
         this.updateStun(dt);
         this.calculateVelocity(dt);
         this.move(dt);
     };
+    
+    g.beginTele = function(){
+        console.log("begin tele");
+//        this.oldX = this.x;
+//        this.oldY = this.y;
+        this.child.x = this.x;
+        this.child.y = this.y;
+        this.child.r = this.radius/2;
+        this.child.velocity.x = this.velocity.x;
+        this.child.velocity.y = this.velocity.y;
+        this.child.xAcc = this.xAcc;
+        this.child.yAcc = this.yAcc;
+        this.childActive = true;
+        
+        //test
+        this.velocity.x=0;
+        this.velocity.y=0;
+        this.xAcc=0;
+        this.yAcc=0;
+    }
 
     g.beginCharge = function(type) {
-        if(!this.stunned && !this.charging) {
-            this.charging = (this.coolDown <= 0);
-            this.chargeType = type;
-
-            if(type === "tele") {
-                //helper function?
-                this.oldX = this.x;
-                this.oldY = this.y;
-                this.child.setPos(this.x,this.y,this.radius);
-                this.child.velocity.x = this.velocity.x;
-                this.child.velocity.y = this.velocity.y;
-                this.childActive = true;
-                this.velocity.x = 0;
-                this.velocity.y = 0;
+        this.charging = true;
+        this.chargeType = type;
+        if(type === "tele") {
+            this.beginTele();
+        }
+        /*
+        if(!this.charges[type]) {
+            if(type === 'brake'){
+                this.charges[type] = true;
+            } else {
+                this.charges[type] = true;
+                this.target.x = this.x;
+                this.target.y = this.y;
             }
         }
+        */
     };
 
     g.updateStun = function(dt) {
@@ -71,45 +89,76 @@ game.Ghost = function() {
             this.stunTime--;
         this.stunned = !(this.stunTime <= 0);
     };
-
+    //////////////////
+    //CLASS SPECIFIC
+    //////////////////
     g.updateCharge = function(dt) {
-        if(this.charging) {
-            this.charge++;
-            this.handleTele();
-            //            this.handleScare();
-        }
-        else
-            this.coolDown--;
-
-        if(this.charge >= this.maxCharge)
-            this.endCharge();
+        if(this.chargeType == "tele") this.handleTele();
+        else if(this.chargeType == "scare") this.handleScare();
+    };
+    
+    g.handleTele = function() {
+        console.log("handle tele");
+        this.child.r -= 0.05;
     };
 
-    g.handleTele = function() {
-
-    }
-
-    g.endCharge = function() {
-        if(this.charging && this.charge < this.maxCharge) {
-            if(this.chargeType === "tele"){
-                this.doTele();
-
-
-            } else if(this.charging) {
-                //this.stunned = true;
-                this.stunTime = 200;
-                this.charge = 0;
-                this.charging = false;
-                this.coolDown = 20;
-            }
+    g.handleBrakes = function(){
+        if(/*this.chargesReady.brake && */this.charges.brake /*&& this.breakPower > 0*/){
+            this.brakePower--;
+            this.mu = .2;
+            console.log('brake')
+        } else {
+            this.mu = .95;
+            //this.endCharge('brake');
         }
+
+        if(this.brakePower < 1)
+            this.chargesReady.brake = false
+
+            if(!this.canBrake)
+                this.chargesReady.brake = (this.brakePower >= 50);
     }
-    
-    g.doTele = function() {
-        this.childActive = false;
-        this.x = this.child.x;
-        this.y = this.child.y;
-    }
+
+    g.handleSling = function() {
+        if(this.charges.sling)
+            this.slingTime ++;
+
+        if(this.slingTime >= this.maxCharge) {
+            this.endCharge('sling');
+            this.slingTime = 0;
+            this.slingCooldown = 100;
+        }
+        this.slingCooldown--;
+        this.chargesReady.sling = (this.slingCooldown < 1);
+
+    };
+
+    g.endCharge = function(type) {
+        if(type === "tele") {
+            this.childActive = false;
+            this.x = this.child.x;
+            this.y = this.child.y;
+        }
+        /*
+        this.charges[type] = false;
+        //send sling
+        if(type === "sling"){
+            //calc distance
+            var xDist = this.target.x - this.x;
+            var yDist = this.target.y - this.y;
+            //apply force
+            var impulse = {x:xDist, y:yDist};
+            impulse.x *= 1.7;
+            impulse.y *= 1.7;
+
+            this.applyImpulse(impulse);
+            //reset
+        }
+        */
+    };
+    /////////////////////////
+    //BASE CODE
+    /////////////////////////
 
     g.updateCollisions = function() {
         var self = this;
@@ -142,82 +191,100 @@ game.Ghost = function() {
         this.applyFriction();
         this.velocity.x += this.xAcc;
         this.velocity.y += this.yAcc;
-
-        this.velocityMag = Math.sqrt((this.velocity.x * this.velocity.x) + (this.velocity.y*this.velocity.y));   
-
-        if(this.velocityMag > this.maxVelocity)
-        {
-            this.clampVelocity();
+        if(this.childActive){
+            this.child.velocity.x += this.child.xAcc;
+            this.child.velocity.y += this.child.yAcc;
         }
+        /*
+        if(!this.childActive) {
+            this.velocity.x += this.xAcc;
+            this.velocity.y += this.yAcc;
+        }
+        else {
+            this.child.velocity.x += this.child.xAcc;
+            this.child.velocity.y += this.child.yAcc;
+        }
+        */
     };
 
     g.updateAcceleration = function(x,y) {
-        if(this.childActive) {
-            this.child.accel.x = x;
-            this.child.accel.y = y;
-        } else {
+        if(!this.childActive) {
             this.xAcc = x;
             this.yAcc = y;
+        } else {
+            this.child.xAcc = x;
+            this.child.yAcc = y;
         }
     };
 
     g.applyFriction = function() {
         this.velocity.x = this.velocity.x * this.mu;
         this.velocity.y = this.velocity.y * this.mu;
+        if(this.childActive) {
+            this.child.velocity.x = this.child.velocity.x * this.mu;
+            this.child.velocity.y = this.child.velocity.y * this.mu;
+        }
     };
 
     g.move = function(dt) {
         var scale = 1;
-        scale = (this.charging || this.stunned && !this.childActive) ? 0.5 : scale;
-
+        scale = (this.charging || this.stunned) ? 0.5 : scale;
         this.y += this.velocity.y * scale;
         this.x += this.velocity.x * scale;
+        if(this.childActive) {
+            this.child.y += this.child.velocity.y*scale;
+            this.child.x += this.child.velocity.x*scale;
+        }
+        /*
+        if(!this.childActive) {
+            this.y += this.velocity.y * scale;
+            this.x += this.velocity.x * scale;
+        } else {
+            this.child.y += this.child.velocity.y*scale;
+            this.child.x += this.child.velocity.x*scale;
+        }
+        */
     };
 
     g.applyImpulse = function(impulse) {
         this.velocity.x += impulse.x/this.mass;
         this.velocity.y += impulse.y/this.mass;
     };
-
+    ///////////////////
+    //RENDER FUNCTIONS
+    ///////////////////
     g.render = function(ctx) {
         ctx.save();
-        //        ctx.fillStyle = this.color;
-        ctx.strokeStyle = this.stunned || this.childActive ? 'grey' : this.color;
+        ctx.fillStyle = this.color;
+        ctx.strokeStyle = this.color;
+//        ctx.strokeStyle = this.stunned ? 'grey' : this.color;
         ctx.lineWidth = 3;
-        ctx.shadowBlur=10;
-        ctx.shadowColor=this.color;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = this.color;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
         ctx.closePath();
         ctx.stroke();
         ctx.restore();
-        if(this.charging)
-            this.renderCharge(ctx);
+        if(this.charging) this.renderCharge(ctx);
     };
 
     g.renderCharge = function(ctx) {
-        if(this.chargeType === "boom")
-            this.drawTeleCharge(ctx);
-        else if(this.chargeType === "rush")
-            this.drawScareCharge(ctx);
+        if(this.chargeType == "tele") this.drawTele(ctx);
+        else if(this.chargeType == "scare") this.drawScare(ctx);
     };
-
-    g.drawTeleCharge = function(ctx) {
-        ctx.save();
-        ctx.fillStyle = this.color;
-        ctx.strokeStyle = this.color;
-        ctx.lineWidth = 3;
-        ctx.shadowBlur=10;
-        ctx.shadowColor=this.color;
-        ctx.stroke();
-        ctx.restore();
-    };
-
-    g.clampVelocity = function(){ // prevent the velocity from becoming too high for the player to control
-        var normVelocity = {x: this.velocity.x / this.velocityMag, y: this.velocity.y / this.velocityMag};
-        var clampedVelocity = {x: normVelocity.x * this.maxVelocity, y: normVelocity.y * this.maxVelocity};
-        this.velocity = clampedVelocity;
-    };
+    
+    g.drawTele = function(ctx){
+        if(this.childActive){
+            ctx.save();
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.child.x,this.child.y,this.child.r,0,Math.PI*2,false);
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        }
+    }
 
     return Ghost;
 }();

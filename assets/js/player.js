@@ -3,9 +3,10 @@
 var game = game || {};
 
 game.Player = function() {
-  var Player = function(id, color, x, y) {
+  var Player = function(id, color, x, y, name) {
     this.x = x;
     this.y = y;
+    this.name = name;
     this.xAcc = 0;
     this.yAcc = 0;
     this.velocity = {x: 0, y: 0};
