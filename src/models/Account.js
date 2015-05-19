@@ -26,12 +26,12 @@ var AccountSchema = new mongoose.Schema({
     },
 
     wins: {
-        type: int,
+        type: Number,
         required: true
     },
 
     losses: {
-        type: int,
+        type: Number,
         required: true
     },
 

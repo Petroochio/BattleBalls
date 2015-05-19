@@ -9,8 +9,8 @@ var users = {};
 var rooms = {};
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
 //models
-//var models = require('/models');
-//var Account = models.Account;
+var models = require('./models');
+var Account = models.Account;
 //For creating new accounts
 var intialClassList = {
   newbie: true,
@@ -19,14 +19,14 @@ var intialClassList = {
   matadore: true
 }
 
-//var dbURL = process.env.MONGOLAB_URI || "mongodb://localhost/BirdMaker";
+var dbURL = process.env.MONGOLAB_URI || "mongodb://localhost/BirdMaker";
 
-/*var db = mongoose.connect(dbURL, function(err) {
+var db = mongoose.connect(dbURL, function(err) {
     if(err) {
         console.log("Could not connect to database");
         throw err;
     }
-});*/
+});
 //Function for generating a random room key
 var generateRoomKey = function(){
   var pw = "";
@@ -123,8 +123,9 @@ io.on('connection', function(socket){
   //ACCOUNT EVENTS
   //////////////////
   //Login event for the player
-  /*socket.on('account login', function(data){
-    var username = data.username;
+  socket.on('account login', function(data){
+    console.log(data);
+    var username = data.name;
     var password = data.pass;
 
     if(!username || !password) {
@@ -143,38 +144,40 @@ io.on('connection', function(socket){
   });
   //Event for creating account
   socket.on('account create', function(data){
-    if(!data.username || !data.pass || !req.body.pass2) {
+    console.log(data);
+    if(!data.name || !data.pass || !data.pass2) {
         return false;//res.status(400).json({error: "RAWR! All fields are required"});
     }
 
     if(data.pass !== data.pass2) {
         return false;//res.status(400).json({error: "RAWR! Passwords do not match"});
     }
-  
-  Account.AccountModel.generateHash(data.pass, function(salt, hash) {
+    console.log('good stuff');
+    Account.AccountModel.generateHash(data.pass, function(salt, hash) {
 
-    var accountData = {
-      username: data.username,
-      salt: salt,
-      password: hash,
-      losses: 0,
-      wins: 0,
-      classes: intialClassList
-    };
-    
-    var newAccount = new Account.AccountModel(accountData);
-    var reqData = {};
-    newAccount.save(function(err) {
-      if(err) {
-        console.log(err);
-        return false;//res.status(400).json({error:'An error occurred'}); 
-      }
+      var accountData = {
+        username: data.name,
+        salt: salt,
+        password: hash,
+        losses: 0,
+        wins: 0,
+        classes: intialClassList
+      };
+      
+      var newAccount = new Account.AccountModel(accountData);
+      var reqData = {};
+      newAccount.save(function(err) {
+        if(err) {
+          console.log(err);
+          return false;//res.status(400).json({error:'An error occurred'}); 
+        }
 
-      reqData.account = newAccount.toAPI();
-            
-      io.to(socket.id).emit('login success', reqData);
+        reqData.account = newAccount.toAPI();
+              
+        io.to(socket.id).emit('login success', reqData);
+      });
     });
-  });*/
+  });
   //////////////////
   //GAME EVENTS
   //////////////////

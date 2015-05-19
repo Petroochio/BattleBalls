@@ -173,20 +173,18 @@ game.Speed = function() {
   ///////////////////
   //RENDER FUNCTIONS
   ///////////////////
-  s.render = function(ctx) {
+  p.render = function(ctx) {
     ctx.save();
     ctx.fillStyle = this.color;
     ctx.strokeStyle = this.stunned ? 'grey' : this.color;
     ctx.lineWidth = 3;
     ctx.shadowBlur=10;
     ctx.shadowColor=this.color;
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    ctx.closePath();
-    ctx.stroke();
+    game.DrawLib.drawCircle(ctx, this.x, this.y, this.radius, "black", this.color);
+    game.DrawLib.drawText(ctx, "%Xi", this.x, this.y + this.radius/2, 40, this.color);
     ctx.restore();
     //if(this.charging)
-    this.renderCharge(ctx);
+      this.renderCharge(ctx);
   };
 
   s.renderCharge = function(ctx) {
