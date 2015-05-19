@@ -3,7 +3,7 @@
 var game = game || {};
 
 game.Newbie = function() {
-  var Newbie = function(id, color, x, y) {
+  var Newbie = function(id, color, x, y, name) {
     this.x = x;
     this.y = y;
     this.xAcc = 0;
@@ -30,6 +30,7 @@ game.Newbie = function() {
     this.power2Name = "dash";
     this.dashSpeed = 200;
     this.maxVelocity = 5;
+    this.name = name;
   };
 
   var p = Newbie.prototype;
