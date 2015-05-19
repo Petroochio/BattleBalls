@@ -3,7 +3,7 @@
 var game = game || {};
 
 game.Player = function() {
-  var Player = function(id, color, x, y) {
+  var Player = function(id, color, x, y, name) {
     this.x = x;
     this.y = y;
     this.xAcc = 0;
@@ -26,6 +26,7 @@ game.Player = function() {
     this.collisions = [];
     this.KOed = false;
     this.ready = false;
+    this.name = name;
   };
 
   var p = Player.prototype;

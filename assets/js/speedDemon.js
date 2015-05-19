@@ -3,7 +3,7 @@
 var game = game || {};
 
 game.Speed = function() {
-  var Speed = function(id, color, x, y) {
+  var Speed = function(id, color, x, y, name) {
     this.x = x;
     this.y = y;
     this.xAcc = 0;
@@ -25,6 +25,7 @@ game.Speed = function() {
     this.ready = false;
     this.power1Name = "sling";
     this.power2Name = "brake";
+    this.name = name;
   };
 
   var s = Speed.prototype;
@@ -173,7 +174,7 @@ game.Speed = function() {
   ///////////////////
   //RENDER FUNCTIONS
   ///////////////////
-  p.render = function(ctx) {
+  s.render = function(ctx) {
     ctx.save();
     ctx.fillStyle = this.color;
     ctx.strokeStyle = this.stunned ? 'grey' : this.color;

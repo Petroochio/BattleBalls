@@ -3,7 +3,7 @@
 var game = game || {};
 
 game.Matador = function() {
-  var Matador = function(id, color, x, y) {
+  var Matador = function(id, color, x, y, name) {
     this.x = x;
     this.y = y;
     this.xAcc = 0;
@@ -33,6 +33,7 @@ game.Matador = function() {
     this.dodgeSpeed = 200;
     this.maxVelocity = 5;
     this.velocityMag = 0;
+    this.name = name;
   };
 
   var p = Matador.prototype;

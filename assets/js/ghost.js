@@ -3,7 +3,7 @@
 var game = game || {};
 
 game.Ghost = function() {
-    var Ghost = function(id, color, x, y) {
+    var Ghost = function(id, color, x, y, name) {
         this.x = x;
         this.y = y;
         this.xAcc = 0;
@@ -30,6 +30,7 @@ game.Ghost = function() {
         this.childActive = false;
         this.power2Name = "scare";
         this.scare = undefined;
+        this.name = name;
     };
 
     var g = Ghost.prototype;
