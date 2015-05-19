@@ -14,7 +14,7 @@ game.battleBalls = {
     state : "START",
     startDelay : 500,
     arenaShrinkDelay : /*1000*/200,
-    ticker: 100,
+    ticker: 200,
     winner: undefined,
     
     bgMusic : undefined,
@@ -453,8 +453,9 @@ game.battleBalls = {
         var me = this;
         me.ctx.fillStyle = "black"
         me.ctx.fillRect(0,0,me.canvas.width,me.canvas.height);
-        me.text(me.ctx,"tilt phone to move",me.canvas.width/2,me.canvas.height/4,50,"white");
-        me.text(me.ctx,"power controls on phone",me.canvas.width/2,me.canvas.height/4+100,50,"white");
+        me.text(me.ctx,"hold phone horizontal",me.canvas.width/2,me.canvas.height/4,50,"white");
+        me.text(me.ctx,"tilt phone to move",me.canvas.width/2,me.canvas.height/4+50,50,"white");
+        me.text(me.ctx,"power controls on phone",me.canvas.width/2,me.canvas.height/4+150,50,"white");
     },
     
     //Main render function that handles different render states
