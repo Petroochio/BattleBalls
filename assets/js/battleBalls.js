@@ -405,7 +405,7 @@ game.battleBalls = {
         
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
-            var xSpacing = index%2
+            var xSpacing = index%2;
             if(player.id == me.winner.id) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
             
             me.ctx.save();
