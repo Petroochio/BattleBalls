@@ -406,7 +406,7 @@ game.battleBalls = {
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
             var xSpacing = index%2;
-            if(player.id == me.winner.id) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
+            if(player.id == me.winner.id) me.text(me.ctx, player.name+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
             
             me.ctx.save();
             me.ctx.strokeStyle = player.color;
@@ -414,7 +414,7 @@ game.battleBalls = {
             if(player.ready) {
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),
+                me.text(me.ctx, player.name,
                         me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
                         me.canvas.height/2+index*55,
                         50,player.color);
@@ -433,7 +433,7 @@ game.battleBalls = {
                 me.ctx.closePath();
                 me.ctx.fill();
             } else {
-                me.text(me.ctx, "player "+(index+1),
+                me.text(me.ctx, player.name,
                         me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
                         me.canvas.height/2+index*55,
                         50,player.color);
