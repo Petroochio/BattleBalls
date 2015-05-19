@@ -70,15 +70,12 @@ game.Ghost = function() {
         if(this.stunned)
             this.stunTime--;
         this.stunned = !(this.stunTime <= 0);
-//        console.log("stunned: "+this.stunned);
-//        console.log("stunTime: "+this.stunTime);
     };
     //////////////////
     //CLASS SPECIFIC
     //////////////////
     g.updateCharge = function(dt) {
         if(this.charging){
-            console.log(this.charging);
             if(this.chargeType == "tele") this.handleTele();
             else if(this.chargeType == "scare") this.handleScare();
         }
@@ -94,8 +91,7 @@ game.Ghost = function() {
             if(this.child.r <= 0 && this.childActive){
                 this.stunned = true;
                 this.stunTime = 200;
-            } else {
-                console.log("this is called");
+            } else if(this.child.r > 0 && this.childActive){
                 this.x = this.child.x;
                 this.y = this.child.y;
             }
@@ -206,6 +202,7 @@ game.Ghost = function() {
         if(this.childActive){
             ctx.save();
             ctx.fillStyle = this.color;
+            ctx.globalAlpha = 0.5;
             ctx.beginPath();
             ctx.arc(this.child.x,this.child.y,this.child.r,0,Math.PI*2,false);
             ctx.closePath();
