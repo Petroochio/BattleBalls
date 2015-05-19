@@ -217,7 +217,7 @@ game.Matador = function() {
     ctx.shadowBlur=10;
     ctx.shadowColor=this.color;
     game.DrawLib.drawCircle(ctx, this.x, this.y, this.radius, "black", this.color);
-    game.DrawLib.drawText(ctx, "Ω", this.x, this.y + this.radius/2, 40, this.color);
+    game.DrawLib.drawText(ctx, "Ω", this.x, this.y + this.radius/2, 30, this.color);
     ctx.restore();
     if(this.charging)
       this.renderCharge(ctx);
