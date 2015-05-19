@@ -56,7 +56,7 @@ form button{
     top: 5%;
 }
 
-#error{
+.error{
     color: red;
 }
 .titleText {
