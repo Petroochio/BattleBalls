@@ -15,6 +15,7 @@ game.battleBalls = {
     startDelay : 500,
     arenaShrinkDelay : /*1000*/200,
     ticker: 100,
+    winner: undefined,
     
     bgMusic : undefined,
     chargeSound : undefined,
@@ -163,6 +164,10 @@ game.battleBalls = {
         });
         //If all players are knocked out end the game
         if(KOes >= me.playerIDs.length -1 && me.playerIDs.length > 1) {
+            me.playerIDs.forEach(function(id){
+                var player = me.players[id];
+                if(!player.KOed) me.winner = player;
+            });
             me.state = "END";
             game.socketHandlers.changeState("END");
         }
@@ -387,7 +392,7 @@ game.battleBalls = {
         
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
-            if(!player.KOed) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
+            if(player.id == me.winner.id) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
             
             me.ctx.save();
             me.ctx.strokeStyle = player.color;
