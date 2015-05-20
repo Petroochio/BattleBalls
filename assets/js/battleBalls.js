@@ -446,7 +446,7 @@ game.battleBalls = {
                     ySpacing = 3;
                     break;
             }
-            if(player.id == me.winner.id) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
+            if(player.id == me.winner.id) me.text(me.ctx,player.name+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
 
             
             me.ctx.save();
@@ -474,11 +474,8 @@ game.battleBalls = {
                 me.ctx.closePath();
                 me.ctx.fill();
             } else {
-<<<<<<< HEAD
+
                 me.text(me.ctx, player.name,
-=======
-                me.text(me.ctx, /*"player "+(index+1)*/player.name,
->>>>>>> master
                         me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
                         me.canvas.height/2+ySpacing*55,
                         50,player.color);
