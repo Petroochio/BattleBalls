@@ -38,7 +38,7 @@ game.battleBalls = {
         //set up sounds
         me.bgMusic = document.querySelector("#bgMusic");
         me.bgMusic.volume = 0.2;
-//        me.bgMusic.play();
+        me.bgMusic.play();
         
         me.chargeSound = document.querySelector("#chargeSound");
         me.chargeSound.volume = 1;
