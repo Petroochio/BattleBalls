@@ -305,45 +305,64 @@ game.battleBalls = {
         me.ctx.fillRect(0,0, me.canvas.width, me.canvas.height);
         me.ctx.restore();
         me.text(me.ctx, "battle balls", me.canvas.width/2, me.canvas.height/4, 100, "white");
-        me.text(me.ctx, "battleballs.herokuapp.com on phone to connect", me.canvas.width/2, me.canvas.height/4+35, 30, "white");
+        me.text(me.ctx, "enter url on phone to connect", me.canvas.width/2, me.canvas.height/4+35, 30, "white");
         me.text(me.ctx, "room code: "+game.socketHandlers.room, me.canvas.width/2, me.canvas.height/4+80, 40, "white");
 
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
             var xSpacing = index%2;
+            var ySpacing;
+            switch(index){ //there is prolly a better way to do this
+                case 0:
+                case 1:
+                    ySpacing = 0;
+                    break;
+                case 2:
+                case 3:
+                    ySpacing = 1;
+                    break;
+                case 4:
+                case 5:
+                    ySpacing = 2;
+                    break;
+                case 6:
+                case 7:
+                    ySpacing = 3;
+                    break;
+            }
             me.ctx.save();
             me.ctx.strokeStyle = player.color;
             me.ctx.fillStyle = player.color;
             if(player.ready) {
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),
+                me.text(me.ctx, /*"player "+(index+1)*/player.name,
                         me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
-                        me.canvas.height/2+index*55+20,
+                        me.canvas.height/2+ySpacing*55+20,
                         50,player.color);
                 
                 me.ctx.beginPath();
                 me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
-                           me.canvas.height/2-20+index*55+20,
+                           me.canvas.height/2-20+ySpacing*55+20,
                            20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
                 
                 me.ctx.beginPath();
                 me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
-                           me.canvas.height/2-20+index*55+20,
+                           me.canvas.height/2-20+ySpacing*55+20,
                            10,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.fill();
             } else {
-                me.text(me.ctx, "player "+(index+1),
+                me.text(me.ctx, /*"player "+(index+1)*/player.name,
                         me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
-                        me.canvas.height/2+index*55+20,
+                        me.canvas.height/2+ySpacing*55+20,
                         50,player.color);
                 
                 me.ctx.beginPath();
                 me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
-                           me.canvas.height/2-20+index*55+20,
+                           me.canvas.height/2-20+ySpacing*55+20,
                            20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
@@ -406,6 +425,25 @@ game.battleBalls = {
         me.playerIDs.forEach(function(id, index) {
             var player = me.players[id];
             var xSpacing = index%2;
+            var ySpacing;
+            switch(index){ //there is prolly a better way to do this
+                case 0:
+                case 1:
+                    ySpacing = 0;
+                    break;
+                case 2:
+                case 3:
+                    ySpacing = 1;
+                    break;
+                case 4:
+                case 5:
+                    ySpacing = 2;
+                    break;
+                case 6:
+                case 7:
+                    ySpacing = 3;
+                    break;
+            }
             if(player.id == me.winner.id) me.text(me.ctx,"player "+(index+1)+" won",me.canvas.width/2,me.canvas.height/4,100,"white");
             
             me.ctx.save();
@@ -414,33 +452,33 @@ game.battleBalls = {
             if(player.ready) {
                 me.ctx.shadowBlur = 10;
                 me.ctx.shadowColor = player.color;
-                me.text(me.ctx, "player "+(index+1),
+                me.text(me.ctx, /*"player "+(index+1)*/player.name,
                         me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
-                        me.canvas.height/2+index*55,
+                        me.canvas.height/2+ySpacing*55,
                         50,player.color);
                 
                 me.ctx.beginPath();
                 me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
-                           me.canvas.height/2-20+index*55,
+                           me.canvas.height/2-20+ySpacing*55,
                            20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();
                 
                 me.ctx.beginPath();
                 me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
-                           me.canvas.height/2-20+index*55,
+                           me.canvas.height/2-20+ySpacing*55,
                            10,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.fill();
             } else {
-                me.text(me.ctx, "player "+(index+1),
+                me.text(me.ctx, /*"player "+(index+1)*/player.name,
                         me.canvas.width/4+(xSpacing*me.canvas.width/3+xSpacing*20),
-                        me.canvas.height/2+index*55,
+                        me.canvas.height/2+ySpacing*55,
                         50,player.color);
                 
                 me.ctx.beginPath();
                 me.ctx.arc((me.canvas.width*2/5+20)+(xSpacing*me.canvas.width/3+xSpacing*20),
-                           me.canvas.height/2-20+index*55,
+                           me.canvas.height/2-20+ySpacing*55,
                            20,0,Math.PI*2,false);
                 me.ctx.closePath();
                 me.ctx.stroke();

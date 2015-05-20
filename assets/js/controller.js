@@ -13,7 +13,6 @@ game.controller = {
     yTap: undefined,
     readyButton: undefined,
 
-    //Will eventually be replaced with power1Button&power2Button
     power1Button: undefined,
     power2Button: undefined,
     leftButton: undefined,
