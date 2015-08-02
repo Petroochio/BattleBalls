@@ -134,7 +134,7 @@ io.on('connection', function(socket){
     Account.AccountModel.authenticate(username, password, function(err, account) {
         if(err || !account) {
             //return res.status(401).json({error: "Wrong username or password"});
-            io.to(socket.id).emit('login fail', {result: 'Login Fail, Bad username or password'});
+            io.to(socket.id).emit('login err', {result: 'Login Fail, Bad username or password'});
             return false;
         }
         var reqData = {};
@@ -169,7 +169,7 @@ io.on('connection', function(socket){
       newAccount.save(function(err) {
         if(err) {
           console.log(err);
-          return false;//res.status(400).json({error:'An error occurred'}); 
+          return io.to(socket.id).emit('sign-up error', {result: err});//res.status(400).json({error:'An error occurred'}); 
         }
 
         reqData.account = newAccount.toAPI();

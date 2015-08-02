@@ -3,7 +3,7 @@
 var game = game || {};
 
 game.Speed = function() {
-  var Speed = function(id, color, x, y) {
+  var Speed = function(id, color, x, y, name) {
     this.x = x;
     this.y = y;
     this.xAcc = 0;
@@ -25,6 +25,7 @@ game.Speed = function() {
     this.ready = false;
     this.power1Name = "sling";
     this.power2Name = "brake";
+    this.name = name;
   };
 
   var s = Speed.prototype;
@@ -173,7 +174,7 @@ game.Speed = function() {
   ///////////////////
   //RENDER FUNCTIONS
   ///////////////////
-  p.render = function(ctx) {
+  s.render = function(ctx) {
     ctx.save();
     ctx.fillStyle = this.color;
     ctx.strokeStyle = this.stunned ? 'grey' : this.color;
@@ -181,7 +182,7 @@ game.Speed = function() {
     ctx.shadowBlur=10;
     ctx.shadowColor=this.color;
     game.DrawLib.drawCircle(ctx, this.x, this.y, this.radius, "black", this.color);
-    game.DrawLib.drawText(ctx, "%Xi", this.x, this.y + this.radius/2, 40, this.color);
+    game.DrawLib.drawText(ctx, "˜∑", this.x, this.y + this.radius/2, 30, this.color);
     ctx.restore();
     //if(this.charging)
       this.renderCharge(ctx);

@@ -3,7 +3,7 @@
 var game = game || {};
 
 game.Matador = function() {
-  var Matador = function(id, color, x, y) {
+  var Matador = function(id, color, x, y, name) {
     this.x = x;
     this.y = y;
     this.xAcc = 0;
@@ -33,6 +33,7 @@ game.Matador = function() {
     this.dodgeSpeed = 200;
     this.maxVelocity = 5;
     this.velocityMag = 0;
+    this.name = name;
   };
 
   var p = Matador.prototype;
@@ -216,7 +217,7 @@ game.Matador = function() {
     ctx.shadowBlur=10;
     ctx.shadowColor=this.color;
     game.DrawLib.drawCircle(ctx, this.x, this.y, this.radius, "black", this.color);
-    game.DrawLib.drawText(ctx, "Ω", this.x, this.y + this.radius/2, 40, this.color);
+    game.DrawLib.drawText(ctx, "Ω", this.x, this.y + this.radius/2, 30, this.color);
     ctx.restore();
     if(this.charging)
       this.renderCharge(ctx);

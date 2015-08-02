@@ -69,7 +69,12 @@ game.controller = {
 
             if(validInput == true)
             {
-                var connectData = { id: id, color: me.color, room: roomID};
+                var connectData = { 
+                    id: id, 
+                    color: me.color, 
+                    room: roomID, 
+                    name: me.account.username
+                };
                 socket.emit('player join', connectData);//ADD ROOM TO DATA
             }
             else{
@@ -90,6 +95,10 @@ game.controller = {
         loginButton.addEventListener("click", function(){
             if(!nameField.value || !passField.value){
                 //error code
+                console.log('error sign in');
+                var error = "Error: All feilds must be filled out";
+                errorLoginDiv.innerHTML = "<p>" + error + "</p>";
+                errorLoginDiv.style.display = "block";
             }else {
                 var data = {
                     name:nameField.value,
@@ -116,6 +125,9 @@ game.controller = {
             if(!nameCreateField.value || !pass1Field.value || !pass2Field.value){
                 //error code
                 console.log('error sign up');
+                var error = "Error: All feilds must be filled out";
+                errorCreateDiv.innerHTML = "<p>" + error + "</p>";
+                errorCreateDiv.style.display = "block";
             } else {
                 var data = {
                     name:nameCreateField.value,
@@ -134,6 +146,16 @@ game.controller = {
             signIn.classList.add("hidden");
             signUp.classList.add("hidden");
             join.classList.remove("hidden");
+        });
+        socket.on('sing-up err', function(data){
+            var error = "Error: Account unavailable";
+            errorCreateDiv.innerHTML = "<p>" + error + "</p>";
+            errorCreateDiv.style.display = "block";
+        });
+        socket.on('login err', function(data){
+            var error = "Error: Invalid sign in data";
+            errorLoginDiv.innerHTML = "<p>" + error + "</p>";
+            errorLoginDiv.style.display = "block";
         });
         ///////////////////////////
         /*var connectData = { id: id, color: me.color };
