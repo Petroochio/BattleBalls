@@ -4,7 +4,7 @@ var http = require('http').Server(app);
 var path = require('path');
 var io = require('socket.io')(http);
 var MobileDetect = require('mobile-detect');
-var mongoose = require('mongoose'); 
+var mongoose = require('mongoose');
 var users = {};
 var rooms = {};
 var port = process.env.PORT || process.env.NODE_PORT || 3000;
@@ -77,7 +77,7 @@ io.on('connection', function(socket){
   // handle disconnects
   socket.on('disconnect', function(){//ROOM CODE?
     io.emit('player leave', {id: socket.id});
-    
+
     if(users[socket.id]){
       rooms[users[socket.id].room].players--;
       delete users[socket.id];
@@ -163,17 +163,17 @@ io.on('connection', function(socket){
         wins: 0,
         classes: intialClassList
       };
-      
+
       var newAccount = new Account.AccountModel(accountData);
       var reqData = {};
       newAccount.save(function(err) {
         if(err) {
           console.log(err);
-          return io.to(socket.id).emit('sign-up error', {result: err});//res.status(400).json({error:'An error occurred'}); 
+          return io.to(socket.id).emit('sign-up error', {result: err});
         }
 
         reqData.account = newAccount.toAPI();
-              
+
         io.to(socket.id).emit('login success', reqData);
       });
     });
